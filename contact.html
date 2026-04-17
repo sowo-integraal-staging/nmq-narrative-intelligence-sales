@@ -6,10 +6,10 @@
   <title>Contact — UnderCurrent</title>
   <link rel="icon" type="image/png" href="icon.png">
   <style>
-    .wave-spinner { display: inline-flex; align-items: center; gap: 3px; height: 20px; }
-    .wave-spinner span { display: block; width: 3px; border-radius: 3px; background: linear-gradient(180deg, #6366f1, #06b6d4); animation: wave-bounce 1.2s ease-in-out infinite; }
-    .wave-spinner span:nth-child(1){animation-delay:0s} .wave-spinner span:nth-child(2){animation-delay:.15s} .wave-spinner span:nth-child(3){animation-delay:.3s} .wave-spinner span:nth-child(4){animation-delay:.45s} .wave-spinner span:nth-child(5){animation-delay:.6s} .wave-spinner span:nth-child(6){animation-delay:.45s} .wave-spinner span:nth-child(7){animation-delay:.3s}
-    @keyframes wave-bounce { 0%,100%{height:4px;opacity:.4} 50%{height:20px;opacity:1} }
+    .wave-svg path { stroke-dasharray: 200; stroke-dashoffset: 200; animation: wave-flow 2.5s ease-in-out infinite; }
+    .wave-svg path:nth-child(2) { animation-delay: 0.3s; }
+    .wave-svg path:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes wave-flow { 0%{stroke-dashoffset:200;opacity:.2} 40%{opacity:1} 100%{stroke-dashoffset:-200;opacity:.2} }
   </style>
   <style>
     :root {
@@ -55,8 +55,12 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:0.75rem;">
-    <div class="wave-spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:0.75rem;text-decoration:none;">
+    <svg class="wave-svg" width="36" height="18" viewBox="0 0 36 18" fill="none">
+      <path d="M2 14 C6 14, 8 4, 12 4 C16 4, 18 14, 22 14 C26 14, 28 4, 32 4" stroke="#6366f1" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M2 9 C6 9, 8 2, 12 2 C16 2, 18 16, 22 16 C26 16, 28 2, 32 2" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M2 12 C7 12, 9 7, 13 7 C17 7, 19 13, 23 13 C27 13, 29 7, 34 7" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4"/>
+    </svg>
     <span>UnderCurrent</span>
   </a>
   <div class="nav-links">
