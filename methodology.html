@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Methodology — NMQ Narrative Intelligence</title>
+  <title>Methodology — UnderCurrent</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    .wave-spinner { display: inline-flex; align-items: center; gap: 3px; height: 20px; }
+    .wave-spinner span { display: block; width: 3px; border-radius: 3px; background: linear-gradient(180deg, #6366f1, #06b6d4); animation: wave-bounce 1.2s ease-in-out infinite; }
+    .wave-spinner span:nth-child(1){animation-delay:0s} .wave-spinner span:nth-child(2){animation-delay:.15s} .wave-spinner span:nth-child(3){animation-delay:.3s} .wave-spinner span:nth-child(4){animation-delay:.45s} .wave-spinner span:nth-child(5){animation-delay:.6s} .wave-spinner span:nth-child(6){animation-delay:.45s} .wave-spinner span:nth-child(7){animation-delay:.3s}
+    @keyframes wave-bounce { 0%,100%{height:4px;opacity:.4} 50%{height:20px;opacity:1} }
+  </style>
   <style>
     :root {
       --bg: #0a0a0f; --bg2: #12121a; --bg3: #1a1a26; --border: #2a2a3a;
@@ -52,7 +59,10 @@
 <body>
 
 <nav>
-  <a href="index.html" class="nav-brand"><span class="dot"></span> NMQ Narrative Intelligence</a>
+  <a href="index.html" class="nav-brand" style="display:flex;align-items:center;gap:0.75rem;">
+    <div class="wave-spinner"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <span>UnderCurrent</span>
+  </a>
   <div class="nav-links">
     <a href="index.html">Overview</a>
     <a href="methodology.html">Methodology</a>
@@ -191,7 +201,7 @@
 </div>
 
 <footer>
-  <p>NMQ Narrative Intelligence · <a href="index.html">Overview</a> · <a href="contact.html">Contact</a></p>
+  <p>UnderCurrent · <a href="index.html">Overview</a> · <a href="contact.html">Contact</a></p>
 </footer>
 
 </body>
