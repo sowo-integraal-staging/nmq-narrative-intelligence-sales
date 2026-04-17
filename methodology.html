@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Methodology — NMQ Narrative Intelligence</title>
+  <style>
+    :root {
+      --bg: #0a0a0f; --bg2: #12121a; --bg3: #1a1a26; --border: #2a2a3a;
+      --accent: #6366f1; --accent2: #8b5cf6; --accent3: #06b6d4;
+      --text: #e8e8f0; --text2: #9999b8; --green: #22c55e; --amber: #f59e0b; --red: #ef4444;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; color: var(--text2); }
+    .nav-links a { color: var(--text2); }
+
+    .page-header { padding: 5rem 2rem 3rem; max-width: 860px; margin: 0 auto; }
+    .page-header .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; margin-bottom: 0.75rem; }
+    .page-header h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .page-header .sub { font-size: 1.1rem; color: var(--text2); line-height: 1.7; }
+
+    .content { max-width: 860px; margin: 0 auto; padding: 0 2rem 6rem; }
+    h2 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin: 3rem 0 0.75rem; }
+    h3 { font-size: 1.1rem; font-weight: 700; margin: 2rem 0 0.5rem; color: var(--text); }
+    p { font-size: 0.95rem; color: var(--text2); line-height: 1.8; margin-bottom: 1rem; }
+    ul { list-style: none; padding: 0; margin-bottom: 1rem; }
+    ul li { font-size: 0.9rem; color: var(--text2); padding: 0.35rem 0 0.35rem 1.5rem; position: relative; line-height: 1.6; }
+    ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); }
+
+    .callout { background: rgba(99,102,241,0.08); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+    .callout p { color: var(--text); margin: 0; }
+
+    .kpi-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.5rem 0; }
+    .kpi-table th { text-align: left; padding: 0.75rem 1rem; background: var(--bg3); color: var(--text2); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    .kpi-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+    .kpi-table td:first-child { font-weight: 600; color: var(--text); white-space: nowrap; }
+    .kpi-table tr:last-child td { border-bottom: none; }
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .badge.a { background: rgba(99,102,241,0.15); color: var(--accent); }
+    .badge.b { background: rgba(6,182,212,0.15); color: var(--accent3); }
+    .badge.ab { background: rgba(139,92,246,0.15); color: var(--accent2); }
+
+    hr { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text2); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand"><span class="dot"></span> NMQ Narrative Intelligence</a>
+  <div class="nav-links">
+    <a href="index.html">Overview</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="tag">Methodology</div>
+  <h1>How it works.<br>Why it's valid.</h1>
+  <p class="sub">A complete technical and epistemological account of the NMQ Narrative Intelligence platform — written for buyers who ask hard questions.</p>
+</div>
+
+<div class="content">
+
+  <h2>1. The Two Measurement Frames</h2>
+
+  <p>Every data collection run produces two types of signal simultaneously. It's important to understand the difference, because the validity claims are different for each.</p>
+
+  <h3>Frame A — AI Brand Monitor</h3>
+  <p>Here, the AI system is the subject. We are measuring what a specific LLM (or set of LLMs) says about your brand, cites about your brand, and associates with your brand. The claim is simple and unambiguous: <em>"ChatGPT mentions your brand in 38% of responses to this category of queries."</em> That is a direct observation. No proxy, no inference about human attitudes.</p>
+  <p>This frame is useful because AI systems are increasingly a primary distribution channel for brand information. What AI says about you shapes what people hear — regardless of whether AI "thinks" anything about you in a meaningful sense.</p>
+
+  <h3>Frame B — AI Market Research</h3>
+  <p>Here, the AI system is the instrument. We use it to simulate a research study: the Cartesian product of audience personas × research intents × AI platforms produces a structured dataset of how different synthetic respondents characterize, consider, and evaluate your brand.</p>
+
+  <div class="callout">
+    <p>The validity argument for Frame B does not require AI responses to be perfect proxies for human attitudes. It requires AI responses to be a <strong>credible, structured, and auditable source of market signal for a specific and growing set of decisions</strong>. The argument: for high-consideration decisions where AI is already in the research path, measuring what AI tells prospective buyers is measuring the research channel itself — not a proxy for it.</p>
+  </div>
+
+  <p>Frame B is most valid for: financial services, insurance, B2B software, healthcare, professional services, and other categories where AI-assisted research is documented. It is least valid for impulse categories and commodity goods where AI is not in the decision journey. We document this distinction explicitly in every study.</p>
+
+  <hr>
+
+  <h2>2. Data Collection Architecture</h2>
+
+  <h3>The Persona × Intent × Platform matrix</h3>
+  <p>Each study begins by defining three dimensions:</p>
+  <ul>
+    <li><strong>Personas:</strong> demographic profiles (age, region, expertise level, decision context) that prime the AI to respond as a specific type of research respondent</li>
+    <li><strong>Intents:</strong> the research questions asked — awareness queries, comparison queries, decision queries, validation queries</li>
+    <li><strong>Platforms:</strong> the AI systems queried — typically ChatGPT, Perplexity, Claude, Gemini, and Google AI</li>
+  </ul>
+  <p>A standard study runs 30 replications per cell to establish statistical stability. Typical run sizes: 500–2,000 inference calls. All calls are cost-gated before execution — the client approves the estimated cost before any inference runs.</p>
+
+  <h3>One question per prompt</h3>
+  <p>Each inference call is designed to answer exactly one research question. Multi-question prompts that would allow a single LLM response to feed multiple KPIs simultaneously are avoided — they create correlated measurement error and make the results non-independent. If KPI #6 and KPI #7 draw from the same response, they share sampling variance and cannot be treated as independent measures.</p>
+
+  <h3>Organic vs. elicited prompts</h3>
+  <p>We strictly distinguish two prompt types and report them separately:</p>
+  <ul>
+    <li><strong>Organic prompts:</strong> brand is not in the prompt. Example: <em>"Which Swiss insurance is best for young professionals?"</em> — measures whether AI spontaneously mentions your brand</li>
+    <li><strong>Elicited prompts:</strong> brand is in the prompt. Example: <em>"Describe [Brand] in 2–3 sentences."</em> — measures how AI characterizes your brand when asked</li>
+  </ul>
+  <p>KPIs derived from organic prompts measure presence. KPIs derived from elicited prompts measure characterization. They are not interchangeable.</p>
+
+  <hr>
+
+  <h2>3. KPI Framework — All 34 Measures</h2>
+
+  <p>KPIs are tagged by which frame they primarily belong to: <span class="badge a">A</span> AI Brand Monitor, <span class="badge b">B</span> Market Research, or <span class="badge ab">A+B</span> Both.</p>
+
+  <table class="kpi-table">
+    <thead>
+      <tr><th>#</th><th>KPI Name</th><th>Frame</th><th>What it measures</th><th>Prompt type</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>AI Share of Answer (SoA)</td><td><span class="badge ab">A+B</span></td><td>% of AI responses that mention your brand</td><td>Organic</td></tr>
+      <tr><td>2</td><td>Intent Visibility Score</td><td><span class="badge b">B</span></td><td>SoA weighted by decision-stage intent relevance</td><td>Organic</td></tr>
+      <tr><td>3</td><td>AI Shortlist Rate</td><td><span class="badge ab">A+B</span></td><td>% of AI responses that include your brand in a consideration list</td><td>Organic</td></tr>
+      <tr><td>4</td><td>Topic Association Strength</td><td><span class="badge a">A</span></td><td>How strongly AI links you to specific topics</td><td>Organic</td></tr>
+      <tr><td>5</td><td>Topic Leadership Index</td><td><span class="badge a">A</span></td><td>Within your associated topics, are you positioned as a leader?</td><td>Organic</td></tr>
+      <tr><td>6</td><td>Narrative Role Share</td><td><span class="badge a">A</span></td><td>What role AI assigns you (Market Leader / Innovator / Value Provider…)</td><td>Elicited</td></tr>
+      <tr><td>7</td><td>Reason Cluster Share</td><td><span class="badge a">A</span></td><td>What reasons AI cites for your brand's value</td><td>Elicited</td></tr>
+      <tr><td>8</td><td>Trust Framing Score</td><td><span class="badge a">A</span></td><td>Whether AI frames you as authoritative, neutral, or uncertain</td><td>Elicited</td></tr>
+      <tr><td>9</td><td>AI Sentiment Balance</td><td><span class="badge ab">A+B</span></td><td>Net positive/negative tone in AI responses about your brand</td><td>Elicited</td></tr>
+      <tr><td>10</td><td>Comparative Advantage Rate</td><td><span class="badge ab">A+B</span></td><td>% of competitive comparisons where you're framed as dominant</td><td>Elicited (with competitor)</td></tr>
+      <tr><td>11</td><td>AI Preference Rate</td><td><span class="badge ab">A+B</span></td><td>% of single-recommendation queries where you're AI's first choice</td><td>Organic</td></tr>
+      <tr><td>12</td><td>Source Citation Rate</td><td><span class="badge a">A</span></td><td>% of AI responses that cite any source when mentioning you</td><td>Organic</td></tr>
+      <tr><td>13</td><td>Publisher Citation Share</td><td><span class="badge a">A</span></td><td>Which publishers AI cites for claims about you</td><td>Organic</td></tr>
+      <tr><td>14</td><td>Title Citation Share</td><td><span class="badge a">A</span></td><td>Which specific articles/titles AI cites</td><td>Organic + webcrawl</td></tr>
+      <tr><td>15</td><td>Authority Domain Map Score</td><td><span class="badge a">A</span></td><td>Which publications cover which topics about you</td><td>Organic + webcrawl</td></tr>
+      <tr><td>16</td><td>Publisher Lift (Correlation)</td><td><span class="badge a">A</span></td><td>Correlation between media placements and AI citation improvements</td><td>Time-series analysis</td></tr>
+      <tr><td>17</td><td>Cross-Source Reinforcement Index</td><td><span class="badge a">A</span></td><td>How many independent sources reinforce the same claim</td><td>Organic + webcrawl</td></tr>
+      <tr><td>18</td><td>Attribute Gap Index</td><td><span class="badge b">B</span></td><td>Gap between desired and actual AI-perceived attributes</td><td>Elicited + client input</td></tr>
+      <tr><td>19</td><td>Role Alignment Score</td><td><span class="badge b">B</span></td><td>Does AI's role assignment match your desired positioning?</td><td>Elicited + client input</td></tr>
+      <tr><td>20</td><td>Reason Alignment Score</td><td><span class="badge b">B</span></td><td>Do AI's reasons match your desired messaging?</td><td>Elicited + client input</td></tr>
+      <tr><td>21</td><td>Product vs Brand Split</td><td><span class="badge a">A</span></td><td>Does AI associate you at product or brand level?</td><td>Elicited</td></tr>
+      <tr><td>22</td><td>Confusion Rate</td><td><span class="badge a">A</span></td><td>% of AI claims about you that conflict with your fact base</td><td>Elicited + client fact base</td></tr>
+      <tr><td>23</td><td>Narrative Drift</td><td><span class="badge a">A</span></td><td>How much has the AI narrative about you shifted over time?</td><td>Elicited (time-series)</td></tr>
+      <tr><td>24</td><td>Answer Variance Index</td><td><span class="badge ab">A+B</span></td><td>Run-to-run variability within the same prompt/persona</td><td>All prompts</td></tr>
+      <tr><td>25</td><td>Persona Sensitivity Index</td><td><span class="badge b">B</span></td><td>KPI variation across audience segments</td><td>All prompts</td></tr>
+      <tr><td>26</td><td>Regional Variance Index</td><td><span class="badge b">B</span></td><td>KPI variation across geographic regions</td><td>All prompts</td></tr>
+      <tr><td>27</td><td>Model Variance Index</td><td><span class="badge a">A</span></td><td>KPI variation across AI platforms</td><td>All prompts</td></tr>
+      <tr><td>28</td><td>Volatility Score</td><td><span class="badge ab">A+B</span></td><td>Which KPIs are stable vs. noisy over time</td><td>All prompts</td></tr>
+      <tr><td>30</td><td>AI Share of Voice</td><td><span class="badge ab">A+B</span></td><td>Your brand's share of all brand mentions in category responses</td><td>Organic</td></tr>
+      <tr><td>33</td><td>Narrative Coherence Score</td><td><span class="badge a">A</span></td><td>Is AI's characterization of you internally consistent?</td><td>Elicited</td></tr>
+      <tr><td>34</td><td>Premium Justification Strength</td><td><span class="badge a">A</span></td><td>Does AI articulate reasons why premium pricing is justified?</td><td>Elicited</td></tr>
+      <tr><td>35</td><td>Defensive Vulnerability</td><td><span class="badge ab">A+B</span></td><td>How often does AI frame you defensively vs competitors?</td><td>Elicited</td></tr>
+      <tr><td>36</td><td>Attribute Elasticity</td><td><span class="badge b">B</span></td><td>How much does your perceived attribute score vary by context?</td><td>Elicited</td></tr>
+      <tr><td>37</td><td>Authority Transfer Score</td><td><span class="badge a">A</span></td><td>Does high-authority citation convert to brand authority lift?</td><td>Organic + webcrawl</td></tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <h2>4. Validity Boundaries — What We Claim and What We Don't</h2>
+
+  <p>We believe in stating the limits explicitly. A methodology document that doesn't acknowledge its own boundaries isn't a methodology document — it's marketing.</p>
+
+  <ul>
+    <li><strong>We claim:</strong> AI responses are a reliable, auditable, and structurally important signal for brand perception in AI-mediated research journeys</li>
+    <li><strong>We claim:</strong> The Cartesian product of personas × intents × platforms produces a structured and reproducible dataset that can support brand strategy decisions</li>
+    <li><strong>We do not claim:</strong> AI responses are equivalent to, or a perfect substitute for, primary human research</li>
+    <li><strong>We do not claim:</strong> Publisher Lift (KPI #16) is causal. It measures correlation between media placements and AI citation changes. Causality would require experimental design with control groups we do not currently implement.</li>
+    <li><strong>We do not claim:</strong> Results generalize across AI platforms. ChatGPT at 38% SoA and Claude at 22% SoA are different findings about different systems, reported separately.</li>
+    <li><strong>We commit to:</strong> Reporting confidence intervals on every KPI. If a number has high variance, you will see that variance, not a false point estimate.</li>
+  </ul>
+
+  <hr>
+
+  <h2>5. The Brand Relevance Index (BRI)</h2>
+
+  <p>The BRI is a composite score (0–100) that summarizes your brand's overall position in the AI layer across four dimensions. It is designed for executive communication, not for methodological analysis — the dimension scores are the analytical substance.</p>
+
+  <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; color: var(--text2); line-height: 2;">
+    BRI = (AI Visibility × 0.30) + (Authority × 0.30) + (Sentiment × 0.20) + (Narrative × 0.20)<br><br>
+    AI Visibility = (SoA × 0.40) + (Intent Visibility × 0.25) + (Shortlist Rate × 0.25) + (Preference Rate × 0.10)<br>
+    Authority = (Trust Framing × 0.35) + (Citation Rate × 0.30) + (Cross-Source Reinforcement × 0.20) + (Authority Transfer × 0.15)<br>
+    Sentiment = (Sentiment Balance × 0.45) + (Defensive Vulnerability_inv × 0.35) + (Stability × 0.20)<br>
+    Narrative = (Topic Association × 0.30) + (Topic Leadership × 0.30) + (Role Share × 0.25) + (Narrative Drift_inv × 0.15)
+  </div>
+
+  <p>The weightings reflect a deliberate position: Visibility and Authority are equally important (0.30 each), and together they outweigh Sentiment and Narrative (0.20 each). This reflects the view that presence with credible sourcing is the foundation — everything else is refinement.</p>
+
+</div>
+
+<footer>
+  <p>NMQ Narrative Intelligence · <a href="index.html">Overview</a> · <a href="contact.html">Contact</a></p>
+</footer>
+
+</body>
+</html>

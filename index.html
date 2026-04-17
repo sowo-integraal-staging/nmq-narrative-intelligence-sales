@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NMQ Narrative Intelligence — AI Brand & Market Intelligence Platform</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --bg3: #1a1a26;
+      --border: #2a2a3a;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --text: #e8e8f0;
+      --text2: #9999b8;
+      --text3: #6666888;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent2); }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; color: var(--text2); }
+    .nav-links a { color: var(--text2); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta { background: var(--accent); color: white; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.85; color: white; }
+
+    /* HERO */
+    .hero { padding: 7rem 2rem 5rem; max-width: 1100px; margin: 0 auto; text-align: center; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.3); border-radius: 100px; padding: 0.35rem 1rem; font-size: 0.8rem; color: var(--accent); margin-bottom: 2rem; letter-spacing: 0.05em; text-transform: uppercase; font-weight: 600; }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 1.5rem; }
+    .hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero-sub { font-size: 1.25rem; color: var(--text2); max-width: 680px; margin: 0 auto 3rem; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--accent); color: white; padding: 0.875rem 2rem; border-radius: 8px; font-weight: 600; font-size: 1rem; transition: opacity 0.2s; }
+    .btn-primary:hover { opacity: 0.85; color: white; }
+    .btn-secondary { background: var(--bg3); color: var(--text); border: 1px solid var(--border); padding: 0.875rem 2rem; border-radius: 8px; font-weight: 600; font-size: 1rem; transition: background 0.2s; }
+    .btn-secondary:hover { background: var(--bg2); color: var(--text); }
+
+    /* STATS BAR */
+    .stats-bar { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 2rem; display: flex; justify-content: center; gap: 4rem; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; background: linear-gradient(135deg, var(--accent), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { font-size: 0.8rem; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0.25rem; }
+
+    /* SECTIONS */
+    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; margin-bottom: 0.75rem; }
+    h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 1rem; }
+    .section-sub { font-size: 1.1rem; color: var(--text2); max-width: 600px; line-height: 1.7; margin-bottom: 3rem; }
+
+    /* CARDS */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; transition: border-color 0.2s, transform 0.2s; }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; font-size: 1.25rem; }
+    .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .card p { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
+
+    /* TWO-PRODUCT SECTION */
+    .products { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+    @media (max-width: 768px) { .products { grid-template-columns: 1fr; } }
+    .product-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; }
+    .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+    .product-card.a::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .product-card.b::before { background: linear-gradient(90deg, var(--accent3), var(--green)); }
+    .product-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; margin-bottom: 0.75rem; }
+    .product-card.a .product-label { color: var(--accent); }
+    .product-card.b .product-label { color: var(--accent3); }
+    .product-card h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+    .product-card .tagline { font-size: 0.95rem; color: var(--text2); margin-bottom: 1.75rem; line-height: 1.6; }
+    .product-card ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .product-card ul li { font-size: 0.875rem; color: var(--text2); display: flex; align-items: flex-start; gap: 0.6rem; }
+    .product-card ul li::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 0.05em; }
+    .product-card.b ul li::before { color: var(--accent3); }
+
+    /* KPI FLOW DIAGRAM */
+    .kpi-flow { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; margin-top: 2rem; overflow-x: auto; }
+    .flow-row { display: flex; gap: 0; align-items: stretch; flex-wrap: nowrap; }
+    .flow-chapter { flex: 1; min-width: 160px; }
+    .flow-header { padding: 0.75rem 1rem; border-radius: 8px 8px 0 0; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
+    .flow-header.ch1 { background: rgba(99,102,241,0.2); color: var(--accent); }
+    .flow-header.ch2 { background: rgba(6,182,212,0.2); color: var(--accent3); }
+    .flow-header.ch3 { background: rgba(139,92,246,0.2); color: var(--accent2); }
+    .flow-header.ch4 { background: rgba(34,197,94,0.2); color: var(--green); }
+    .flow-header.ch5 { background: rgba(245,158,11,0.2); color: var(--amber); }
+    .flow-body { padding: 1rem; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 0.4rem; }
+    .flow-kpi { font-size: 0.75rem; color: var(--text2); background: var(--bg3); border-radius: 4px; padding: 0.3rem 0.5rem; }
+    .flow-arrow { display: flex; align-items: center; padding: 0 0.5rem; color: var(--border); font-size: 1.25rem; margin-top: 2.2rem; }
+
+    /* EVIDENCE SECTION */
+    .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    @media (max-width: 768px) { .evidence-grid { grid-template-columns: 1fr; } }
+    .evidence-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; }
+    .evidence-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .evidence-card p { font-size: 0.875rem; color: var(--text2); line-height: 1.7; }
+    .evidence-card .source { font-size: 0.75rem; color: var(--text3); margin-top: 0.75rem; }
+
+    /* METHODOLOGY PILLARS */
+    .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    @media (max-width: 768px) { .pillars { grid-template-columns: 1fr; } }
+    .pillar { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; }
+    .pillar-num { font-size: 2rem; font-weight: 800; color: var(--border); margin-bottom: 0.75rem; letter-spacing: -0.05em; }
+    .pillar h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .pillar p { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+
+    /* COMPARISON TABLE */
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    .compare-table th { text-align: left; padding: 0.875rem 1rem; background: var(--bg3); color: var(--text2); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); }
+    .compare-table td { padding: 0.875rem 1rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .compare-table td:first-child { font-weight: 600; color: var(--text); }
+    .compare-table td:not(:first-child) { color: var(--text2); }
+    .check { color: var(--green); }
+    .x { color: var(--red); }
+    .partial { color: var(--amber); }
+
+    /* CTA SECTION */
+    .cta-section { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 4rem 3rem; text-align: center; margin: 2rem 0; }
+    .cta-section h2 { margin-bottom: 1rem; }
+    .cta-section p { color: var(--text2); max-width: 560px; margin: 0 auto 2.5rem; }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text2); font-size: 0.8rem; }
+
+    /* SEPARATOR */
+    .sep { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+    /* HIGHLIGHT BOX */
+    .highlight { background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25); border-radius: 12px; padding: 1.5rem 2rem; margin: 2rem 0; }
+    .highlight p { font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+    .highlight strong { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand"><span class="dot"></span> NMQ Narrative Intelligence</div>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#why">Why Now</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#kpis">KPI Framework</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="nav-cta">Request Briefing</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">⬡ AI Brand & Market Intelligence</div>
+  <h1>Your brand exists in<br><span>the AI layer</span>.<br>Do you know what it says?</h1>
+  <p class="hero-sub">AI is now the primary research channel for a growing share of high-consideration decisions. NMQ Narrative Intelligence measures and manages your brand's position in that channel — with the rigor of market research and the depth of competitive intelligence.</p>
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary">Explore the Platform</a>
+    <a href="methodology.html" class="btn-secondary">Read the Methodology</a>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">67%</div><div class="stat-label">of B2B buyers use AI before contacting a vendor</div></div>
+  <div class="stat"><div class="stat-num">34</div><div class="stat-label">measurable KPIs across 5 intelligence dimensions</div></div>
+  <div class="stat"><div class="stat-num">5+</div><div class="stat-label">AI platforms measured simultaneously</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">transparent, auditable methodology</div></div>
+</div>
+
+<hr class="sep">
+
+<!-- THE SHIFT -->
+<section id="why">
+  <div class="section-tag">The New Reality</div>
+  <h2>The research channel has changed.<br>Most brands haven't noticed.</h2>
+  <p class="section-sub">For two decades, brand intelligence meant search rankings and media monitoring. That infrastructure is now structurally incomplete.</p>
+
+  <div class="highlight">
+    <p>When a CFO asks ChatGPT <em>"which wealth management firm should I consider for our corporate treasury?"</em> — the answer that comes back <strong>is the market reality for that interaction</strong>. Not a proxy for it. Not an approximation. The actual content that shapes the consideration set. If your brand isn't in that answer, you weren't considered.</p>
+  </div>
+
+  <div class="cards" style="margin-top: 2rem;">
+    <div class="card">
+      <div class="card-icon" style="background: rgba(99,102,241,0.1);">📊</div>
+      <h3>The shift is structural</h3>
+      <p>AI-assisted research is not a trend — it's an infrastructure change. Customers use AI directly (ChatGPT, Perplexity, Claude) and indirectly (AI embedded in every SaaS product, search engine, and recommendation system). Both pathways shape perception.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background: rgba(6,182,212,0.1);">⚡</div>
+      <h3>It's already happening in your category</h3>
+      <p>High-consideration categories — insurance, financial services, B2B software, healthcare, professional services — have the highest AI research rates. If a prospect is doing due diligence, there is a near-certain AI touchpoint in that journey.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon" style="background: rgba(139,92,246,0.1);">🔍</div>
+      <h3>Existing tools are blind to it</h3>
+      <p>SEO tools measure web ranking. Social listening measures social content. PR tools measure earned media. None of them tell you what an LLM says about you when a potential client asks. That gap is what this platform closes.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- TWO PRODUCTS -->
+<section id="products">
+  <div class="section-tag">The Platform</div>
+  <h2>Two intelligence lenses.<br>One unified platform.</h2>
+  <p class="section-sub">The same data collection run powers two fundamentally different — and complementary — forms of insight.</p>
+
+  <div class="products">
+    <div class="product-card a">
+      <div class="product-label">Product A — AI Brand Monitor</div>
+      <h3>How AI models represent your brand</h3>
+      <p class="tagline">Measures the AI systems themselves as a signal: what do the most widely-used LLMs say about you, cite about you, and associate you with?</p>
+      <ul>
+        <li>Track your Share of Answer across ChatGPT, Perplexity, Claude, Gemini, Google AI simultaneously</li>
+        <li>Know which sources AI cites when it mentions you — and which it cites for your competitors</li>
+        <li>Detect narrative drift before it damages positioning</li>
+        <li>Measure whether your PR investments translate into AI citations — with lag analysis</li>
+        <li>Identify which publishers, articles, and claims are feeding the AI's perception of you</li>
+      </ul>
+    </div>
+    <div class="product-card b">
+      <div class="product-label">Product B — AI Market Research</div>
+      <h3>What your target market thinks, via AI simulation</h3>
+      <p class="tagline">Uses AI as a high-fidelity field research instrument: simulates thousands of persona-specific research interactions to surface attitudes, preferences, and positioning gaps.</p>
+      <ul>
+        <li>Run a full Cartesian product of personas × intents × regions without a panel or a fieldwork budget</li>
+        <li>Compare brand perception across Gen Z vs Boomers, Zürich vs Romandie, awareness vs decision stage</li>
+        <li>Identify where your brand positioning mismatches your target audience's actual mental model</li>
+        <li>Get results in days, not weeks — and re-run after any significant campaign or market event</li>
+        <li>Fully auditable: every prompt, every persona priming, every classification rule is documented</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- WHY PRODUCT B IS VALID -->
+<section>
+  <div class="section-tag">Methodology</div>
+  <h2>On the validity of AI-based market research</h2>
+  <p class="section-sub">A direct answer to the question every rigorous buyer will ask.</p>
+
+  <div class="highlight">
+    <p>Product B doesn't need AI to be a perfect proxy for human attitudes. It needs AI to be a <strong>credible, structured, and auditable source of market signal</strong> — which it is, for a specific and growing set of use cases.</p>
+  </div>
+
+  <div class="evidence-grid" style="margin-top: 2rem;">
+    <div class="evidence-card">
+      <h4>The epistemological case</h4>
+      <p>LLMs are trained on the aggregate of human-generated text. When prompted as a specific demographic persona, they reproduce the statistical patterns of how that demographic expresses preferences, evaluates options, and frames decisions. This isn't simulation of individual psychology — it's a structured readout of cultural and linguistic patterns encoded in the training data.</p>
+      <p style="margin-top: 0.75rem;">The validity question isn't "is this as good as a survey?" It's "is this better than nothing, for a specific set of questions?" For brand positioning, category awareness, and narrative framing, the answer is clearly yes.</p>
+    </div>
+    <div class="evidence-card">
+      <h4>The practical case</h4>
+      <p>When a Gen Z prospect in Zürich asks Perplexity "which insurance is best for young professionals in Switzerland?" — the response they receive <em>is the market signal</em>. Not a proxy for it. The AI's answer is the actual content shaping that consideration set.</p>
+      <p style="margin-top: 0.75rem;">For AI-mediated research journeys — which are the majority for high-consideration B2B and financial services decisions — measuring what AI says is measuring the channel itself. Product A and Product B converge: the AI's representation of your brand is your brand's market reality, for those interactions.</p>
+    </div>
+    <div class="evidence-card">
+      <h4>What makes it rigorous</h4>
+      <p>Unlike panel research, the NMQ methodology is fully auditable. Every prompt is documented. Every persona priming instruction is published. Every classification rule is specified. Clients can reproduce any finding independently. Confidence intervals and variance scores are reported — not hidden — so clients know which numbers are stable and which require more runs to confirm.</p>
+    </div>
+    <div class="evidence-card">
+      <h4>Where the limits are</h4>
+      <p>We don't claim this is traditional market research. We claim it's a new form of market intelligence, best suited to: high-consideration decisions where AI is already in the research path; categories with high information content (financial services, insurance, professional services, B2B software); brand positioning questions rather than price sensitivity or purchase intent.</p>
+      <p style="margin-top: 0.75rem;">Where AI is not in the research journey, this tool is Product A only — AI brand monitoring, not market research. We document the distinction explicitly.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- KPI FRAMEWORK -->
+<section id="kpis">
+  <div class="section-tag">KPI Framework</div>
+  <h2>A complete story, not a dashboard inventory</h2>
+  <p class="section-sub">34 KPIs organized into five chapters. Each chapter answers a distinct client question. Together they tell the full brand intelligence story.</p>
+
+  <div class="kpi-flow">
+    <div class="flow-row">
+      <div class="flow-chapter">
+        <div class="flow-header ch1">Ch. 1 · Presence</div>
+        <div class="flow-body">
+          <div class="flow-kpi">AI Share of Answer</div>
+          <div class="flow-kpi">AI Shortlist Rate</div>
+          <div class="flow-kpi">Share of Voice</div>
+          <div class="flow-kpi">Intent Visibility</div>
+          <div class="flow-kpi">AI Preference Rate</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-chapter">
+        <div class="flow-header ch2">Ch. 2 · Credibility</div>
+        <div class="flow-body">
+          <div class="flow-kpi">Source Citation Rate</div>
+          <div class="flow-kpi">Publisher Quality</div>
+          <div class="flow-kpi">Authority Domain Map</div>
+          <div class="flow-kpi">Trust Framing Score</div>
+          <div class="flow-kpi">Cross-Source Reinforcement</div>
+          <div class="flow-kpi">Authority Transfer</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-chapter">
+        <div class="flow-header ch3">Ch. 3 · Perception</div>
+        <div class="flow-body">
+          <div class="flow-kpi">Narrative Role Share</div>
+          <div class="flow-kpi">Topic Association</div>
+          <div class="flow-kpi">Topic Leadership Index</div>
+          <div class="flow-kpi">Reason Cluster Share</div>
+          <div class="flow-kpi">Attribute Gap Index</div>
+          <div class="flow-kpi">Narrative Coherence</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-chapter">
+        <div class="flow-header ch4">Ch. 4 · Stability</div>
+        <div class="flow-body">
+          <div class="flow-kpi">Answer Variance</div>
+          <div class="flow-kpi">Model Variance</div>
+          <div class="flow-kpi">Persona Sensitivity</div>
+          <div class="flow-kpi">Regional Variance</div>
+          <div class="flow-kpi">Narrative Drift</div>
+          <div class="flow-kpi">Volatility Score</div>
+        </div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-chapter">
+        <div class="flow-header ch5">Ch. 5 · Action</div>
+        <div class="flow-body">
+          <div class="flow-kpi">PR priority gaps</div>
+          <div class="flow-kpi">Publisher opportunities</div>
+          <div class="flow-kpi">Narrative corrections</div>
+          <div class="flow-kpi">Audience interventions</div>
+          <div class="flow-kpi">Competitive counters</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text2); text-align: center;">
+    Each chapter is complete on its own. Each feeds the next. Presence without Credibility is noise. Credibility without Perception is wasted authority. Perception that's unstable can't be managed.
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- METHODOLOGY PILLARS -->
+<section id="methodology">
+  <div class="section-tag">How It Works</div>
+  <h2>Rigorous by design.</h2>
+  <p class="section-sub">The methodology is auditable at every step. No black boxes. No hidden assumptions.</p>
+
+  <div class="pillars">
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <h4>Persona × Intent × Platform matrix</h4>
+      <p>Every measurement run executes the full Cartesian product of your defined audience segments, research intents, and AI platforms. Typically 500–2,000 inference calls per study, parallelized and cost-gated before execution.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <h4>One question per prompt</h4>
+      <p>Each inference call measures exactly one thing. No multi-question prompts that contaminate measurement independence. Every prompt is documented and published with the results.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <h4>Raw data preserved</h4>
+      <p>Every AI response is stored verbatim before any processing. KPIs are computed as deterministic transformations of this raw data. Any finding can be recomputed or challenged independently.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">04</div>
+      <h4>Confidence intervals, not point estimates</h4>
+      <p>Every KPI is reported with its sampling variance. Clients see which numbers are stable (σ &lt; 3) and which require more runs to confirm. We don't hide the uncertainty.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">05</div>
+      <h4>Organic vs. elicited measurement</h4>
+      <p>We distinguish between organic mentions (AI mentions you unprompted) and elicited characterization (AI describes you when asked). Both are reported. Both matter. They're not the same thing.</p>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">06</div>
+      <h4>Multi-model coverage</h4>
+      <p>Results are reported per platform (ChatGPT, Perplexity, Claude, Gemini, Google AI) and as a weighted composite. Your "38% Share of Answer on ChatGPT" is not the same claim as "38% across all AI platforms."</p>
+    </div>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- VS COMPARISON -->
+<section>
+  <div class="section-tag">Competitive Context</div>
+  <h2>What this replaces. What it complements.</h2>
+  <p class="section-sub">NMQ Narrative Intelligence is not a replacement for your existing brand tracking infrastructure. It's the layer that was missing.</p>
+
+  <div style="background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 1rem;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Capability</th>
+          <th>SEO / Search Tools</th>
+          <th>Social Listening</th>
+          <th>Traditional Market Research</th>
+          <th>NMQ Narrative Intelligence</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AI platform presence</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="check">✓ Core feature</span></td>
+        </tr>
+        <tr>
+          <td>Brand perception by audience segment</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="partial">~ Indirect</span></td>
+          <td><span class="check">✓ Yes</span></td>
+          <td><span class="check">✓ At scale, in days</span></td>
+        </tr>
+        <tr>
+          <td>Source / citation intelligence</td>
+          <td><span class="partial">~ Backlinks only</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="check">✓ Full citation chain</span></td>
+        </tr>
+        <tr>
+          <td>Competitive positioning in AI</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="x">✗</span></td>
+          <td><span class="partial">~ Survey-based</span></td>
+          <td><span class="check">✓ Direct measurement</span></td>
+        </tr>
+        <tr>
+          <td>Narrative drift detection</td>
+          <td><span class="x">✗</span></td>
+          <td><span class="partial">~ Sentiment only</span></td>
+          <td><span class="x">✗ Too slow</span></td>
+          <td><span class="check">✓ Continuous monitoring</span></td>
+        </tr>
+        <tr>
+          <td>Turnaround time</td>
+          <td>Real-time</td>
+          <td>Real-time</td>
+          <td>4–8 weeks</td>
+          <td><span class="check">2–5 business days</span></td>
+        </tr>
+        <tr>
+          <td>Methodology transparency</td>
+          <td>Black box</td>
+          <td>Algorithm-based</td>
+          <td>Published</td>
+          <td><span class="check">Fully auditable</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="sep">
+
+<!-- CTA -->
+<section>
+  <div class="cta-section">
+    <div class="section-tag">Get Started</div>
+    <h2>See your brand in the AI layer</h2>
+    <p>We run a scoped pilot study on your brand and your top competitors in 5 business days. You get the full KPI report, the raw data, and a methodology briefing. No commitment beyond the pilot.</p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn-primary">Request a Pilot Study</a>
+      <a href="methodology.html" class="btn-secondary">Read the Full Methodology</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>NMQ Narrative Intelligence — a NMQ × Integraal product · <a href="methodology.html">Methodology</a> · <a href="contact.html">Contact</a></p>
+</footer>
+
+</body>
+</html>

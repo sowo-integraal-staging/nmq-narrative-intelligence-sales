@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — NMQ Narrative Intelligence</title>
+  <style>
+    :root {
+      --bg: #0a0a0f; --bg2: #12121a; --bg3: #1a1a26; --border: #2a2a3a;
+      --accent: #6366f1; --accent2: #8b5cf6; --accent3: #06b6d4;
+      --text: #e8e8f0; --text2: #9999b8; --green: #22c55e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+    a { color: var(--accent); text-decoration: none; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.5rem; }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; color: var(--text2); }
+    .nav-links a { color: var(--text2); }
+
+    .main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 4rem 2rem; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; max-width: 900px; width: 100%; align-items: start; }
+    @media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; gap: 2rem; } }
+
+    .contact-info .tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; margin-bottom: 0.75rem; }
+    .contact-info h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; margin-bottom: 1rem; }
+    .contact-info p { font-size: 0.95rem; color: var(--text2); line-height: 1.7; margin-bottom: 2rem; }
+
+    .pilot-box { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top: 2rem; }
+    .pilot-box h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .pilot-box ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .pilot-box ul li { font-size: 0.85rem; color: var(--text2); display: flex; align-items: flex-start; gap: 0.6rem; }
+    .pilot-box ul li::before { content: '✓'; color: var(--green); flex-shrink: 0; }
+
+    .contact-form { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; }
+    .form-group { margin-bottom: 1.25rem; }
+    label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+    input, select, textarea { width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; color: var(--text); font-size: 0.9rem; font-family: inherit; transition: border-color 0.2s; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+    textarea { height: 120px; resize: vertical; }
+    select option { background: var(--bg3); }
+    .submit-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 0.875rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem; }
+    .submit-btn:hover { opacity: 0.85; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; color: var(--text2); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-brand"><span class="dot"></span> NMQ Narrative Intelligence</a>
+  <div class="nav-links">
+    <a href="index.html">Overview</a>
+    <a href="methodology.html">Methodology</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="tag">Get Started</div>
+      <h1>Request a pilot study</h1>
+      <p>We run a scoped pilot on your brand and your top 2 competitors in 5 business days. Full KPI report, raw data, and a methodology briefing. No commitment beyond the pilot.</p>
+
+      <div class="pilot-box">
+        <h4>What you get in the pilot</h4>
+        <ul>
+          <li>Full Chapter 1 (Presence) report: SoA, Shortlist Rate, Share of Voice, Preference Rate</li>
+          <li>Source Intelligence snapshot: top 10 cited sources, Ringier coverage gap</li>
+          <li>Competitive comparison: you vs. your top 2 competitors across 7 KPIs</li>
+          <li>Methodology briefing: 45-minute walkthrough of what the numbers mean and how they were produced</li>
+          <li>Raw data export: every inference response, every classification, every score</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <form>
+        <div class="form-group">
+          <label>Your name</label>
+          <input type="text" placeholder="Name">
+        </div>
+        <div class="form-group">
+          <label>Company</label>
+          <input type="text" placeholder="Company name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@company.com">
+        </div>
+        <div class="form-group">
+          <label>Industry / Category</label>
+          <select>
+            <option value="">Select your category</option>
+            <option>Financial Services / Banking</option>
+            <option>Insurance</option>
+            <option>Asset Management / Wealth</option>
+            <option>B2B Software / SaaS</option>
+            <option>Professional Services</option>
+            <option>Healthcare / Pharma</option>
+            <option>Consumer Goods</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>What's your primary question?</label>
+          <textarea placeholder="e.g. We want to understand our AI brand visibility vs. UBS and Credit Suisse in the wealth management category..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Request Pilot Study →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>NMQ Narrative Intelligence · <a href="index.html">Overview</a> · <a href="methodology.html">Methodology</a> · NMQ × Integraal</p>
+</footer>
+</body>
+</html>
