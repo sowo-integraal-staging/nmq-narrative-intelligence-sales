@@ -42,10 +42,13 @@
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.25rem; color: var(--text); }
     .nav-toggle svg { display: block; }
     @media (max-width: 768px) {
-      nav { padding: 0 1.25rem; flex-wrap: wrap; height: auto; min-height: 56px; }
+      nav { padding: 0 1.25rem; flex-wrap: wrap; height: auto; min-height: 56px; align-items: center; }
       .nav-toggle { display: flex; align-items: center; }
-      .nav-links { display: none; flex-direction: column; gap: 0; width: 100%; border-top: 1px solid var(--border); padding: 0.5rem 0 1rem; order: 3; }
-      .nav-links.open { display: flex; }
+      .nav-links { display: flex; flex-direction: column; gap: 0; width: 100%; order: 3;
+        max-height: 0; overflow: hidden;
+        transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s ease;
+        padding: 0; border-top: 0px solid var(--border); }
+      .nav-links.open { max-height: 400px; padding: 0.5rem 0 1rem; border-top: 1px solid var(--border); }
       .nav-links a { padding: 0.6rem 0; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
       .nav-cta { display: none; }
       .nav-cta-mobile { display: block; margin: 0.75rem 0 0; background: var(--accent); color: white; padding: 0.65rem 1.25rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600; text-align: center; }
@@ -78,8 +81,8 @@
 
     /* CARDS */
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; transition: border-color 0.2s, transform 0.2s; }
-    .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 1.75rem; transition: border-color 0.2s, box-shadow 0.2s; }
+    .card:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
     .card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; font-size: 1.25rem; }
     .card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
     .card p { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
