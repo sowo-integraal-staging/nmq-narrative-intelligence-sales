@@ -38,6 +38,19 @@
     .nav-links a:hover { color: var(--text); }
     .nav-cta { background: var(--accent); color: white; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; transition: opacity 0.2s; }
     .nav-cta:hover { opacity: 0.85; color: white; }
+    /* Hamburger */
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.25rem; color: var(--text); }
+    .nav-toggle svg { display: block; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; flex-wrap: wrap; height: auto; min-height: 56px; }
+      .nav-toggle { display: flex; align-items: center; }
+      .nav-links { display: none; flex-direction: column; gap: 0; width: 100%; border-top: 1px solid var(--border); padding: 0.5rem 0 1rem; order: 3; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.6rem 0; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .nav-cta { display: none; }
+      .nav-cta-mobile { display: block; margin: 0.75rem 0 0; background: var(--accent); color: white; padding: 0.65rem 1.25rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600; text-align: center; }
+    }
+    @media (min-width: 769px) { .nav-cta-mobile { display: none; } }
 
     /* HERO */
     .hero { padding: 7rem 2rem 5rem; max-width: 1100px; margin: 0 auto; text-align: center; }
@@ -158,15 +171,38 @@
     </svg>
     <span>UnderCurrent</span>
   </div>
-  <div class="nav-links">
-    <a href="#products">Products</a>
-    <a href="#why">Why Now</a>
-    <a href="#methodology">Methodology</a>
-    <a href="#kpis">KPI Framework</a>
+  <div class="nav-links" id="navLinks">
+    <a href="#products" onclick="closeNav()">Products</a>
+    <a href="#why" onclick="closeNav()">Why Now</a>
+    <a href="#methodology" onclick="closeNav()">Methodology</a>
+    <a href="#kpis" onclick="closeNav()">KPI Framework</a>
     <a href="contact.html">Contact</a>
+    <a href="contact.html" class="nav-cta-mobile">Request Briefing</a>
   </div>
   <a href="contact.html" class="nav-cta">Request Briefing</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="toggleNav()">
+    <svg id="iconMenu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <svg id="iconClose" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
 </nav>
+<script>
+  function toggleNav() {
+    var links = document.getElementById('navLinks');
+    var menu = document.getElementById('iconMenu');
+    var close = document.getElementById('iconClose');
+    var open = links.classList.toggle('open');
+    menu.style.display = open ? 'none' : 'block';
+    close.style.display = open ? 'block' : 'none';
+  }
+  function closeNav() {
+    var links = document.getElementById('navLinks');
+    var menu = document.getElementById('iconMenu');
+    var close = document.getElementById('iconClose');
+    links.classList.remove('open');
+    menu.style.display = 'block';
+    close.style.display = 'none';
+  }
+</script>
 
 <!-- HERO -->
 <div class="hero">
