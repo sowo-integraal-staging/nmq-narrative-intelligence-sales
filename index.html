@@ -40,10 +40,10 @@
     .nav-cta:hover { opacity: 0.85; color: white; }
     /* Hamburger */
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--text); line-height: 0; }
-    /* Mobile dropdown — absolutely positioned below the fixed-height nav bar */
+    /* Mobile dropdown — fixed below the nav bar so it doesn't scroll away */
     .nav-dropdown {
       display: none;
-      position: absolute; top: 60px; left: 0; right: 0;
+      position: fixed; top: 56px; left: 0; right: 0;
       background: rgba(10,10,15,0.98); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       flex-direction: column; gap: 0;
@@ -214,6 +214,7 @@
     var open = dd.classList.toggle('open');
     menu.style.display = open ? 'none' : 'block';
     close.style.display = open ? 'block' : 'none';
+    document.body.style.overflow = open ? 'hidden' : '';
   }
   function closeNav() {
     var dd = document.getElementById('navDropdown');
@@ -222,6 +223,7 @@
     dd.classList.remove('open');
     menu.style.display = 'block';
     close.style.display = 'none';
+    document.body.style.overflow = '';
   }
 </script>
 
