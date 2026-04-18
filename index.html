@@ -39,21 +39,31 @@
     .nav-cta { background: var(--accent); color: white; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; transition: opacity 0.2s; }
     .nav-cta:hover { opacity: 0.85; color: white; }
     /* Hamburger */
-    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.25rem; color: var(--text); }
-    .nav-toggle svg { display: block; }
-    @media (max-width: 768px) {
-      nav { padding: 0 1.25rem; flex-wrap: wrap; height: auto; min-height: 56px; align-items: center; }
-      .nav-toggle { display: flex; align-items: center; }
-      .nav-links { display: flex; flex-direction: column; gap: 0; width: 100%; order: 3;
-        max-height: 0; overflow: hidden;
-        transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1), padding 0.35s ease;
-        padding: 0; border-top: 0px solid var(--border); }
-      .nav-links.open { max-height: 400px; padding: 0.5rem 0 1rem; border-top: 1px solid var(--border); }
-      .nav-links a { padding: 0.6rem 0; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
-      .nav-cta { display: none; }
-      .nav-cta-mobile { display: block; margin: 0.75rem 0 0; background: var(--accent); color: white; padding: 0.65rem 1.25rem; border-radius: 6px; font-size: 0.95rem; font-weight: 600; text-align: center; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--text); line-height: 0; }
+    /* Mobile dropdown — absolutely positioned below the fixed-height nav bar */
+    .nav-dropdown {
+      display: none;
+      position: absolute; top: 60px; left: 0; right: 0;
+      background: rgba(10,10,15,0.98); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column; gap: 0;
+      padding: 0;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+      z-index: 99;
     }
-    @media (min-width: 769px) { .nav-cta-mobile { display: none; } }
+    .nav-dropdown.open { max-height: 420px; }
+    .nav-dropdown a { display: block; padding: 0.9rem 1.5rem; font-size: 1rem; color: var(--text2); border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.15s, background 0.15s; }
+    .nav-dropdown a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .nav-dropdown .nav-cta-mobile { display: block; margin: 1rem 1.5rem; background: var(--accent); color: white; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 1rem; font-weight: 600; text-align: center; border: none; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; height: 56px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-toggle { display: flex; align-items: center; justify-content: center; }
+      .nav-dropdown { display: flex; }
+    }
+    @media (min-width: 769px) { .nav-dropdown { display: none !important; } }
 
     /* HERO */
     .hero { padding: 7rem 2rem 5rem; max-width: 1100px; margin: 0 auto; text-align: center; }
@@ -174,34 +184,42 @@
     </svg>
     <span>UnderCurrent</span>
   </div>
-  <div class="nav-links" id="navLinks">
-    <a href="#products" onclick="closeNav()">Products</a>
-    <a href="#why" onclick="closeNav()">Why Now</a>
-    <a href="#methodology" onclick="closeNav()">Methodology</a>
-    <a href="#kpis" onclick="closeNav()">KPI Framework</a>
+  <div class="nav-links">
+    <a href="#products">Products</a>
+    <a href="#why">Why Now</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#kpis">KPI Framework</a>
     <a href="contact.html">Contact</a>
-    <a href="contact.html" class="nav-cta-mobile">Request Briefing</a>
   </div>
   <a href="contact.html" class="nav-cta">Request Briefing</a>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="toggleNav()">
-    <svg id="iconMenu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-    <svg id="iconClose" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <svg id="iconMenu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <svg id="iconClose" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
 </nav>
+<!-- Mobile dropdown: separate from nav so the nav bar height never changes -->
+<div class="nav-dropdown" id="navDropdown">
+  <a href="#products" onclick="closeNav()">Products</a>
+  <a href="#why" onclick="closeNav()">Why Now</a>
+  <a href="#methodology" onclick="closeNav()">Methodology</a>
+  <a href="#kpis" onclick="closeNav()">KPI Framework</a>
+  <a href="contact.html" onclick="closeNav()">Contact</a>
+  <a href="contact.html" class="nav-cta-mobile">Request Briefing</a>
+</div>
 <script>
   function toggleNav() {
-    var links = document.getElementById('navLinks');
+    var dd = document.getElementById('navDropdown');
     var menu = document.getElementById('iconMenu');
     var close = document.getElementById('iconClose');
-    var open = links.classList.toggle('open');
+    var open = dd.classList.toggle('open');
     menu.style.display = open ? 'none' : 'block';
     close.style.display = open ? 'block' : 'none';
   }
   function closeNav() {
-    var links = document.getElementById('navLinks');
+    var dd = document.getElementById('navDropdown');
     var menu = document.getElementById('iconMenu');
     var close = document.getElementById('iconClose');
-    links.classList.remove('open');
+    dd.classList.remove('open');
     menu.style.display = 'block';
     close.style.display = 'none';
   }
