@@ -118,13 +118,12 @@
     .product-card.b ul li::before { color: var(--accent3); }
 
     /* KPI FLOW DIAGRAM */
-    .kpi-product-tabs { display: flex; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-    .kpi-tab { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .kpi-tab:hover { border-color: var(--accent); color: var(--text); }
-    .kpi-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
-    .kpi-tab.active.b { background: var(--accent3); border-color: var(--accent3); }
-    .kpi-product-panel { display: none; }
-    .kpi-product-panel.visible { display: block; }
+    .kpi-product-block { margin-bottom: 2.5rem; }
+    .kpi-product-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .kpi-product-badge { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.8rem; border-radius: 100px; }
+    .kpi-product-badge.a { background: rgba(99,102,241,0.15); color: var(--accent); }
+    .kpi-product-badge.b { background: rgba(6,182,212,0.15); color: var(--accent3); }
+    .kpi-product-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
     .kpi-flow { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; overflow-x: auto; }
     .flow-row { display: flex; gap: 0; align-items: stretch; flex-wrap: nowrap; }
     .flow-chapter { flex: 1; min-width: 155px; }
@@ -441,14 +440,13 @@
 <section id="kpis">
   <div class="section-tag">KPI Framework</div>
   <h2>A complete story, not a dashboard inventory</h2>
-  <p class="section-sub">26 KPIs across 5 chapters for AI Brand Monitor. 22 KPIs across 5 chapters for AI Market Research. Hover any KPI for its description. <a href="framework.html" style="color:var(--accent)">Full framework details →</a></p>
+  <p class="section-sub">48 KPIs across two products, each structured as a five-chapter arc from measurement to action. Hover any KPI for its description. <a href="framework.html" style="color:var(--accent)">Full framework details →</a></p>
 
-  <div class="kpi-product-tabs">
-    <button class="kpi-tab active" onclick="switchKpiTab('A',this)">AI Brand Monitor</button>
-    <button class="kpi-tab" onclick="switchKpiTab('B',this)">AI Market Research</button>
+  <div class="kpi-product-block">
+  <div class="kpi-product-header">
+    <span class="kpi-product-badge a">AI Brand Monitor</span>
+    <span class="kpi-product-title">Brand intelligence — 26 KPIs across 5 chapters</span>
   </div>
-
-  <div id="kpi-panel-A" class="kpi-product-panel visible">
     <div class="kpi-flow">
       <div class="flow-row">
         <div class="flow-chapter">
@@ -509,9 +507,13 @@
       </div>
     </div>
     <div style="margin-top: 1.1rem; font-size: 0.83rem; color: var(--text2); text-align: center;">Visibility without Authority is noise. Authority without Narrative is wasted credibility. Narrative that&#39;s unstable can&#39;t be managed.</div>
-  </div>
+  </div><!-- /kpi-product-block A -->
 
-  <div id="kpi-panel-B" class="kpi-product-panel">
+  <div class="kpi-product-block">
+  <div class="kpi-product-header">
+    <span class="kpi-product-badge b">AI Market Research</span>
+    <span class="kpi-product-title">Market intelligence — 22 KPIs across 5 chapters</span>
+  </div>
     <div class="kpi-flow">
       <div class="flow-row">
         <div class="flow-chapter">
@@ -568,7 +570,7 @@
       </div>
     </div>
     <div style="margin-top: 1.1rem; font-size: 0.83rem; color: var(--text2); text-align: center;">Demand Landscape first — you can&#39;t position competitively until you know how the market actually makes decisions.</div>
-  </div>
+  </div><!-- /kpi-product-block B -->
 
 </section>
 
@@ -717,14 +719,6 @@
 <div id="kpiTooltip"><div class="tt-name"></div><div class="tt-body"></div></div>
 
 <script>
-// Tab switcher
-function switchKpiTab(prod, btn) {
-  document.querySelectorAll('.kpi-tab').forEach(function(t){ t.classList.remove('active'); });
-  document.querySelectorAll('.kpi-product-panel').forEach(function(p){ p.classList.remove('visible'); });
-  btn.classList.add('active');
-  document.getElementById('kpi-panel-' + prod).classList.add('visible');
-}
-
 // KPI tooltip — position:fixed, never clipped
 var tip = document.getElementById('kpiTooltip');
 var tipName = tip.querySelector('.tt-name');
