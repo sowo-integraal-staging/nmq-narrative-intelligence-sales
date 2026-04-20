@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPI Framework — UnderCurrent</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg2: #12121a;
+      --bg3: #1a1a26;
+      --border: #2a2a3a;
+      --accent: #6366f1;
+      --accent2: #8b5cf6;
+      --accent3: #06b6d4;
+      --text: #e8e8f0;
+      --text2: #9999b8;
+      --text3: #666688;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --red: #ef4444;
+
+      --ch-colors: #6366f1, #06b6d4, #8b5cf6, #22c55e, #f59e0b;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent2); }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.75rem; }
+    .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
+    .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; color: var(--text2); }
+    .nav-links a { color: var(--text2); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta { background: var(--accent); color: white; padding: 0.5rem 1.25rem; border-radius: 6px; font-size: 0.875rem; font-weight: 600; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.85; color: white; }
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; color: var(--text); line-height: 0; }
+    .nav-dropdown {
+      display: none; position: fixed; top: 56px; left: 0; right: 0;
+      background: rgba(10,10,15,0.98); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      flex-direction: column; gap: 0; padding: 0;
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+      z-index: 99;
+    }
+    .nav-dropdown.open { max-height: 420px; }
+    .nav-dropdown a { display: block; padding: 0.9rem 1.5rem; font-size: 1rem; color: var(--text2); border-bottom: 1px solid rgba(255,255,255,0.06); transition: color 0.15s, background 0.15s; }
+    .nav-dropdown a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+    .nav-dropdown .nav-cta-mobile { display: block; margin: 1rem 1.5rem; background: var(--accent); color: white; padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 1rem; font-weight: 600; text-align: center; border: none; }
+    @media (max-width: 768px) {
+      nav { padding: 0 1.25rem; height: 56px; }
+      .nav-links { display: none; }
+      .nav-cta { display: none; }
+      .nav-toggle { display: flex; align-items: center; justify-content: center; }
+      .nav-dropdown { display: flex; }
+    }
+    @media (min-width: 769px) { .nav-dropdown { display: none !important; } }
+
+    /* PAGE HERO */
+    .page-hero { padding: 3.5rem 2rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .page-tag { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); font-weight: 700; margin-bottom: 0.75rem; }
+    .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 1rem; }
+    .page-hero h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .page-hero-sub { font-size: 1.1rem; color: var(--text2); max-width: 680px; line-height: 1.7; margin-bottom: 2rem; }
+
+    /* PRODUCT TABS */
+    .product-tabs { max-width: 1100px; margin: 0 auto; padding: 0 2rem 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .tab-btn { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 0.6rem 1.25rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+    .tab-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+    /* LAYOUT: sidebar + main */
+    .layout { display: grid; grid-template-columns: 240px 1fr; gap: 2rem; max-width: 1100px; margin: 0 auto; padding: 0 2rem 4rem; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    /* SIDEBAR */
+    .sidebar { position: sticky; top: 76px; height: calc(100vh - 100px); overflow-y: auto; }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .sidebar-section { margin-bottom: 0.25rem; }
+    .sidebar-chapter { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; color: var(--text2); cursor: pointer; transition: background 0.15s, color 0.15s; text-transform: uppercase; letter-spacing: 0.06em; }
+    .sidebar-chapter:hover, .sidebar-chapter.active { background: var(--bg2); color: var(--text); }
+    .sidebar-chapter .ch-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .sidebar-kpis { padding-left: 1.5rem; display: none; }
+    .sidebar-kpis.open { display: block; }
+    .sidebar-kpi { display: block; padding: 0.3rem 0.5rem; font-size: 0.75rem; color: var(--text3); border-radius: 4px; cursor: pointer; transition: color 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-kpi:hover { color: var(--text2); }
+    @media (max-width: 900px) { .sidebar { position: static; height: auto; } }
+
+    /* MAIN CONTENT */
+    .main-content { min-width: 0; }
+
+    /* CHAPTER SECTION */
+    .chapter-section { margin-bottom: 2rem; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+    .chapter-header { display: flex; align-items: center; gap: 1rem; padding: 1.5rem 1.75rem; cursor: pointer; transition: background 0.15s; user-select: none; }
+    .chapter-header:hover { background: rgba(255,255,255,0.02); }
+    .chapter-num { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.6; }
+    .chapter-name { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; flex: 1; }
+    .chapter-question { font-size: 0.85rem; color: var(--text2); flex: 2; display: none; }
+    @media (min-width: 600px) { .chapter-question { display: block; } }
+    .chapter-kpi-count { font-size: 0.75rem; color: var(--text3); background: var(--bg3); padding: 0.2rem 0.6rem; border-radius: 20px; white-space: nowrap; }
+    .chapter-chevron { color: var(--text3); font-size: 1rem; transition: transform 0.2s; flex-shrink: 0; }
+    .chapter-section.open .chapter-chevron { transform: rotate(180deg); }
+
+    .chapter-body { display: none; padding: 0 1.75rem 1.75rem; }
+    .chapter-section.open .chapter-body { display: block; }
+
+    .chapter-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; padding-top: 0.5rem; }
+    @media (max-width: 600px) { .chapter-meta { grid-template-columns: 1fr; } }
+    .chapter-meta-item { background: var(--bg3); border-radius: 8px; padding: 1rem 1.25rem; }
+    .chapter-meta-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 0.4rem; font-weight: 700; }
+    .chapter-meta-text { font-size: 0.85rem; color: var(--text2); line-height: 1.6; }
+
+    /* KPI CARDS */
+    .kpi-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .kpi-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .kpi-card-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1.25rem; cursor: pointer; transition: background 0.15s; }
+    .kpi-card-header:hover { background: rgba(255,255,255,0.025); }
+    .kpi-badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.2rem 0.5rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0; }
+    .kpi-name { font-size: 0.95rem; font-weight: 700; flex: 1; }
+    .kpi-short { font-size: 0.8rem; color: var(--text3); }
+    .kpi-dir { font-size: 0.75rem; padding: 0.15rem 0.5rem; border-radius: 12px; white-space: nowrap; }
+    .dir-up { background: rgba(34,197,94,0.12); color: var(--green); }
+    .dir-down { background: rgba(239,68,68,0.12); color: var(--red); }
+    .dir-neutral { background: rgba(153,153,184,0.12); color: var(--text2); }
+    .kpi-chevron { color: var(--text3); font-size: 0.85rem; transition: transform 0.2s; flex-shrink: 0; }
+    .kpi-card.open .kpi-chevron { transform: rotate(180deg); }
+
+    .kpi-body { display: none; padding: 0 1.25rem 1.25rem; }
+    .kpi-card.open .kpi-body { display: block; }
+
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+    @media (max-width: 600px) { .kpi-grid { grid-template-columns: 1fr; } }
+    .kpi-field { background: var(--bg3); border-radius: 6px; padding: 0.875rem 1rem; }
+    .kpi-field.full { grid-column: 1 / -1; }
+    .kpi-field-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 0.35rem; font-weight: 700; }
+    .kpi-field-text { font-size: 0.825rem; color: var(--text2); line-height: 1.65; }
+    .kpi-field-text code { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 0.8em; background: var(--bg); padding: 0.1em 0.35em; border-radius: 3px; color: var(--accent3); }
+
+    /* MEASUREMENT STEPS */
+    .measurement-section { margin-top: 0.75rem; }
+    .measurement-toggle { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text3); cursor: pointer; padding: 0.5rem 0; transition: color 0.15s; }
+    .measurement-toggle:hover { color: var(--text2); }
+    .measurement-toggle svg { transition: transform 0.2s; }
+    .measurement-toggle.open svg { transform: rotate(180deg); }
+    .measurement-detail { display: none; margin-top: 0.5rem; }
+    .measurement-toggle.open + .measurement-detail { display: block; }
+
+    .steps-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .step { display: flex; gap: 0.75rem; background: var(--bg3); border-radius: 6px; padding: 0.75rem 1rem; }
+    .step-num { width: 20px; height: 20px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; color: var(--text3); flex-shrink: 0; margin-top: 0.05rem; }
+    .step-content { flex: 1; min-width: 0; }
+    .step-name { font-size: 0.75rem; font-weight: 700; color: var(--text); margin-bottom: 0.2rem; }
+    .step-desc { font-size: 0.78rem; color: var(--text2); line-height: 1.55; }
+    .step-formula { font-family: 'SF Mono', 'Fira Mono', monospace; font-size: 0.75rem; background: var(--bg); color: var(--accent3); padding: 0.3rem 0.6rem; border-radius: 4px; margin-top: 0.35rem; display: block; overflow-x: auto; white-space: pre; }
+
+    /* LOADING / ERROR */
+    .state-msg { text-align: center; padding: 5rem 2rem; color: var(--text2); }
+    .state-msg .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* FOOTER */
+    footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-size: 0.8rem; color: var(--text3); }
+    footer a { color: var(--text2); }
+    footer a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <span class="dot"></span>
+    UnderCurrent
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Platform</a>
+    <a href="index.html#methodology">Methodology</a>
+    <a href="framework.html" class="active">KPI Framework</a>
+    <a href="contact.html" class="nav-cta">Request Briefing</a>
+  </div>
+  <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
+</nav>
+<div class="nav-dropdown" id="navDropdown">
+  <a href="index.html">Platform</a>
+  <a href="index.html#methodology">Methodology</a>
+  <a href="framework.html">KPI Framework</a>
+  <a href="contact.html" class="nav-cta-mobile">Request Briefing</a>
+</div>
+
+<!-- HERO -->
+<div class="page-hero">
+  <div class="page-tag">KPI Framework</div>
+  <h1>The full measurement<br><span>framework, documented.</span></h1>
+  <p class="page-hero-sub">Every KPI defined, measured, and explained — from what it captures to how it's computed. Browse by chapter, expand any KPI for the full specification.</p>
+</div>
+
+<!-- PRODUCT TABS -->
+<div class="product-tabs" id="productTabs"></div>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <aside class="sidebar" id="sidebar"></aside>
+  <main class="main-content" id="mainContent">
+    <div class="state-msg" id="loadingState">
+      <div class="spinner"></div>
+      <p>Loading framework…</p>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <p>UnderCurrent — AI Brand & Market Intelligence &nbsp;·&nbsp; <a href="index.html">Platform Overview</a> &nbsp;·&nbsp; <a href="contact.html">Request Briefing</a></p>
+</footer>
+
+<script>
+// ─── chapter accent colours ──────────────────────────────────────────────────
+const CH_COLORS = ['#6366f1','#06b6d4','#8b5cf6','#22c55e','#f59e0b'];
+
+// ─── nav toggle ──────────────────────────────────────────────────────────────
+function toggleNav() {
+  const dd = document.getElementById('navDropdown');
+  dd.classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const dd = document.getElementById('navDropdown');
+  if (dd.classList.contains('open') && !e.target.closest('nav') && !e.target.closest('.nav-dropdown')) {
+    dd.classList.remove('open');
+  }
+});
+
+// ─── text helpers ────────────────────────────────────────────────────────────
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function clean(str) {
+  // collapse block scalar whitespace to single spaces
+  if (!str) return '';
+  return String(str).replace(/\s+/g,' ').trim();
+}
+
+// ─── direction badge ─────────────────────────────────────────────────────────
+function dirBadge(dir) {
+  if (!dir) return '';
+  if (dir === 'higher_is_better') return '<span class="kpi-dir dir-up">↑ higher = better</span>';
+  if (dir === 'lower_is_better')  return '<span class="kpi-dir dir-down">↓ lower = better</span>';
+  return `<span class="kpi-dir dir-neutral">${esc(dir)}</span>`;
+}
+
+// ─── render a single KPI card ─────────────────────────────────────────────────
+function renderKPI(kpi, color, chIdx, kIdx) {
+  const id = `kpi-${esc(kpi.id)}`;
+  const badgeBg = color + '22';
+
+  // measurement steps
+  let stepsHtml = '';
+  const txfm = kpi.measurement?.transformations;
+  if (txfm && txfm.length) {
+    stepsHtml = txfm.map(s => `
+      <div class="step">
+        <div class="step-num">${s.step}</div>
+        <div class="step-content">
+          <div class="step-name">${esc(s.name)}</div>
+          <div class="step-desc">${esc(clean(s.description))}</div>
+          ${s.formula ? `<code class="step-formula">${esc(s.formula)}</code>` : ''}
+        </div>
+      </div>`).join('');
+  }
+
+  // prompt example
+  const promptEx = kpi.measurement?.inference_required?.prompt_example;
+  const rawOutput = kpi.measurement?.raw_output;
+  const outputVal = kpi.measurement?.output_value;
+
+  // optional fields collector
+  const optFields = [];
+  if (kpi.typical_range)    optFields.push(['Typical Range', kpi.typical_range]);
+  if (kpi.benchmark_note)   optFields.push(['Benchmark', kpi.benchmark_note]);
+  if (kpi.unit)             optFields.push(['Unit', kpi.unit]);
+  if (kpi.interpretation_risk) optFields.push(['Interpretation Risk', kpi.interpretation_risk]);
+  if (kpi.actionable_when)  optFields.push(['Actionable When', kpi.actionable_when]);
+  if (kpi.leading_or_lagging) optFields.push(['Leading / Lagging', kpi.leading_or_lagging]);
+  if (kpi.related_kpis)     optFields.push(['Related KPIs', Array.isArray(kpi.related_kpis) ? kpi.related_kpis.join(', ') : kpi.related_kpis]);
+  if (kpi.report_pairing)   optFields.push(['Report Pairing', kpi.report_pairing]);
+
+  // implementation details
+  const impl = kpi.implementation;
+
+  return `
+  <div class="kpi-card" id="${id}">
+    <div class="kpi-card-header" onclick="toggleKPI('${id}')">
+      <span class="kpi-badge" style="background:${badgeBg};color:${color}">${esc(kpi.short_name || kpi.id)}</span>
+      <span class="kpi-name">${esc(kpi.name)}</span>
+      ${dirBadge(kpi.direction)}
+      <svg class="kpi-chevron" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M2.5 5l4.5 4 4.5-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        ${kpi.motivation ? `<div class="kpi-field full"><div class="kpi-field-label">Why it matters</div><div class="kpi-field-text">${esc(clean(kpi.motivation))}</div></div>` : ''}
+        ${kpi.definition ? `<div class="kpi-field full"><div class="kpi-field-label">Definition</div><div class="kpi-field-text">${esc(clean(kpi.definition))}</div></div>` : ''}
+        ${kpi.how_to_read ? `<div class="kpi-field full"><div class="kpi-field-label">How to read it</div><div class="kpi-field-text">${esc(clean(kpi.how_to_read))}</div></div>` : ''}
+        ${optFields.map(([lbl, val]) => `
+          <div class="kpi-field">
+            <div class="kpi-field-label">${esc(lbl)}</div>
+            <div class="kpi-field-text">${esc(clean(String(val)))}</div>
+          </div>`).join('')}
+      </div>
+
+      ${promptEx ? `
+      <div class="kpi-field" style="margin-bottom:0.75rem">
+        <div class="kpi-field-label">Example Prompt</div>
+        <div class="kpi-field-text"><code>${esc(clean(promptEx))}</code></div>
+      </div>` : ''}
+
+      ${stepsHtml || impl ? `
+      <div class="measurement-section">
+        <div class="measurement-toggle" onclick="toggleMeasurement(this)">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Implementation details
+        </div>
+        <div class="measurement-detail">
+          ${stepsHtml ? `<div class="steps-list" style="margin-bottom:0.75rem">${stepsHtml}</div>` : ''}
+          ${impl ? Object.entries(impl).map(([k, v]) => `
+            <div class="kpi-field" style="margin-bottom:0.5rem">
+              <div class="kpi-field-label">${esc(k.replace(/_/g,' '))}</div>
+              <div class="kpi-field-text">${esc(clean(String(v)))}</div>
+            </div>`).join('') : ''}
+        </div>
+      </div>` : ''}
+    </div>
+  </div>`;
+}
+
+// ─── render a chapter section ────────────────────────────────────────────────
+function renderChapter(ch, chIdx, productId) {
+  const color = CH_COLORS[chIdx % CH_COLORS.length];
+  const id = `ch-${productId}-${esc(ch.id)}`;
+  const kpis = ch.kpis || [];
+  const kpiHtml = kpis.map((kpi, ki) => renderKPI(kpi, color, chIdx, ki)).join('');
+
+  return `
+  <div class="chapter-section" id="${id}" data-chapter="${esc(ch.id)}" data-product="${productId}">
+    <div class="chapter-header" onclick="toggleChapter('${id}')">
+      <div style="display:flex;align-items:center;gap:0.75rem;flex:1;min-width:0">
+        <span class="chapter-num" style="color:${color}">Chapter ${ch.number || chIdx+1}</span>
+        <span class="chapter-name">${esc(ch.name)}</span>
+      </div>
+      <span class="chapter-question">${esc(clean(ch.client_question))}</span>
+      <span class="chapter-kpi-count">${kpis.length} KPI${kpis.length !== 1 ? 's' : ''}</span>
+      <svg class="chapter-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="chapter-body">
+      <div class="chapter-meta">
+        ${ch.illuminates ? `<div class="chapter-meta-item"><div class="chapter-meta-label">What it illuminates</div><div class="chapter-meta-text">${esc(clean(ch.illuminates))}</div></div>` : ''}
+        ${ch.unique_insight ? `<div class="chapter-meta-item"><div class="chapter-meta-label">Unique insight</div><div class="chapter-meta-text">${esc(clean(ch.unique_insight))}</div></div>` : ''}
+        ${ch.enables ? `<div class="chapter-meta-item"><div class="chapter-meta-label">Enables</div><div class="chapter-meta-text">${esc(clean(ch.enables))}</div></div>` : ''}
+        ${ch.improves ? `<div class="chapter-meta-item"><div class="chapter-meta-label">Improves</div><div class="chapter-meta-text">${esc(clean(ch.improves))}</div></div>` : ''}
+      </div>
+      <div class="kpi-list">
+        ${kpiHtml}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ─── toggle helpers ──────────────────────────────────────────────────────────
+function toggleChapter(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  // sync sidebar
+  const sidebarBtn = document.querySelector(`.sidebar-chapter[data-target="${id}"]`);
+  if (sidebarBtn) {
+    sidebarBtn.classList.toggle('active', el.classList.contains('open'));
+    const kpiList = sidebarBtn.nextElementSibling;
+    if (kpiList) kpiList.classList.toggle('open', el.classList.contains('open'));
+  }
+}
+
+function toggleKPI(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleMeasurement(btn) {
+  btn.classList.toggle('open');
+}
+
+// ─── active product state ────────────────────────────────────────────────────
+let activeProductId = null;
+
+function showProduct(productId) {
+  activeProductId = productId;
+  // tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.product === productId);
+  });
+  // chapters
+  document.querySelectorAll('.chapter-section').forEach(el => {
+    el.style.display = el.dataset.product === productId ? '' : 'none';
+  });
+  // sidebar
+  document.querySelectorAll('.sidebar-section').forEach(el => {
+    el.style.display = el.dataset.product === productId ? '' : 'none';
+  });
+}
+
+// ─── build sidebar for a product ─────────────────────────────────────────────
+function buildSidebarProduct(product, productId) {
+  const chapters = product.chapters || [];
+  return chapters.map((ch, chIdx) => {
+    const color = CH_COLORS[chIdx % CH_COLORS.length];
+    const chId = `ch-${productId}-${ch.id}`;
+    const kpis = ch.kpis || [];
+    const kpiLinks = kpis.map(kpi =>
+      `<a class="sidebar-kpi" onclick="scrollToKPI('kpi-${kpi.id}')">${esc(kpi.short_name || kpi.name)}</a>`
+    ).join('');
+    return `
+    <div class="sidebar-section" data-product="${productId}">
+      <div class="sidebar-chapter" data-target="${chId}" onclick="sidebarChapterClick('${chId}')">
+        <span class="ch-dot" style="background:${color}"></span>
+        <span>${esc(ch.name)}</span>
+      </div>
+      <div class="sidebar-kpis">
+        ${kpiLinks}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function sidebarChapterClick(id) {
+  // open chapter and scroll to it
+  const el = document.getElementById(id);
+  if (!el.classList.contains('open')) toggleChapter(id);
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function scrollToKPI(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  // ensure parent chapter is open
+  const chSection = el.closest('.chapter-section');
+  if (chSection && !chSection.classList.contains('open')) toggleChapter(chSection.id);
+  // open kpi card
+  if (!el.classList.contains('open')) el.classList.add('open');
+  setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+}
+
+// ─── main render ─────────────────────────────────────────────────────────────
+function render(data) {
+  const products = data.platform?.products || [];
+  if (!products.length) {
+    document.getElementById('mainContent').innerHTML = '<div class="state-msg"><p>No products found in YAML.</p></div>';
+    return;
+  }
+
+  // build tabs
+  const tabsEl = document.getElementById('productTabs');
+  tabsEl.innerHTML = products.map(p =>
+    `<button class="tab-btn" data-product="${esc(p.id)}" onclick="showProduct('${esc(p.id)}')">${esc(p.name)}</button>`
+  ).join('');
+
+  // build sidebar
+  const sidebarEl = document.getElementById('sidebar');
+  sidebarEl.innerHTML = products.map(p => buildSidebarProduct(p, p.id)).join('');
+
+  // build main content
+  const mainEl = document.getElementById('mainContent');
+  mainEl.innerHTML = products.map(p => {
+    const chapters = p.chapters || [];
+    return chapters.map((ch, chIdx) => renderChapter(ch, chIdx, p.id)).join('');
+  }).join('');
+
+  // show first product by default
+  showProduct(products[0].id);
+
+  // open first chapter by default
+  const firstCh = document.querySelector(`.chapter-section[data-product="${products[0].id}"]`);
+  if (firstCh) toggleChapter(firstCh.id);
+}
+
+// ─── fetch and parse ──────────────────────────────────────────────────────────
+async function load() {
+  try {
+    // cache-bust with timestamp so refreshing always gets latest YAML
+    const resp = await fetch('undercurrent.yaml?v=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const text = await resp.text();
+    const data = jsyaml.load(text);
+    document.getElementById('loadingState')?.remove();
+    render(data);
+  } catch(err) {
+    document.getElementById('mainContent').innerHTML = `
+      <div class="state-msg">
+        <p style="color:var(--red)">Failed to load framework: ${esc(err.message)}</p>
+        <p style="margin-top:0.5rem;font-size:0.8rem">Make sure <code>undercurrent.yaml</code> is in the same directory.</p>
+      </div>`;
+  }
+}
+
+load();
+</script>
+</body>
+</html>

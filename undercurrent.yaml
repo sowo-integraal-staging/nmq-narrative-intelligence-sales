@@ -1,0 +1,2599 @@
+platform:
+  name: UnderCurrent
+  tagline: "What does AI say about your brand? What does AI say about your market?"
+  paired_pitch: >
+    We tell you what your buyers think. And what AI tells them to think about you.
+  closing_pitch: >
+    Understand what AI says about your market. Know exactly how AI represents you within
+    that market. Act on both — with a prioritised roadmap that tells you what to fix,
+    what to claim, and how to measure whether it worked.
+
+  # The two products run on the same inference engine and cohort machinery.
+  # What differs is the question being asked — and therefore the chapter structure
+  # and KPI logic that gives the data meaning.
+  shared_infrastructure: >
+    Both products share the same prompting infrastructure, persona/cohort system,
+    and data collection layer. A single study run can power outputs for both products
+    simultaneously. The execution engine (Cohortster) handles prompt dispatch,
+    async execution, cost gating, and structured output storage.
+
+  cross_product_note: >
+    Both products share a Chapter 4 quality gate — but in different directions.
+    Brand Monitor Ch. 4 (Reliability) asks whether your brand's AI presence is stable.
+    Market Research Ch. 4 (Signal Consistency) asks whether AI as a research instrument
+    is reliable for the question being studied. If Brand Monitor shows high model
+    divergence for your brand, Market Research findings for your category should be
+    interpreted with extra caution — because the models don't agree on you.
+
+  products:
+
+    # ═══════════════════════════════════════════════════════════════
+    # PRODUCT A — AI BRAND MONITOR
+    # ═══════════════════════════════════════════════════════════════
+
+    - id: ai_brand_monitor
+      name: AI Brand Monitor
+      tagline: "The brand audit for the AI era."
+      role: >
+        AI is the subject. You are auditing how the AI layer represents your brand
+        and products — visibility, authority, narrative accuracy, and stability over time.
+      client_persona: Brand teams, CMOs, communications directors
+      cadence: Ongoing monitoring with quarterly action reviews
+      origin_story: >
+        Product A exists because of AI — not independently of it. It is a response to
+        a new risk that didn't exist before. AI is now a decision-making intermediary:
+        when someone asks ChatGPT "what's the best accounting software for a mid-size
+        firm?", AI answers, and that answer shapes consideration sets. LLMs don't index
+        neutrally like search engines — they synthesise, weight, and recommend. They
+        have something that functions like a point of view. Clients never had to care
+        what an algorithm thought of their brand before. Now they do.
+      why_different_from_brand_tracking: >
+        Traditional brand tracking measures human recall and sentiment. Product A
+        measures what a machine outputs — the AI layer buyers interact through before
+        they form a consideration set. There is no prior methodology that maps to
+        "auditing a model's implicit brand representation." It is genuinely new.
+      chapter_arc: >
+        You appear (Ch. 1 Visibility) because authoritative sources vouch for you
+        (Ch. 2 Authority), which shapes the narrative AI tells about you (Ch. 3 Narrative),
+        and we can measure how stable that is (Ch. 4 Reliability), so you know exactly
+        what to act on and in what order (Ch. 5 Action).
+
+      chapters:
+
+        # ───────────────────────────────────────────────────────────
+        - id: abm_ch1
+          number: 1
+          name: Visibility
+          client_question: "Are you in the room when buyers ask?"
+          illuminates: >
+            Whether your brand exists in the AI layer at the moment a buyer asks a
+            purchase-relevant question — before any human recommendation, search result,
+            or sales call intervenes.
+          unique_insight: >
+            A brand can have strong human awareness and near-zero AI presence. Traditional
+            brand tracking cannot detect this gap. This chapter makes it visible,
+            measurable, and comparable across competitors.
+          enables: >
+            Segment-specific presence profiling. Competitive benchmarking of AI share.
+            Intent-level gap identification (present for informational queries but absent
+            for high-intent buy-decision queries).
+          improves: >
+            Content strategy targeting training signals. Publisher relationships that
+            increase citation frequency. Category definition work. Visibility scores
+            should respond to a 6–12 month content and PR cycle.
+
+          kpis:
+
+            - id: soa
+              name: Share of Answer
+              short_name: SoA
+              motivation: >
+                AI is increasingly the first touchpoint in a buyer's research journey.
+                If your brand does not appear in AI responses to relevant category
+                queries, you are invisible at the most consequential moment — before
+                the buyer has formed a consideration set.
+              definition: >
+                The proportion of relevant AI inference trials in which the brand is
+                mentioned at least once, regardless of position, expressed as a
+                percentage. Measured per cohort cell (persona × intent × model).
+              how_to_read: >
+                SoA of 80% means your brand appeared in 80 out of 100 relevant queries
+                for this cohort. SoA below 30% indicates marginal AI presence — the
+                brand is not reliably part of the AI-generated consideration set for
+                this segment. SoA above 70% indicates strong structural presence.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100%"
+              benchmark_note: "Category averages typically 20–60% for established brands"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence
+                  prompt_example: >
+                    "What are the leading providers of [category] in [market]?"
+                    / "I am looking for [product type]. What should I consider?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text_or_ranked_list
+                  fields_extracted:
+                    - brand_mentioned: bool
+                    - mention_position: "int (1–N, null if not mentioned)"
+                    - mention_count: int
+                transformations:
+                  - step: 1
+                    name: mention_flag
+                    description: >
+                      For each trial, set mentioned=true if the brand name (or any
+                      registered alias) appears anywhere in the response text.
+                    formula: "mentioned_i = brand_name ∈ response_text_i"
+                  - step: 2
+                    name: soa_per_cell
+                    description: >
+                      Count trials where brand was mentioned, divide by total trials
+                      for that cohort cell.
+                    formula: "SoA_cell = Σ(mentioned_i) / N_trials"
+                  - step: 3
+                    name: aggregate
+                    description: >
+                      Aggregate across cohort cells using weighted average, weight
+                      proportional to cohort size (or equal weight if unspecified).
+                    formula: "SoA = Σ(SoA_cell × w_cell) / Σ(w_cell)"
+                output_value:
+                  type: percentage
+                  granularity: per_cohort
+                  comparable_across: [competitors, models, time_periods, markets]
+
+            - id: shortlist_rate
+              name: Shortlist Rate
+              short_name: SR
+              motivation: >
+                Being mentioned is not enough — appearing in the top 3 is what drives
+                consideration. Shortlist Rate separates structural presence from
+                peripheral mentions.
+              definition: >
+                The proportion of relevant inference trials in which the brand appears
+                in the top 3 positions of a ranked AI response. Only applicable to
+                prompts that elicit a ranked list.
+              how_to_read: >
+                SR of 60% means you were in the top 3 in 6 of 10 ranked responses.
+                High SoA with low SR indicates the brand is mentioned but not prioritised
+                — a narrative or authority problem, not a visibility problem.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: ranked_recommendation
+                  prompt_example: >
+                    "What are the top 3 providers of [category] for [persona]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: ranked_list
+                  fields_extracted:
+                    - brand_position: "int (1–N, null if not in list)"
+                    - list_length: int
+                transformations:
+                  - step: 1
+                    name: top3_flag
+                    description: "Set in_shortlist=true if brand_position <= 3."
+                    formula: "in_shortlist_i = (brand_position_i ≤ 3)"
+                  - step: 2
+                    name: shortlist_rate_per_cell
+                    description: "Proportion of trials where brand was in top 3."
+                    formula: "SR_cell = Σ(in_shortlist_i) / N_trials"
+                  - step: 3
+                    name: aggregate
+                    description: "Weighted average across cohort cells."
+                    formula: "SR = Σ(SR_cell × w_cell) / Σ(w_cell)"
+                output_value:
+                  type: percentage
+                  granularity: per_cohort
+                  comparable_across: [competitors, models, time_periods]
+
+            - id: intent_visibility
+              name: Intent Visibility
+              short_name: IV
+              motivation: >
+                A brand may appear for informational queries but vanish for high-intent
+                buy-decision queries — exactly where it matters most. Intent Visibility
+                reveals whether presence is strategically aligned with the buyer journey.
+              definition: >
+                SoA broken down by intent type (informational / comparative /
+                buy-decision / navigational). Each intent type is scored separately;
+                the composite is an intent-weighted average where buy-decision carries
+                highest weight.
+              how_to_read: >
+                High SoA for informational, low for buy-decision = awareness without
+                conversion support. The intent weighting makes the composite sensitive
+                to the stages that matter commercially.
+              unit: "weighted % (0–100)"
+              direction: higher_is_better
+              typical_range: "0–100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: intent_segmented_presence
+                  prompt_example: >
+                    Informational: "What is [category]?"
+                    Comparative: "Compare [Brand A] and [Brand B] for [use case]."
+                    Buy-decision: "Which [product] should I buy for [specific need]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 15
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - brand_mentioned: bool
+                    - intent_type: "enum: informational|comparative|buy_decision|navigational"
+                transformations:
+                  - step: 1
+                    name: soa_per_intent
+                    description: "Compute SoA separately for each intent type."
+                    formula: "SoA_intent_k = Σ(mentioned_i | intent=k) / N_trials_k"
+                  - step: 2
+                    name: intent_weighted_composite
+                    description: >
+                      Apply intent weights (configurable; default: buy_decision=0.4,
+                      comparative=0.3, informational=0.2, navigational=0.1).
+                    formula: "IV = Σ(SoA_intent_k × weight_k)"
+                output_value:
+                  type: weighted_percentage
+                  granularity: per_cohort_per_intent
+                  comparable_across: [intent_types, competitors, time_periods]
+
+            - id: share_of_voice
+              name: Share of Voice
+              short_name: SoV
+              motivation: >
+                Absolute SoA does not tell you where you stand relative to competitors.
+                Share of Voice normalises presence against the full competitive set
+                mentioned by AI, giving a relative market position score.
+              definition: >
+                The brand's mention count as a proportion of total brand mentions across
+                all competitors in the defined competitive set, within the same inference
+                batch.
+              how_to_read: >
+                SoV of 35% means your brand accounts for 35% of all brand mentions
+                across the competitive set. SoV gain over time indicates strengthening
+                AI position relative to competitors, independent of absolute query volume.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100% (sum across competitive set = 100%)"
+
+              measurement:
+                inference_required:
+                  prompt_type: competitive_presence
+                  prompt_example: >
+                    "Name the main providers in [category] in [market]."
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text_or_list
+                  fields_extracted:
+                    - brands_mentioned: "list[str]"
+                transformations:
+                  - step: 1
+                    name: count_per_brand
+                    description: "Count total mentions for each brand in competitive set."
+                    formula: "count_b = Σ_trials(b ∈ brands_mentioned_i)"
+                  - step: 2
+                    name: sov_per_brand
+                    description: "Normalise by total mentions across all brands."
+                    formula: "SoV_b = count_b / Σ_b'(count_b')"
+                output_value:
+                  type: percentage
+                  granularity: per_brand_in_competitive_set
+                  comparable_across: [competitors, time_periods, markets]
+
+            - id: preference_rate
+              name: Preference Rate
+              short_name: PR
+              motivation: >
+                When AI is asked to recommend one option, which brand does it choose?
+                Preference Rate captures the AI's implicit ranking when forced to
+                commit — the strongest signal of brand strength in the AI layer.
+              definition: >
+                The proportion of inference trials using a forced-choice or
+                top-recommendation prompt in which the brand is selected as the
+                primary (first or only) recommendation.
+              how_to_read: >
+                PR of 45% means your brand was the top recommendation in 45% of
+                forced-choice trials. This is the most commercially meaningful
+                presence metric — it simulates the AI's answer when a buyer asks
+                "just tell me which one to pick."
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: forced_choice_recommendation
+                  prompt_example: >
+                    "If you had to recommend just one [product type] for [persona],
+                    which would it be?"
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - primary_recommendation: str
+                    - brand_is_primary: bool
+                transformations:
+                  - step: 1
+                    name: primary_flag
+                    description: "Match primary_recommendation against brand alias registry."
+                    formula: "is_primary_i = (primary_recommendation_i ∈ brand_aliases)"
+                  - step: 2
+                    name: preference_rate_per_cell
+                    description: "Proportion of trials where brand was primary pick."
+                    formula: "PR_cell = Σ(is_primary_i) / N_trials"
+                  - step: 3
+                    name: aggregate
+                    description: "Weighted average across cohort cells."
+                    formula: "PR = Σ(PR_cell × w_cell) / Σ(w_cell)"
+                output_value:
+                  type: percentage
+                  granularity: per_cohort
+                  comparable_across: [competitors, models, time_periods]
+
+            - id: model_coverage
+              name: Model Coverage
+              short_name: MC
+              motivation: >
+                AI presence on one model does not guarantee presence on others. A brand
+                well-represented in GPT-4's training data may be nearly absent from
+                Claude or Gemini. Model Coverage makes this cross-model distribution
+                explicit — high variance across models indicates fragile, non-structural
+                presence.
+              definition: >
+                The number of major LLMs in which the brand achieves SoA above a
+                defined threshold (default: 40%), expressed as a fraction of models
+                tested.
+              how_to_read: >
+                MC of 5/5 means you exceed the threshold on all five tested models —
+                structural, model-independent presence. MC of 2/5 means you are
+                present on two models only — presence is model-specific and fragile.
+              unit: "N/N (fraction)"
+              direction: higher_is_better
+              typical_range: "0/5 to 5/5 (or per model count)"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence
+                  persona_priming: optional
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "SoA score per model (derived from SoA computation above)"
+                  fields_extracted:
+                    - model_id: str
+                    - soa_score: float
+                transformations:
+                  - step: 1
+                    name: threshold_flag_per_model
+                    description: "Flag each model as covered if SoA >= threshold."
+                    formula: "covered_m = (SoA_m ≥ threshold)"
+                  - step: 2
+                    name: coverage_count
+                    description: "Count models where brand is covered."
+                    formula: "MC = Σ(covered_m) / N_models_tested"
+                output_value:
+                  type: fraction
+                  granularity: per_model
+                  comparable_across: [competitors, time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: abm_ch2
+          number: 2
+          name: Authority
+          client_question: "Why does AI trust you — and who vouches for you?"
+          illuminates: >
+            The citation and trust architecture behind your AI presence. LLMs don't
+            recommend from thin air — their outputs reflect what authoritative sources
+            have written about you. This chapter maps which publishers vouch for you,
+            how consistently, and how that compares to competitors.
+          unique_insight: >
+            High visibility with weak authority signals means your presence is fragile.
+            A model update or editorial shift at a key publisher can erase it. This
+            chapter tells you whether your AI presence has structural foundations.
+          enables: >
+            Precision PR and content placement decisions. Publisher gap analysis.
+            Source concentration risk assessment.
+          improves: >
+            Publisher diversity and quality of citation. Source Citation Rate and
+            Cross-Source Reinforcement should respond to earned media investment
+            within 2–3 quarters.
+
+          kpis:
+
+            - id: source_citation_rate
+              name: Source Citation Rate
+              short_name: SCR
+              motivation: >
+                AI models that cite sources are showing their work — and those citations
+                reveal which publishers are trusted enough to influence model outputs.
+                Measuring how often sources are cited alongside your brand reveals the
+                infrastructure of your AI credibility.
+              definition: >
+                The proportion of inference trials in which the model cites at least
+                one identifiable external source (URL, publication name, or domain)
+                in the same response that mentions the brand.
+              how_to_read: >
+                SCR of 70% means 7 in 10 brand mentions come with a source citation.
+                Low SCR indicates the model is asserting your brand without citing
+                supporting sources — presence without traceable authority.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100% (varies significantly by model — Perplexity high, GPT-4 lower)"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence_with_citation_enabled
+                  prompt_example: >
+                    "What are the leading [category] providers? Please cite your sources."
+                    / Use models with web search enabled (Perplexity, GPT-4 with search).
+                  persona_priming: optional
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: free_text_with_citations
+                  fields_extracted:
+                    - brand_mentioned: bool
+                    - citations_present: bool
+                    - citation_urls: "list[str]"
+                transformations:
+                  - step: 1
+                    name: citation_flag
+                    description: "Flag trial as cited if brand mentioned AND at least one URL/source present."
+                    formula: "cited_i = (brand_mentioned_i AND len(citation_urls_i) > 0)"
+                  - step: 2
+                    name: scr_per_cell
+                    description: "Proportion of brand-mention trials that include a citation."
+                    formula: "SCR_cell = Σ(cited_i | brand_mentioned_i) / Σ(brand_mentioned_i)"
+                  - step: 3
+                    name: aggregate
+                    description: "Weighted average across cohort cells."
+                    formula: "SCR = Σ(SCR_cell × w_cell) / Σ(w_cell)"
+                output_value:
+                  type: percentage
+                  granularity: per_cohort_per_model
+                  comparable_across: [competitors, models, time_periods]
+
+            - id: publisher_citation_share
+              name: Publisher Citation Share
+              short_name: PCS
+              motivation: >
+                Not all citations are equal. Being cited by NZZ carries more authority
+                signal than being cited by an unknown blog. This KPI maps which
+                publications are vouching for you in AI responses and in what proportion.
+              definition: >
+                For all citation URLs extracted in trials where the brand is mentioned,
+                the distribution of citations across identified publishers, expressed
+                as a percentage share per outlet.
+              how_to_read: >
+                PCS showing Handelszeitung 45%, NZZ 20%, Bilanz 15%, other 20% means
+                nearly half your AI authority comes from one publisher — concentration
+                risk. If NZZ has a higher authority tier score than Handelszeitung for
+                your category, you know where to invest PR effort.
+              unit: "% per outlet"
+              direction: neutral (diversity is good; concentration is risk)
+              typical_range: "Distribution summing to 100% across identified outlets"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence_with_citation_enabled
+                  persona_priming: optional
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: free_text_with_citations
+                  fields_extracted:
+                    - citation_urls: "list[str]"
+                    - brand_mentioned: bool
+                transformations:
+                  - step: 1
+                    name: domain_extraction
+                    description: "Extract root domain from each citation URL."
+                    formula: "domain_j = extract_domain(url_j)"
+                  - step: 2
+                    name: publisher_matching
+                    description: "Match domain against publisher registry to get outlet name and tier."
+                    formula: "publisher_j = publisher_registry.lookup(domain_j)"
+                  - step: 3
+                    name: citation_count_per_publisher
+                    description: "Count citations per publisher across all brand-mention trials."
+                    formula: "count_p = Σ_trials Σ_citations(publisher_j == p)"
+                  - step: 4
+                    name: share_per_publisher
+                    description: "Normalise by total citation count."
+                    formula: "PCS_p = count_p / Σ_p'(count_p')"
+                output_value:
+                  type: distribution_percentage
+                  granularity: per_publisher
+                  comparable_across: [competitors, time_periods]
+
+            - id: publisher_authority_score
+              name: Publisher Authority Score
+              short_name: PAS
+              motivation: >
+                Citation share tells you who cites you. Authority Score tells you
+                how much those citations are worth — weighted by the tier of the
+                publisher doing the citing.
+              definition: >
+                A weighted average of citations received, where each citation is
+                weighted by the authority tier of the citing publisher (Tier 1 = 1.0,
+                Tier 2 = 0.6, Tier 3 = 0.3). Normalised to 0–100.
+              how_to_read: >
+                PAS of 72 means your citation profile is dominated by high-tier sources.
+                PAS of 28 with high SCR means you have many citations but mostly from
+                low-authority outlets — quantity without quality.
+              unit: "score 0–100"
+              direction: higher_is_better
+              typical_range: "0–100"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence_with_citation_enabled
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: "publisher_citation_list (from PCS computation)"
+                  fields_extracted:
+                    - publisher: str
+                    - tier: "int (1|2|3, from publisher registry)"
+                    - citation_count: int
+                transformations:
+                  - step: 1
+                    name: tier_weight_assignment
+                    description: "Assign weight to each citation based on publisher tier."
+                    formula: "w_p = {1: 1.0, 2: 0.6, 3: 0.3}[tier_p]"
+                  - step: 2
+                    name: weighted_citation_score
+                    description: "Sum weighted citations."
+                    formula: "raw_PAS = Σ_p(count_p × w_p)"
+                  - step: 3
+                    name: normalise
+                    description: "Normalise to 0–100 using max observed score in competitive set."
+                    formula: "PAS = (raw_PAS / max_raw_PAS_in_competitive_set) × 100"
+                output_value:
+                  type: score_0_100
+                  granularity: per_brand
+                  comparable_across: [competitors, time_periods]
+
+            - id: cross_source_reinforcement
+              name: Cross-Source Reinforcement Index
+              short_name: CSRI
+              motivation: >
+                A single publisher vouching for you is fragile. When multiple
+                independent, high-tier publishers consistently cite your brand in
+                the same context, that reinforcement creates a structural authority
+                signal that is resistant to single-publisher changes.
+              definition: >
+                The proportion of brand citation clusters (per query) in which at
+                least 2 distinct Tier 1 or Tier 2 publishers are cited together.
+                Measures co-citation diversity, not just volume.
+              how_to_read: >
+                CSRI of 65% means 65% of your citation clusters include two or more
+                high-tier independent sources. CSRI below 30% indicates your authority
+                rests on a single-source dependency.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence_with_citation_enabled
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: "citation clusters per trial (from SCR computation)"
+                  fields_extracted:
+                    - trial_id: int
+                    - brand_mentioned: bool
+                    - high_tier_publishers_cited: "list[str] (Tier 1 or 2)"
+                transformations:
+                  - step: 1
+                    name: multi_source_flag
+                    description: "Flag trial if 2+ distinct high-tier publishers cited alongside brand."
+                    formula: "multi_source_i = (len(set(high_tier_publishers_cited_i)) >= 2)"
+                  - step: 2
+                    name: csri
+                    description: "Proportion of brand-mention trials that are multi-source."
+                    formula: "CSRI = Σ(multi_source_i | brand_mentioned_i) / Σ(brand_mentioned_i)"
+                output_value:
+                  type: percentage
+                  granularity: per_brand
+                  comparable_across: [competitors, time_periods]
+
+            - id: trust_framing_index
+              name: Trust Framing Index
+              short_name: TFI
+              motivation: >
+                A brand can be mentioned and cited but framed with qualifying or
+                dismissive language ("some consider", "reportedly", "despite
+                controversy"). Trust Framing Index measures whether AI's language
+                around your brand is confident and positive or hedged and cautious.
+              definition: >
+                A scored classification of the framing language surrounding brand
+                mentions, on a four-point scale: Positive (1.0), Neutral (0.5),
+                Qualified (0.25), Dismissive (0.0). Aggregated as a weighted mean.
+              how_to_read: >
+                TFI of 0.8 indicates the brand is predominantly framed in positive,
+                confident language. TFI of 0.3 indicates hedged or cautious framing —
+                AI trusts the brand less than competitors. Compare TFI against
+                competitors to identify framing disadvantages.
+              unit: "index 0.0–1.0"
+              direction: higher_is_better
+              typical_range: "0.0–1.0"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - brand_mention_context: "str (200-char window around brand mention)"
+                transformations:
+                  - step: 1
+                    name: framing_classification
+                    description: >
+                      Classify each mention context using a keyword dictionary:
+                      Positive (strong endorsement keywords), Neutral (factual reference),
+                      Qualified (hedging language: "reportedly", "some say", "considered by"),
+                      Dismissive (negative or cautionary language).
+                    formula: "framing_i = classify(mention_context_i, framing_dictionary)"
+                  - step: 2
+                    name: framing_score
+                    description: "Map classification to numeric weight."
+                    formula: "score_i = {Positive: 1.0, Neutral: 0.5, Qualified: 0.25, Dismissive: 0.0}[framing_i]"
+                  - step: 3
+                    name: tfi_aggregate
+                    description: "Mean framing score across all brand mention trials."
+                    formula: "TFI = Σ(score_i) / N_brand_mention_trials"
+                output_value:
+                  type: index_0_1
+                  granularity: per_cohort
+                  comparable_across: [competitors, models, time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: abm_ch3
+          number: 3
+          name: Narrative
+          client_question: "What story does AI actually tell about you?"
+          illuminates: >
+            The content of AI's representation of your brand — not just whether you
+            appear, but what is said, how you are framed, what attributes are assigned,
+            and how that compares to your intended positioning.
+          unique_insight: >
+            A brand can have high visibility and strong authority signals and still
+            be described in ways that work against its strategy. This chapter
+            systematically audits the narrative AI tells about your brand at scale.
+          enables: >
+            Positioning gap identification. Messaging strategy grounded in how AI
+            currently frames you vs. how you want to be framed. Attribute-level
+            competitive comparison.
+          improves: >
+            Content and messaging that closes the narrative gap. The Narrative Gap
+            Index provides a direct feedback loop between brand strategy and AI output.
+
+          kpis:
+
+            - id: role_attribution
+              name: Role Attribution
+              short_name: RA
+              motivation: >
+                AI classifies brands into implicit roles — market leader, challenger,
+                niche specialist, legacy player, value option. These role assignments
+                shape how buyers perceive and shortlist brands. Knowing your assigned
+                role reveals whether AI is reinforcing or undermining your positioning.
+              definition: >
+                The dominant role category assigned to the brand across inference trials,
+                derived from keyword and framing classification of brand mention contexts.
+                Reported as a distribution across role categories.
+              how_to_read: >
+                A distribution heavily weighted toward "market leader" (70%) is ideal
+                for an established brand. "Niche specialist" (60%) may be appropriate
+                for a focused player. "Value option" for a premium brand is a positioning
+                mismatch that requires content correction.
+              unit: "distribution % across role categories"
+              direction: neutral (target role is client-defined)
+              typical_range: "Distribution summing to 100% across: market_leader / challenger / niche_specialist / legacy_player / value_option / unclassified"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_description
+                  prompt_example: >
+                    "How would you describe [Brand] in the [category] market?"
+                    "What is [Brand] known for?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - brand_description_text: str
+                transformations:
+                  - step: 1
+                    name: role_classification
+                    description: >
+                      Apply role taxonomy keyword classifier to brand description text.
+                      Categories: market_leader, challenger, niche_specialist,
+                      legacy_player, value_option, unclassified.
+                    formula: "role_i = classify(brand_description_text_i, role_taxonomy_dict)"
+                  - step: 2
+                    name: role_distribution
+                    description: "Compute proportion of trials assigned to each role category."
+                    formula: "RA_role_k = Σ(role_i == k) / N_trials"
+                output_value:
+                  type: distribution
+                  granularity: per_brand_per_cohort
+                  comparable_across: [competitors, time_periods]
+
+            - id: topic_alignment_score
+              name: Topic Alignment Score
+              short_name: TAS
+              motivation: >
+                A brand that appears in AI responses but only for topics outside its
+                strategic intent has a misalignment problem. Topic Alignment measures
+                whether AI associates your brand with the right intent contexts.
+              definition: >
+                The proportion of brand mentions that occur within the client-defined
+                set of target topics and intent types, versus off-target topics.
+              how_to_read: >
+                TAS of 85% means 85% of your brand appearances are in the right topic
+                context. TAS of 40% means the majority of your AI presence is in
+                contexts irrelevant to your strategy — noise, not signal.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "0–100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: topic_segmented_presence
+                  prompt_example: >
+                    Prompts designed to probe on-target topics (defined at study setup)
+                    vs. off-target control topics.
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 15
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - brand_mentioned: bool
+                    - prompt_topic: str
+                    - topic_is_target: bool
+                transformations:
+                  - step: 1
+                    name: on_target_flag
+                    description: "Flag each brand mention as on-target or off-target based on prompt topic."
+                    formula: "on_target_i = (brand_mentioned_i AND topic_is_target_i)"
+                  - step: 2
+                    name: tas_computation
+                    description: "Proportion of brand mentions that are on-target."
+                    formula: "TAS = Σ(on_target_i) / Σ(brand_mentioned_i)"
+                output_value:
+                  type: percentage
+                  granularity: per_topic_category
+                  comparable_across: [competitors, time_periods]
+
+            - id: reason_for_recommendation
+              name: Reason-for-Recommendation
+              short_name: RFR
+              motivation: >
+                When AI recommends your brand, it typically gives a reason. Those reasons
+                reveal which attributes AI associates with you — price, reputation,
+                specialisation, innovation, trust. Knowing which attributes drive your
+                AI recommendations lets you audit whether they match your strategy.
+              definition: >
+                A ranked distribution of the attributes cited as reasons for recommending
+                the brand, extracted and clustered from recommendation-context text.
+              how_to_read: >
+                RFR showing price (45%), reliability (30%), brand recognition (15%)
+                means AI recommends you primarily as a cost option. If your strategy
+                is premium positioning, this is a content signal — the attributes AI
+                learned from your ecosystem don't match your intent.
+              unit: "ranked distribution % across attribute clusters"
+              direction: neutral (target distribution is client-defined)
+              typical_range: "Distribution summing to 100% across attribute clusters"
+
+              measurement:
+                inference_required:
+                  prompt_type: recommendation_with_reason
+                  prompt_example: >
+                    "Why would you recommend [Brand] for [use case]?"
+                    "What are [Brand]'s main strengths in [category]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - recommendation_reason_text: str
+                transformations:
+                  - step: 1
+                    name: attribute_extraction
+                    description: >
+                      Extract attribute mentions from reason text using attribute
+                      taxonomy keyword dictionary.
+                    formula: "attributes_i = extract_attributes(recommendation_reason_text_i, attribute_dict)"
+                  - step: 2
+                    name: attribute_clustering
+                    description: >
+                      Cluster extracted attributes into canonical categories
+                      (e.g. price/value, reliability/trust, innovation, specialisation,
+                      brand recognition, customer service).
+                    formula: "clusters_i = cluster(attributes_i, attribute_taxonomy)"
+                  - step: 3
+                    name: rfr_distribution
+                    description: "Compute share of each attribute cluster across all trials."
+                    formula: "RFR_cluster_k = Σ(k ∈ clusters_i) / N_trials"
+                output_value:
+                  type: ranked_distribution
+                  granularity: per_brand_per_cohort
+                  comparable_across: [competitors, time_periods]
+
+            - id: narrative_gap_index
+              name: Narrative Gap Index
+              short_name: NGI
+              motivation: >
+                The most actionable output in the platform. Compares AI's actual
+                narrative about your brand against your declared strategic positioning.
+                The delta between desired and actual is the gap you need to close.
+              definition: >
+                A composite distance score between the client-declared desired positioning
+                (attributes, role, topics) and the measured AI narrative (from Role
+                Attribution, Topic Alignment, Reason-for-Recommendation). Normalised
+                to 0–100 where 0 = perfect alignment, 100 = maximum divergence.
+              how_to_read: >
+                NGI of 12 = AI's narrative is closely aligned with your positioning.
+                NGI of 67 = significant misalignment — AI is telling a story about you
+                that conflicts with your strategy. NGI is the primary metric for
+                tracking the impact of content and PR interventions over time.
+              unit: "index 0–100 (0=aligned, 100=maximum divergence)"
+              direction: lower_is_better
+              typical_range: "0–100"
+              requires_client_input: true
+              client_input_description: >
+                Client must define desired positioning at study setup: target role,
+                target attributes (with weights), target topic distribution.
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_description + recommendation_with_reason
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "derived from Role Attribution, Topic Alignment, RFR outputs"
+                  fields_extracted:
+                    - measured_role_distribution: dict
+                    - measured_topic_alignment: float
+                    - measured_rfr_distribution: dict
+                transformations:
+                  - step: 1
+                    name: desired_vs_actual_role
+                    description: "Compute distance between desired role distribution and measured role distribution."
+                    formula: "Δ_role = JSD(desired_role_distribution, measured_role_distribution)"
+                  - step: 2
+                    name: desired_vs_actual_topics
+                    description: "Compute gap between desired topic alignment target and measured TAS."
+                    formula: "Δ_topic = |desired_TAS - measured_TAS|"
+                  - step: 3
+                    name: desired_vs_actual_attributes
+                    description: "Compute distance between desired attribute distribution and measured RFR."
+                    formula: "Δ_attributes = JSD(desired_rfr_distribution, measured_rfr_distribution)"
+                  - step: 4
+                    name: composite_ngi
+                    description: >
+                      Weighted composite of the three deltas. Default weights:
+                      role=0.3, topic=0.3, attributes=0.4. Normalise to 0–100.
+                    formula: "NGI = normalise(0.3×Δ_role + 0.3×Δ_topic + 0.4×Δ_attributes) × 100"
+                output_value:
+                  type: index_0_100
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+            - id: framing_quality
+              name: Framing Quality
+              short_name: FQ
+              motivation: >
+                Beyond sentiment, framing quality captures whether AI language about
+                your brand is confident and direct vs. hedged, qualified, or dismissive.
+                A brand can have neutral sentiment but poor framing quality — mentioned
+                but never as a clear recommendation.
+              definition: >
+                A four-category classification of the predominant language framing
+                surrounding brand mentions: Positive / Neutral / Qualified / Dismissive.
+                Reported as a distribution; summary score is proportion of
+                Positive + Neutral frames.
+              how_to_read: >
+                A distribution of Positive 60%, Neutral 30%, Qualified 8%, Dismissive 2%
+                indicates a healthy framing profile. Qualified framing above 20% is a
+                warning signal — AI is hedging when it mentions you.
+              unit: "distribution % across: Positive / Neutral / Qualified / Dismissive"
+              direction: "more Positive is better; less Qualified/Dismissive is better"
+              typical_range: "Distribution summing to 100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - brand_mention_context: "str (200-char window around mention)"
+                transformations:
+                  - step: 1
+                    name: framing_classification
+                    description: "Classify mention context into framing category using keyword dictionary."
+                    formula: "framing_i = classify(mention_context_i, framing_dict)"
+                  - step: 2
+                    name: framing_distribution
+                    description: "Compute proportion of mentions in each framing category."
+                    formula: "FQ_k = Σ(framing_i == k) / N_brand_mentions"
+                output_value:
+                  type: distribution
+                  granularity: per_cohort
+                  comparable_across: [competitors, time_periods]
+
+            - id: comparative_narrative_role
+              name: Comparative Narrative Role
+              short_name: CNR
+              motivation: >
+                When AI describes your brand relative to competitors, it assigns an
+                implicit competitive role. Understanding whether AI frames you as
+                market leader, challenger, or alternative to something else tells you
+                how it positions you in the buyer's competitive landscape.
+              definition: >
+                The dominant competitive framing of the brand in responses that mention
+                both the brand and at least one competitor. Categories: Leader /
+                Challenger / Alternative / Complementary / Unclassified.
+              how_to_read: >
+                CNR of Leader 55% means in most comparative contexts AI frames your
+                brand as the reference point. CNR of Alternative 60% means AI typically
+                frames you as a secondary option to a competitor — a positioning problem
+                if you're trying to lead the category.
+              unit: "distribution % across: Leader / Challenger / Alternative / Complementary / Unclassified"
+              direction: neutral (target depends on brand strategy)
+              typical_range: "Distribution summing to 100%"
+
+              measurement:
+                inference_required:
+                  prompt_type: comparative_brand_description
+                  prompt_example: >
+                    "How does [Brand] compare to [Competitor] in [category]?"
+                    "Who are the main alternatives to [Brand]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - comparative_context_text: str
+                transformations:
+                  - step: 1
+                    name: comparative_role_classification
+                    description: >
+                      Classify comparative framing using role taxonomy:
+                      Leader (brand is reference point), Challenger (brand challenges leader),
+                      Alternative (brand offered as secondary option to another),
+                      Complementary (brand used alongside another).
+                    formula: "cnr_i = classify(comparative_context_text_i, comparative_role_dict)"
+                  - step: 2
+                    name: cnr_distribution
+                    description: "Distribution across competitive role categories."
+                    formula: "CNR_k = Σ(cnr_i == k) / N_comparative_trials"
+                output_value:
+                  type: distribution
+                  granularity: per_brand_per_competitor_pair
+                  comparable_across: [competitors, time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: abm_ch4
+          number: 4
+          name: Reliability
+          client_question: "Can you trust these numbers — and will they hold tomorrow?"
+          illuminates: >
+            The variance, sensitivity, and temporal stability of your AI presence.
+            The quality gate that separates findings worth acting on from noise.
+          unique_insight: >
+            A single measurement without error bars is an anecdote. This chapter
+            gives every finding from Chapters 1–3 a confidence band. It also reveals
+            whether your presence is maturing (becoming more stable) or remains fragile.
+          enables: >
+            Confidence-graded reporting. Priority weighting of findings by stability.
+            Early detection of model updates that affect brand representation.
+          improves: >
+            Measurement discipline. A reliability profile that improves over time is
+            itself a strategic signal — fragile presence becoming structural.
+
+          kpis:
+
+            - id: response_variance
+              name: Response Variance
+              short_name: RV
+              motivation: >
+                AI outputs are non-deterministic. The same prompt can produce different
+                results on repeated runs. Without measuring variance, you cannot know
+                whether a reported SoA of 72% is a stable signal or could swing to
+                41% on the next run.
+              definition: >
+                The standard deviation of SoA scores across all replications of the
+                same prompt × cohort cell. Reported per KPI to provide a confidence
+                band around each chapter's outputs.
+              how_to_read: >
+                RV (σ) of 3% around an SoA of 72% means the true score is reliably
+                in the 69–75% range — act on it. RV of 22% means the score is
+                highly unstable — treat as directional, not as a hard finding.
+              unit: "σ (percentage points)"
+              direction: lower_is_better
+              typical_range: "1–30 percentage points depending on model and prompt type"
+
+              measurement:
+                inference_required:
+                  prompt_type: same_as_source_kpi
+                  model_scope: all_major
+                  replications: 30
+                raw_output:
+                  format: "SoA score per replication (from SoA measurement runs)"
+                  fields_extracted:
+                    - soa_per_replication: "list[float]"
+                transformations:
+                  - step: 1
+                    name: standard_deviation
+                    description: "Compute standard deviation across replication SoA scores."
+                    formula: "RV = σ(soa_per_replication)"
+                output_value:
+                  type: standard_deviation
+                  granularity: per_kpi_per_cohort
+                  comparable_across: [competitors, time_periods]
+
+            - id: model_divergence_index
+              name: Model Divergence Index
+              short_name: MDI
+              motivation: >
+                Different LLMs have different training data, weighting, and update
+                cycles. A brand well-represented on GPT-4 may score very differently
+                on Claude or Gemini. High model divergence means your presence is
+                model-specific — fragile and dependent on one provider's editorial
+                choices.
+              definition: >
+                A measure of how much SoA scores vary across major models for the
+                same prompt and cohort. Computed as the range (max − min) of
+                per-model SoA scores, normalised to 0–100.
+              how_to_read: >
+                MDI of 10 = scores are closely aligned across models — structural
+                presence. MDI of 55 = large cross-model spread — presence is
+                model-dependent and will behave unpredictably as models update.
+              unit: "index 0–100 (0=identical across models)"
+              direction: lower_is_better
+              typical_range: "0–100"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "SoA per model"
+                  fields_extracted:
+                    - model_id: str
+                    - soa: float
+                transformations:
+                  - step: 1
+                    name: per_model_soa
+                    description: "Collect SoA score per model from standard measurement."
+                    formula: "SoA_m = SoA computation per model m"
+                  - step: 2
+                    name: mdi_range
+                    description: "Compute range across models, normalise to 0–100."
+                    formula: "MDI = (max(SoA_m) − min(SoA_m)) × 100"
+                output_value:
+                  type: index_0_100
+                  granularity: per_brand
+                  comparable_across: [competitors, time_periods]
+
+            - id: persona_sensitivity_index
+              name: Persona Sensitivity Index
+              short_name: PSI
+              motivation: >
+                Adding a persona primer to a prompt changes AI outputs — sometimes
+                dramatically. PSI measures how much your brand presence scores shift
+                when persona priming is applied. High sensitivity means your AI
+                presence is context-dependent; low sensitivity means it is robust.
+              definition: >
+                The average absolute difference in SoA between primed (persona-active)
+                and unprimed (baseline) inference trials, across all persona variants
+                tested, normalised to 0–100.
+              how_to_read: >
+                PSI of 8 = presence is robust across persona contexts. PSI of 42 =
+                your SoA score shifts significantly depending on the persona in the
+                prompt — you may be strong for one segment but weak for others.
+              unit: "index 0–100"
+              direction: lower_is_better (high PSI = unstable; but high PSI can also reveal useful segment variation)
+              typical_range: "0–100"
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_presence_primed_vs_unprimed
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "SoA per trial with persona flag"
+                  fields_extracted:
+                    - soa_primed: "float per persona variant"
+                    - soa_unprimed: float
+                transformations:
+                  - step: 1
+                    name: delta_per_persona
+                    description: "Compute absolute difference in SoA for each persona vs. unprimed baseline."
+                    formula: "Δ_p = |SoA_primed_p − SoA_unprimed|"
+                  - step: 2
+                    name: psi_average
+                    description: "Average delta across all persona variants, normalise to 0–100."
+                    formula: "PSI = mean(Δ_p) × 100"
+                output_value:
+                  type: index_0_100
+                  granularity: per_brand_per_persona
+                  comparable_across: [competitors, time_periods]
+
+            - id: temporal_stability_score
+              name: Temporal Stability Score
+              short_name: TSS
+              motivation: >
+                AI models are updated silently. A score that was 70% last quarter may
+                be 45% this quarter with no action on your part. Temporal Stability
+                measures how much your key scores drift between measurement periods,
+                enabling you to distinguish intentional change from model-induced drift.
+              definition: >
+                The average absolute change in core KPI scores (SoA, SR, NGI) between
+                consecutive measurement periods. Lower = more stable. Reported as a
+                normalised index.
+              how_to_read: >
+                TSS of 5 = scores are highly stable between periods. TSS of 35 =
+                significant period-to-period drift — investigate whether a model
+                update or content change is the cause.
+              unit: "index 0–100 (0=no change between periods)"
+              direction: lower_is_better
+              requires_multi_period: true
+
+              measurement:
+                inference_required:
+                  prompt_type: same_as_core_kpis
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "KPI scores per measurement period"
+                  fields_extracted:
+                    - period: str
+                    - kpi_scores: dict
+                transformations:
+                  - step: 1
+                    name: period_delta
+                    description: "Compute absolute change in each core KPI between consecutive periods."
+                    formula: "Δ_kpi_t = |score_kpi_t − score_kpi_(t-1)|"
+                  - step: 2
+                    name: tss_aggregate
+                    description: "Average delta across KPIs and normalise to 0–100."
+                    formula: "TSS = mean(Δ_kpi_t across KPIs) × 100"
+                output_value:
+                  type: index_0_100
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+            - id: narrative_drift
+              name: Narrative Drift
+              short_name: ND
+              motivation: >
+                The story AI tells about your brand can shift over time as models are
+                updated and the information landscape changes. Narrative Drift detects
+                whether the content of AI's brand narrative is changing — even when
+                presence scores remain stable.
+              definition: >
+                Jensen-Shannon Divergence (JSD) between the role/attribute distributions
+                measured in the current period and the prior period. JSD of 0 =
+                identical narrative; JSD of 1 = completely different narrative.
+              how_to_read: >
+                ND of 0.03 = narrative is stable between periods. ND of 0.28 =
+                significant narrative shift — something in the AI's learned representation
+                of your brand has changed. Investigate content sources and model updates.
+              unit: "JSD 0.0–1.0"
+              direction: lower_is_better (unless change was intentional)
+              requires_multi_period: true
+
+              measurement:
+                inference_required:
+                  prompt_type: brand_description + recommendation_with_reason
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "Role and attribute distributions per period"
+                  fields_extracted:
+                    - role_distribution_t: dict
+                    - rfr_distribution_t: dict
+                transformations:
+                  - step: 1
+                    name: combined_narrative_distribution
+                    description: "Concatenate role and attribute distributions into a single narrative vector per period."
+                    formula: "narrative_t = concat(role_distribution_t, rfr_distribution_t)"
+                  - step: 2
+                    name: jsd_computation
+                    description: "Compute Jensen-Shannon Divergence between current and prior period narrative vectors."
+                    formula: "ND = JSD(narrative_t, narrative_(t-1))"
+                output_value:
+                  type: divergence_score_0_1
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: abm_ch5
+          number: 5
+          name: Action
+          client_question: "What do you actually do with all of this?"
+          illuminates: >
+            The priority order of strategic interventions — what to fix first, why,
+            and how to measure success. Converts four chapters of measurement into
+            a working action plan.
+          unique_insight: >
+            Most intelligence platforms stop at dashboards. This chapter makes the
+            translation from score to decision explicit and grounded in the specific
+            KPI evidence from Chapters 1–4.
+          enables: >
+            Quarterly planning integration. PR and content briefs grounded in KPI gaps.
+            ROI tracking through baseline-vs-target measurement cycles.
+          improves: >
+            Client retention and platform stickiness. The action layer is the product's
+            core value delivery mechanism — it turns measurement into mandate.
+
+          kpis:
+
+            - id: priority_gap_matrix
+              name: Priority Gap Matrix
+              short_name: PGM
+              motivation: >
+                Without prioritisation, a client faces 20+ KPI gaps of varying
+                importance and effort. The Priority Gap Matrix collapses this into a
+                ranked action list: high-impact gaps that are achievable vs. gaps that
+                require more investment.
+              definition: >
+                A ranked list of identified KPI gaps, scored on two axes: Strategic
+                Impact (how much closing this gap improves brand position) and Effort
+                to Close (estimated investment in content, PR, or partnerships). Gaps
+                are plotted in four quadrants: Quick Wins / Strategic Priorities /
+                Long-term / Deprioritise.
+              how_to_read: >
+                Top-right quadrant (high impact, low effort) = Quick Wins to action
+                immediately. Top-left (high impact, high effort) = Strategic Priorities
+                for roadmap. Bottom-right (low impact, low effort) = nice-to-have.
+                Bottom-left = deprioritise.
+              unit: "ranked list with impact × effort scores"
+              direction: neutral (output type)
+              requires_client_input: true
+              client_input_description: "Client validates impact weightings and effort estimates"
+
+              measurement:
+                inference_required:
+                  prompt_type: derived (no new inference required)
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "KPI gap scores from Chapters 1–4"
+                  fields_extracted:
+                    - kpi_id: str
+                    - current_score: float
+                    - benchmark_or_target_score: float
+                    - gap: float
+                transformations:
+                  - step: 1
+                    name: gap_identification
+                    description: "Identify all KPIs where current score deviates from target by more than threshold."
+                    formula: "gap_kpi = target_score_kpi − current_score_kpi (if gap > threshold)"
+                  - step: 2
+                    name: impact_scoring
+                    description: "Score each gap by strategic importance using a configurable weight vector."
+                    formula: "impact_kpi = gap_kpi × strategic_weight_kpi"
+                  - step: 3
+                    name: effort_estimation
+                    description: >
+                      Estimate effort to close each gap based on gap type:
+                      content gaps (low effort), publisher relationships (medium),
+                      narrative repositioning (high).
+                    formula: "effort_kpi = effort_lookup_table[gap_type_kpi]"
+                  - step: 4
+                    name: matrix_ranking
+                    description: "Sort gaps by impact descending, group into quadrants."
+                    formula: "quadrant_kpi = classify(impact_kpi, effort_kpi)"
+                output_value:
+                  type: ranked_list
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+            - id: lever_map
+              name: Lever Map
+              short_name: LM
+              motivation: >
+                Knowing you have a gap is not enough. The Lever Map translates each
+                high-priority gap into specific, concrete recommended actions —
+                not vague advice but targeted interventions with named channels.
+              definition: >
+                For each gap in the top quadrants of the Priority Gap Matrix, a set
+                of recommended actions specifying: the target channel (PR, owned
+                content, publisher partnership, technical SEO), the specific action,
+                and the KPI it addresses.
+              how_to_read: >
+                "Publisher Citation Share gap → Action: commission Bilanz profile
+                piece (PR), pitch NZZ data story (PR), create authoritative white
+                paper for industry citation (Owned Content). Addresses: SCR, PCS, PAS."
+              unit: "structured action list"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "Gap types from Priority Gap Matrix"
+                transformations:
+                  - step: 1
+                    name: gap_type_classification
+                    description: "Classify each gap into an action category."
+                    formula: "action_type = gap_to_action_mapping[gap_kpi_type]"
+                  - step: 2
+                    name: lever_generation
+                    description: >
+                      Generate lever recommendations from action type lookup table
+                      and client context (known publisher relationships, content calendar).
+                    formula: "levers = lever_library.lookup(action_type, client_context)"
+                output_value:
+                  type: structured_action_list
+                  granularity: per_gap
+                  comparable_across: [time_periods]
+
+            - id: baseline_and_targets
+              name: Baseline + Target KPIs
+              short_name: BT
+              motivation: >
+                A plan without measurable targets is not a plan. Baseline + Targets
+                gives clients a concrete mandate: specific KPI scores to reach by
+                specific dates, derived from current scores and realistic improvement
+                trajectories.
+              definition: >
+                For each KPI addressed in the Lever Map, a current baseline score and
+                a target score at 6 months and 12 months, with the expected improvement
+                trajectory stated explicitly.
+              how_to_read: >
+                "SoA (CFO segment, DACH): Baseline 34% → 6m target 52% → 12m target 68%.
+                SCR: Baseline 28% → 6m target 45% → 12m target 60%."
+                If scores are not moving toward targets by the 6-month check, the
+                lever strategy needs revision.
+              unit: "current score + target scores at 6m and 12m"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                transformations:
+                  - step: 1
+                    name: baseline_capture
+                    description: "Record current KPI scores as baseline at study start."
+                    formula: "baseline_kpi = current_score_kpi at t=0"
+                  - step: 2
+                    name: target_projection
+                    description: >
+                      Project 6m and 12m targets using category improvement benchmarks
+                      and lever intensity estimates.
+                    formula: "target_6m_kpi = baseline_kpi + projected_improvement(lever_intensity, category_benchmark)"
+                output_value:
+                  type: score_timeline
+                  granularity: per_kpi
+                  comparable_across: [time_periods]
+
+            - id: quick_win_index
+              name: Quick Win Index
+              short_name: QWI
+              motivation: >
+                Early wins matter for client retention. The Quick Win Index filters
+                the full gap list for improvements that are high-impact relative to
+                effort and achievable within 90 days — ensuring every client sees
+                measurable progress in the first quarter.
+              definition: >
+                A filtered and ranked subset of the Priority Gap Matrix: gaps in the
+                Quick Win quadrant (high impact, low effort) with an estimated close
+                time of ≤ 90 days. Ranked by impact score descending.
+              how_to_read: >
+                Top 3 Quick Wins = the three things to do this quarter that will move
+                the needle the most for the least investment. Each has a specific
+                action, a responsible channel, and the KPI it improves.
+              unit: "ranked list (max 5 items)"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                transformations:
+                  - step: 1
+                    name: filter_quick_wins
+                    description: "Filter PGM to Quick Win quadrant and estimated close time ≤ 90 days."
+                    formula: "quick_wins = PGM.filter(quadrant == 'quick_win' AND est_close_days <= 90)"
+                  - step: 2
+                    name: rank_by_impact
+                    description: "Sort by impact score descending, take top 5."
+                    formula: "QWI = quick_wins.sort_by(impact_score, descending).head(5)"
+                output_value:
+                  type: ranked_list
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+    # ═══════════════════════════════════════════════════════════════
+    # PRODUCT B — AI MARKET RESEARCH
+    # ═══════════════════════════════════════════════════════════════
+
+    - id: ai_market_research
+      name: AI Market Research
+      tagline: "Market research at AI speed."
+      role: >
+        AI is the instrument. You are using it to understand your market — what buyers
+        want, how competitors are perceived, how thinking varies by segment, and what
+        to do with those findings.
+      client_persona: Strategy teams, CMOs, product leadership, market research directors
+      cadence: Study-based — commissioned when a strategic decision needs grounding
+      origin_story: >
+        Product B is classical market research with a different instrument. Buyers have
+        always had opinions that drive decisions. Understanding those opinions at scale
+        has always been valuable. LLMs make it faster and cheaper to surface them —
+        AI stands in for human respondents. The methodology is unchanged; the instrument
+        changed. This makes Product B immediately legible to buyers who already
+        understand research panels and segmentation studies.
+      validity_argument: >
+        AI is a valid synthetic respondent for high-consideration categories where buyers
+        actively research before deciding — insurance, banking, B2B software, healthcare,
+        financial services. In these categories, AI has absorbed vast training data
+        from reviews, analyst reports, forums, and editorial content. For impulse or
+        commodity categories, synthetic research validity is lower and findings should
+        be treated as supplementary. Category Validity Score (Ch. 4) quantifies this
+        per study.
+      chapter_arc: >
+        Buyers want these things (Ch. 1 Demand Landscape), competitors own these
+        positions (Ch. 2 Competitive Perception), but differently depending on who the
+        buyer is (Ch. 3 Segment Intelligence), and here is how confident we are in
+        these findings (Ch. 4 Signal Consistency), so here is what to do and in what
+        order (Ch. 5 Strategic Implications).
+
+      chapters:
+
+        # ───────────────────────────────────────────────────────────
+        - id: amr_ch1
+          number: 1
+          name: Demand Landscape
+          client_question: "What does AI believe buyers in this category actually want?"
+          illuminates: >
+            How AI frames the problem your brand is solving — the needs, decision
+            criteria, and trade-offs AI associates with buyer decisions in your category.
+            This is the market context layer before any brand-specific measurement.
+          unique_insight: >
+            Survey panels tell you what respondents say today. AI tells you what the
+            aggregated weight of training data — reviews, articles, forums, research —
+            has converged on as the dominant market narrative. Highly stable for mature
+            categories; a leading indicator for fast-moving ones.
+          enables: >
+            Messaging alignment. Gap identification between what buyers want (per AI)
+            and what your product actually delivers. Contextualises all Brand Monitor
+            findings.
+          improves: >
+            Content strategy, value proposition clarity, and product-market fit
+            communication.
+
+          kpis:
+
+            - id: decision_driver_ranking
+              name: Decision Driver Ranking
+              short_name: DDR
+              motivation: >
+                Before measuring competitive position, you need to know what the
+                competition is on. DDR reveals which buyer priorities AI believes
+                drive decisions in your category — the criteria against which all
+                brands are evaluated.
+              definition: >
+                A ranked list of purchase decision criteria extracted from AI responses
+                to open-ended buyer intent prompts, clustered into canonical drivers
+                and ranked by mention frequency across the inference batch.
+              how_to_read: >
+                DDR showing "1. Claims simplicity (89%), 2. Digital interface (67%),
+                3. Price (45%), 4. Brand reputation (31%)" means AI believes the
+                primary purchase driver in your category is claims simplicity, not
+                price. Compare against your product's actual strengths to identify
+                alignment or gaps.
+              unit: "ranked list with % mention frequency"
+              direction: neutral (output type)
+              typical_range: "Top 5–10 drivers ranked by frequency"
+
+              measurement:
+                inference_required:
+                  prompt_type: open_buyer_intent
+                  prompt_example: >
+                    "What factors are most important when choosing [product type]?"
+                    "What would make someone switch from one [category] provider to another?"
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - decision_criteria_text: str
+                transformations:
+                  - step: 1
+                    name: criteria_extraction
+                    description: "Extract decision criteria mentions from response text using attribute taxonomy."
+                    formula: "criteria_i = extract_attributes(decision_criteria_text_i, decision_driver_taxonomy)"
+                  - step: 2
+                    name: criteria_clustering
+                    description: "Cluster extracted criteria into canonical driver categories."
+                    formula: "driver_clusters_i = cluster(criteria_i, driver_taxonomy)"
+                  - step: 3
+                    name: ddr_ranking
+                    description: "Rank drivers by total mention frequency across all trials."
+                    formula: "DDR_k = Σ(k ∈ driver_clusters_i) / N_trials, sorted descending"
+                output_value:
+                  type: ranked_frequency_list
+                  granularity: per_segment
+                  comparable_across: [segments, models, time_periods]
+
+            - id: category_frame
+              name: Category Frame
+              short_name: CF
+              motivation: >
+                How AI defines the boundaries of a category shapes everything — which
+                brands belong, which need types are relevant, which use cases count.
+                If AI frames the category more narrowly or broadly than your product
+                addresses, your positioning will be misaligned with the AI layer.
+              definition: >
+                A structured description of how AI defines the boundaries of the
+                client's product category: included/excluded use cases, included/excluded
+                competitor types, primary framing axis (e.g. price vs. service vs.
+                risk). Extracted from category-definition prompts.
+              how_to_read: >
+                If AI consistently frames "business banking" as primarily about digital
+                tools and SME lending (and not wealth management), a bank whose
+                strength is private wealth will find itself outside the AI-defined
+                category frame — invisible by definition, not by reputation.
+              unit: "structured text description + boundary tags"
+              direction: neutral (output type — category fit is evaluated by client)
+
+              measurement:
+                inference_required:
+                  prompt_type: category_definition
+                  prompt_example: >
+                    "What is [category]? What types of providers does it include?"
+                    "What are the main use cases for [product type]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 10
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - category_definition_text: str
+                transformations:
+                  - step: 1
+                    name: boundary_extraction
+                    description: "Extract inclusion/exclusion language and category framing axis."
+                    formula: "cf_tags = extract_category_boundaries(category_definition_text, boundary_taxonomy)"
+                  - step: 2
+                    name: cross_model_synthesis
+                    description: "Synthesise consistent category frame from multi-model responses."
+                    formula: "CF = majority_vote(cf_tags_per_model)"
+                output_value:
+                  type: structured_description
+                  granularity: per_category
+                  comparable_across: [models, time_periods]
+
+            - id: segment_need_profile
+              name: Segment Need Profile
+              short_name: SNP
+              motivation: >
+                Different buyer segments have fundamentally different need structures.
+                A 28-year-old renter and a 55-year-old CFO are in different markets
+                even when shopping in the same category. SNP makes these differences
+                explicit at the granularity of each defined cohort.
+              definition: >
+                A per-cohort ranking of the top decision drivers, derived by running
+                DDR measurement separately for each cohort definition. Each cohort
+                gets its own ordered need priority list.
+              how_to_read: >
+                SNP for Gen Z (18–26): "1. Price (92%), 2. Digital-first UX (78%),
+                3. No lock-in (55%)." SNP for CFO (45–60): "1. Compliance coverage (87%),
+                2. Service SLA (71%), 3. Reporting quality (60%)." These are different
+                markets. Different messaging is required.
+              unit: "ranked list with % mention frequency per cohort"
+              direction: neutral
+              typical_range: "Top 5 drivers per cohort"
+
+              measurement:
+                inference_required:
+                  prompt_type: open_buyer_intent
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "DDR per cohort (derived from DDR computation with persona priming active)"
+                  fields_extracted:
+                    - cohort_id: str
+                    - decision_driver_ranking: list
+                transformations:
+                  - step: 1
+                    name: ddr_per_cohort
+                    description: "Run full DDR computation separately for each cohort definition."
+                    formula: "SNP_cohort_c = DDR(trials | cohort == c)"
+                output_value:
+                  type: ranked_list_per_cohort
+                  granularity: per_cohort
+                  comparable_across: [cohorts, time_periods]
+
+            - id: market_narrative_consistency
+              name: Market Narrative Consistency
+              short_name: MNC
+              motivation: >
+                If different models give radically different answers about what buyers
+                want in a category, the "AI view of the market" is not stable enough
+                to be a reliable research instrument. MNC measures how much models
+                agree on the demand landscape — the prerequisite for treating results
+                as findings rather than model artefacts.
+              definition: >
+                The degree of agreement across major LLMs on the top-3 decision drivers
+                for a given category and segment, measured as the proportion of driver
+                rankings that are consistent (same top-3, same order) across models.
+              how_to_read: >
+                MNC of 85% means 85% of the top-3 driver rankings are identical across
+                models — the demand landscape finding is robust. MNC of 35% means the
+                models disagree substantially — findings should be treated as directional
+                only and investigated for model-specific biases.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "40–90% depending on category maturity"
+
+              measurement:
+                inference_required:
+                  prompt_type: open_buyer_intent
+                  persona_priming: required
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "DDR per model"
+                  fields_extracted:
+                    - model_id: str
+                    - top3_drivers: "list[str]"
+                transformations:
+                  - step: 1
+                    name: top3_per_model
+                    description: "Extract top 3 decision drivers from DDR per model."
+                    formula: "top3_m = DDR_m.head(3)"
+                  - step: 2
+                    name: agreement_score
+                    description: "Compute proportion of driver positions that are consistent across all models."
+                    formula: "MNC = |intersection(top3_m for all m)| / 3"
+                output_value:
+                  type: percentage
+                  granularity: per_category_per_segment
+                  comparable_across: [time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: amr_ch2
+          number: 2
+          name: Competitive Perception
+          client_question: "How does AI rank and frame competitors in buyers' eyes?"
+          illuminates: >
+            The competitive distribution of buyer demand — who AI positions as the
+            answer to each decision driver, how sharply each competitor is
+            differentiated, and where white space exists.
+          unique_insight: >
+            AI has processed years of comparative reviews, analyst reports, and user
+            feedback. Its competitive framing is a compressed consensus of all of that.
+            You get the competitive map as the AI layer has distilled it — and where
+            no one owns a position yet.
+          enables: >
+            Positioning strategy grounded in competitive reality. White space
+            identification. Targeting and messaging differentiation.
+          improves: >
+            Go-to-market sharpness. Competitive positioning. Clients can track whether
+            positioning investments shift how AI distributes competitive rankings.
+
+          kpis:
+
+            - id: competitive_ranking_by_driver
+              name: Competitive Ranking by Decision Driver
+              short_name: CRDD
+              motivation: >
+                The decision drivers from Ch. 1 are the competitive battleground.
+                CRDD maps which brands AI believes best address each driver — giving
+                a driver-level competitive landscape rather than a single overall ranking.
+              definition: >
+                For each top decision driver identified in DDR, a ranked list of
+                brands most associated with delivering that driver, derived from
+                competitive association prompts. Each driver gets its own ranking.
+              how_to_read: >
+                CRDD for "Claims simplicity": Brand A (78%), Brand B (45%), Client (22%).
+                Client is ranked 3rd on the most important driver — a critical positioning
+                gap. CRDD for "Specialist coverage": Client (71%), Brand A (18%),
+                Brand B (12%) — a white space the client already owns.
+              unit: "ranked list per driver with % association"
+              direction: higher_is_better per target driver
+
+              measurement:
+                inference_required:
+                  prompt_type: competitive_driver_association
+                  prompt_example: >
+                    "Which [category] provider is best known for [decision driver]?"
+                    "Which brands are most associated with [driver] in [category]?"
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text_or_ranked_list
+                  fields_extracted:
+                    - driver: str
+                    - brands_mentioned: "list[str]"
+                    - brand_position: "dict[brand, int]"
+                transformations:
+                  - step: 1
+                    name: association_rate_per_driver
+                    description: "For each driver, compute association rate per brand."
+                    formula: "CRDD_driver_d_brand_b = Σ(b ∈ brands_mentioned_i | driver==d) / N_trials_d"
+                  - step: 2
+                    name: ranking_per_driver
+                    description: "Sort brands by association rate per driver."
+                    formula: "CRDD_d = sort_by(CRDD_driver_d_brand_b, descending)"
+                output_value:
+                  type: ranked_list_per_driver
+                  granularity: per_driver_per_brand
+                  comparable_across: [time_periods]
+
+            - id: attribute_ownership_map
+              name: Attribute Ownership Map
+              short_name: AOM
+              motivation: >
+                Strategic positioning is about owning an attribute in the buyer's
+                mind. AOM maps which brand owns which attribute in AI's view of your
+                competitive set — and which attributes are genuinely contested or
+                unclaimed.
+              definition: >
+                A matrix of brands × attributes where each cell contains the
+                association strength between brand and attribute, derived from
+                attribute-specific competitive prompts. Normalised so each attribute
+                sums to 100% across brands.
+              how_to_read: >
+                Attribute "innovation": Brand A 65%, Brand B 20%, Client 10%, Other 5%.
+                Brand A owns innovation. Attribute "local expertise": Client 55%,
+                Brand B 30%, Brand A 8%. Client owns local expertise. The map tells
+                you what you own, what you don't, and what's contested.
+              unit: "% ownership per brand per attribute"
+              direction: neutral (client evaluates own position per target attribute)
+
+              measurement:
+                inference_required:
+                  prompt_type: attribute_ownership
+                  prompt_example: >
+                    "Which [category] brand is most associated with [attribute]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 15
+                raw_output:
+                  format: free_text_or_ranked_list
+                  fields_extracted:
+                    - attribute: str
+                    - brand_mentioned: str
+                    - brand_is_primary: bool
+                transformations:
+                  - step: 1
+                    name: association_count
+                    description: "Count primary associations per brand per attribute."
+                    formula: "count_a_b = Σ_trials(brand_is_primary AND attribute == a AND brand == b)"
+                  - step: 2
+                    name: normalise_per_attribute
+                    description: "Normalise across brands so each attribute sums to 100%."
+                    formula: "AOM_a_b = count_a_b / Σ_b'(count_a_b')"
+                output_value:
+                  type: matrix_percentage
+                  granularity: per_brand_per_attribute
+                  comparable_across: [time_periods]
+
+            - id: white_space_index
+              name: White Space Index
+              short_name: WSI
+              motivation: >
+                The most strategically valuable finding in competitive analysis is
+                not what competitors own but what nobody owns. WSI identifies the
+                decision drivers that buyers care about (from DDR) but that no
+                competitor is clearly associated with in AI's view.
+              definition: >
+                The set of top-N decision drivers (from DDR) where no brand in the
+                competitive set achieves an AOM association score above the dominance
+                threshold (default: 50%). Each qualifying driver is a white space.
+                WSI score = proportion of top-N drivers that are white spaces.
+              how_to_read: >
+                WSI of 3/8 means 3 of the top 8 buyer decision criteria have no clear
+                AI-defined owner. Those 3 drivers are the primary positioning
+                opportunities — high buyer relevance, no incumbent. A brand that moves
+                first to own one of these through content and positioning will be the
+                first to be associated with it in AI outputs.
+              unit: "count + % of top-N drivers (N configurable, default 8)"
+              direction: higher_is_better (more white space = more opportunity)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "AOM matrix + DDR ranking (derived)"
+                  fields_extracted:
+                    - driver: str
+                    - max_aom_score: float
+                transformations:
+                  - step: 1
+                    name: identify_dominant_brands
+                    description: "For each driver, find if any brand exceeds AOM dominance threshold."
+                    formula: "dominated_d = (max(AOM_d_b for all b) >= dominance_threshold)"
+                  - step: 2
+                    name: white_space_flag
+                    description: "Flag drivers as white space if not dominated."
+                    formula: "white_space_d = NOT dominated_d AND d ∈ top_N_DDR"
+                  - step: 3
+                    name: wsi_score
+                    description: "Count and proportion of white space drivers."
+                    formula: "WSI = Σ(white_space_d) / N"
+                output_value:
+                  type: count_and_percentage
+                  granularity: per_competitive_set
+                  comparable_across: [time_periods]
+
+            - id: positioning_sharpness
+              name: Positioning Sharpness
+              short_name: PS
+              motivation: >
+                A competitor that is clearly associated with specific attributes is
+                harder to displace than one that is blurry or generic. Positioning
+                Sharpness measures how distinctly each competitor is differentiated
+                in AI's view — high sharpness = owned position; low sharpness =
+                generic, vulnerable.
+              definition: >
+                For each brand, the concentration (Herfindahl-style index) of its
+                AOM attribute ownership — how much its associations are concentrated
+                on a few specific attributes vs. spread evenly across many.
+                Score 0 = perfectly generic; score 1 = fully concentrated on one attribute.
+              how_to_read: >
+                PS of 0.7 for Brand A = highly concentrated on 2–3 attributes —
+                a sharply positioned brand that owns clear territory. PS of 0.2 for
+                Brand B = spread evenly across 10 attributes — generic, not owning
+                anything in particular. Low PS + high AOM overall = known but
+                undifferentiated — the most common positioning failure.
+              unit: "index 0.0–1.0"
+              direction: higher_is_better (for the competitor being assessed)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "AOM row per brand (derived)"
+                  fields_extracted:
+                    - brand: str
+                    - aom_row: "dict[attribute, float]"
+                transformations:
+                  - step: 1
+                    name: herfindahl_index
+                    description: "Compute Herfindahl concentration index on AOM row per brand."
+                    formula: "PS_b = Σ_a(AOM_a_b^2)"
+                output_value:
+                  type: index_0_1
+                  granularity: per_brand
+                  comparable_across: [competitors, time_periods]
+
+            - id: segment_competitive_share
+              name: Segment-level Competitive Share
+              short_name: SCS
+              motivation: >
+                Overall competitive rankings obscure important segment variation.
+                A brand may dominate overall but underperform in the fastest-growing
+                segment. SCS breaks competitive standing down by cohort to reveal
+                where each competitor is strongest and weakest.
+              definition: >
+                SoA-equivalent presence score computed separately for each brand within
+                each cohort definition, normalised to competitive share within that
+                cohort. Shows how the competitive distribution of AI's responses
+                shifts across segments.
+              how_to_read: >
+                Brand A: SCS Gen Z 62%, SCS CFO 18%. Client: SCS Gen Z 12%, SCS CFO 71%.
+                The competitive landscape is completely different by segment. Strategy
+                needs to reflect this: different channels, different content,
+                different publishers to influence.
+              unit: "% competitive share per segment per brand"
+              direction: higher_is_better for client brand in target segments
+
+              measurement:
+                inference_required:
+                  prompt_type: competitive_presence
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "SoA per brand per cohort (from competitive presence prompts)"
+                  fields_extracted:
+                    - cohort_id: str
+                    - brand: str
+                    - soa: float
+                transformations:
+                  - step: 1
+                    name: competitive_share_per_cohort
+                    description: "Normalise each brand's SoA within cohort by total SoA across competitive set."
+                    formula: "SCS_cohort_c_brand_b = SoA_c_b / Σ_b'(SoA_c_b')"
+                output_value:
+                  type: percentage_per_segment
+                  granularity: per_cohort_per_brand
+                  comparable_across: [time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: amr_ch3
+          number: 3
+          name: Segment Intelligence
+          client_question: "How does buyer thinking differ across personas and cohorts?"
+          illuminates: >
+            The full segment-level breakdown of buyer needs, competitive perceptions,
+            and decision drivers — the granular view that justifies differentiated
+            strategy across cohorts.
+          unique_insight: >
+            Traditional segmentation research is slow and expensive. AI synthetic
+            research runs the full Cartesian product of persona dimensions in hours —
+            giving segment resolution that no human panel study can match at this cost.
+          enables: >
+            Media targeting precision. Product-market fit validation by segment.
+            Evidence base for differentiated messaging by segment.
+          improves: >
+            Targeting precision. Messaging differentiation. ROI on media spend.
+
+          kpis:
+
+            - id: segment_competitive_ranking
+              name: Segment Competitive Ranking
+              short_name: SCR_seg
+              motivation: >
+                The overall competitive ranking from Ch. 2 may hide dramatic segment-level
+                reversals. A brand that is second overall may be first in the highest-value
+                segment. SCR_seg makes the full segment-competitive matrix visible.
+              definition: >
+                A competitive ranking table broken down by cohort: for each cohort,
+                brands ranked by their SCS score. The full cohort × brand matrix
+                of competitive standing.
+              how_to_read: >
+                The matrix reveals which cohorts each competitor dominates and which
+                are contested or open. Prioritise segments where your competitive
+                standing is strong (or where standing can be improved with targeted
+                action) against segments with high strategic value.
+              unit: "ranked list per cohort"
+              direction: neutral (client evaluates own rank per target cohort)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "SCS matrix from Ch. 2 (derived)"
+                transformations:
+                  - step: 1
+                    name: rank_per_cohort
+                    description: "For each cohort, sort brands by SCS score descending."
+                    formula: "SCR_seg_c = sort_by(SCS_c_b for all b, descending)"
+                output_value:
+                  type: ranked_matrix
+                  granularity: per_cohort
+                  comparable_across: [time_periods]
+
+            - id: cross_segment_variance
+              name: Cross-Segment Variance
+              short_name: CSV
+              motivation: >
+                If all segments think the same thing, a single strategy serves everyone.
+                If segments diverge substantially, differentiated strategy is mandatory.
+                CSV quantifies how much segment findings differ — the business case
+                for or against segmented messaging.
+              definition: >
+                The average pairwise divergence (Jensen-Shannon Distance) between
+                Segment Need Profiles across all cohort pairs. High CSV = segments
+                are substantially different; low CSV = market is relatively homogeneous.
+              how_to_read: >
+                CSV of 0.08 = segments are very similar — a single value proposition
+                can address them all. CSV of 0.45 = high segment divergence — a unified
+                strategy will underserve most segments. The threshold for "differentiation
+                required" is context-dependent but 0.20+ typically warrants distinct messaging.
+              unit: "JSD 0.0–1.0"
+              direction: neutral (high CSV = differentiation opportunity or necessity)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "Segment Need Profiles from Ch. 1 (derived)"
+                  fields_extracted:
+                    - cohort_id: str
+                    - need_profile_distribution: dict
+                transformations:
+                  - step: 1
+                    name: pairwise_jsd
+                    description: "Compute JSD between each pair of cohort need profiles."
+                    formula: "jsd_c1_c2 = JSD(SNP_c1, SNP_c2)"
+                  - step: 2
+                    name: average_divergence
+                    description: "Average all pairwise JSD scores."
+                    formula: "CSV = mean(jsd_c1_c2 for all cohort pairs)"
+                output_value:
+                  type: divergence_score_0_1
+                  granularity: overall
+                  comparable_across: [time_periods]
+
+            - id: opportunity_score_per_segment
+              name: Opportunity Score per Segment
+              short_name: OSS
+              motivation: >
+                Not all segments are equally worth targeting. OSS synthesises three
+                inputs — buyer demand intensity, competitive white space, and product
+                fit — into a single prioritisation score per segment.
+              definition: >
+                A composite score per cohort combining: (1) Demand Intensity — how
+                strongly expressed are buyer needs in this segment (from SNP frequency
+                scores); (2) Competitive Opening — average white space available to
+                the client in this segment's top drivers; (3) Product Fit — client-declared
+                alignment between their product's strengths and the segment's top drivers.
+                Normalised to 0–100.
+              how_to_read: >
+                OSS of 82 for the "CFO, mid-size firm, DACH" segment means high demand,
+                open competitive field, and strong product fit — the segment to prioritise.
+                OSS of 23 for "Gen Z consumer" means low fit or high competition — not
+                where to invest resources now.
+              unit: "score 0–100"
+              direction: higher_is_better
+              requires_client_input: true
+              client_input_description: "Client must rate product fit per segment at study setup."
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "SNP frequency scores + AOM scores + client product fit ratings"
+                  fields_extracted:
+                    - cohort_id: str
+                    - demand_intensity: float
+                    - competitive_opening: float
+                    - product_fit: float
+                transformations:
+                  - step: 1
+                    name: demand_intensity_score
+                    description: >
+                      Compute mean frequency score of top-3 drivers in segment's SNP
+                      as proxy for demand intensity.
+                    formula: "DI_c = mean(SNP_c.top3.frequencies)"
+                  - step: 2
+                    name: competitive_opening_score
+                    description: >
+                      Compute mean white space across top-3 drivers for this segment.
+                    formula: "CO_c = mean(1 - max_AOM_d_b for d in SNP_c.top3)"
+                  - step: 3
+                    name: oss_composite
+                    description: "Weighted composite of three inputs. Default weights: demand=0.35, competitive=0.35, fit=0.30."
+                    formula: "OSS_c = normalise(0.35×DI_c + 0.35×CO_c + 0.30×product_fit_c) × 100"
+                output_value:
+                  type: score_0_100
+                  granularity: per_cohort
+                  comparable_across: [cohorts, time_periods]
+
+        # ───────────────────────────────────────────────────────────
+        - id: amr_ch4
+          number: 4
+          name: Signal Consistency
+          client_question: "When can you trust AI as a research instrument — and when should you be careful?"
+          illuminates: >
+            Where AI produces reliable, cross-model-consistent findings and where it
+            produces noisy, model-specific outputs. The quality gate that separates
+            hard findings from directional signals.
+          unique_insight: >
+            Any tool produces outputs. What distinguishes a rigorous research platform
+            is the ability to grade its own findings. Signal Consistency is that grade —
+            every finding gets a confidence rating, and clients know exactly what
+            they can act on vs. what they should validate further.
+          enables: >
+            Confidence-graded reporting. Transparent research platform positioning.
+            Risk management: avoids acting on unstable model artefacts.
+          improves: >
+            Client trust, platform credibility, and reputational integrity.
+
+          kpis:
+
+            - id: cross_model_consensus
+              name: Cross-Model Consensus Score
+              short_name: CMCS
+              motivation: >
+                If GPT-4, Claude, and Gemini give the same answer about what buyers
+                want, that's a finding. If they give completely different answers,
+                that's a model artefact, not market intelligence. CMCS is the gate
+                between the two.
+              definition: >
+                The proportion of top-3 decision driver rankings that are consistent
+                across all major models tested, for a given segment and category.
+              how_to_read: >
+                CMCS of 85% = robust finding. CMCS of 35% = model-specific — investigate
+                which models are outliers and why. Findings with CMCS below 50% should
+                be reported as directional only, not as hard findings.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "40–90%"
+
+              measurement:
+                inference_required:
+                  prompt_type: open_buyer_intent
+                  persona_priming: required
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "DDR per model"
+                  fields_extracted:
+                    - model_id: str
+                    - top3_drivers: list
+                transformations:
+                  - step: 1
+                    name: inter_model_agreement
+                    description: "Compute intersection of top-3 driver rankings across all models."
+                    formula: "CMCS = |intersection(top3_drivers_m for all m)| / 3"
+                output_value:
+                  type: percentage
+                  granularity: per_segment_per_category
+                  comparable_across: [time_periods]
+
+            - id: run_level_stability
+              name: Run-Level Stability
+              short_name: RLS
+              motivation: >
+                A finding that changes between the morning run and the afternoon run
+                of the same study is not a finding — it's noise. RLS measures whether
+                the study produces consistent outputs across repeated executions,
+                which is the minimum bar for treating results as research data.
+              definition: >
+                The average overlap (Jaccard similarity) of top-3 decision driver
+                rankings between repeated runs of the same study configuration,
+                across all segments.
+              how_to_read: >
+                RLS of 0.9 = very stable — same top drivers appear across all runs.
+                RLS of 0.4 = unstable — findings change between runs without any
+                real-world change having occurred. Investigate prompt sensitivity
+                and reduce temperature settings.
+              unit: "Jaccard similarity 0.0–1.0"
+              direction: higher_is_better
+              typical_range: "0.6–0.95"
+
+              measurement:
+                inference_required:
+                  prompt_type: open_buyer_intent
+                  persona_priming: required
+                  model_scope: all_major
+                  replications: "3 full study re-runs"
+                raw_output:
+                  format: "Top-3 drivers per run per segment"
+                  fields_extracted:
+                    - run_id: int
+                    - segment_id: str
+                    - top3_drivers: list
+                transformations:
+                  - step: 1
+                    name: jaccard_per_run_pair
+                    description: "Compute Jaccard similarity of top-3 driver sets between each run pair."
+                    formula: "J_r1_r2_c = |top3_r1_c ∩ top3_r2_c| / |top3_r1_c ∪ top3_r2_c|"
+                  - step: 2
+                    name: rls_aggregate
+                    description: "Average Jaccard across all run pairs and segments."
+                    formula: "RLS = mean(J_r1_r2_c for all run pairs and segments)"
+                output_value:
+                  type: similarity_score_0_1
+                  granularity: overall
+                  comparable_across: [time_periods]
+
+            - id: category_validity_score
+              name: Category Validity Score
+              short_name: CVS
+              motivation: >
+                AI is a more reliable research instrument for high-consideration
+                categories (insurance, banking, B2B software) than for impulse or
+                commodity categories (snacks, fast fashion). CVS rates how well-suited
+                AI is as a research instrument for the specific category being studied.
+              definition: >
+                A composite rating of AI suitability for the category, based on:
+                (1) training data richness signals (CMCS as proxy), (2) response
+                completeness (does AI produce substantive answers or deflect?),
+                (3) category type classification (high-consideration vs. impulse).
+                Rated on a 5-point scale with an associated confidence tier.
+              how_to_read: >
+                CVS 5 (Very High) = AI is an excellent research instrument for this
+                category — findings can be treated as primary research.
+                CVS 2 (Low) = AI has thin training data or high deflection rate for
+                this category — findings are supplementary only. Always report
+                CVS alongside findings for transparency.
+              unit: "1–5 rating with confidence tier label"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: category_definition + open_buyer_intent
+                  model_scope: all_major
+                  replications: 10
+                raw_output:
+                  format: "CMCS score + response completeness + category type"
+                  fields_extracted:
+                    - cmcs: float
+                    - response_completeness_rate: float
+                    - category_type: "enum: high_consideration|research_heavy|impulse|commodity"
+                transformations:
+                  - step: 1
+                    name: category_type_score
+                    description: "Map category type to base validity score."
+                    formula: "base_score = {high_consideration: 5, research_heavy: 4, impulse: 2, commodity: 1}[category_type]"
+                  - step: 2
+                    name: cmcs_adjustment
+                    description: "Adjust base score up/down based on observed CMCS."
+                    formula: "adjusted_score = base_score × (0.5 + 0.5 × CMCS)"
+                  - step: 3
+                    name: completeness_adjustment
+                    description: "Penalise if response completeness rate < 80% (AI deflects frequently)."
+                    formula: "CVS_raw = adjusted_score × (1 if completeness >= 0.8 else 0.7)"
+                  - step: 4
+                    name: round_to_scale
+                    description: "Round to nearest integer 1–5."
+                    formula: "CVS = round(clip(CVS_raw, 1, 5))"
+                output_value:
+                  type: rating_1_5
+                  granularity: per_category
+                  comparable_across: [categories]
+
+            - id: confidence_band
+              name: Confidence Band per Output KPI
+              short_name: CB
+              motivation: >
+                Every research finding should carry its own confidence grade.
+                The Confidence Band system converts the underlying quality metrics
+                (CMCS, RLS, CVS) into a per-KPI confidence label that is readable
+                by non-technical stakeholders.
+              definition: >
+                A three-tier confidence label assigned to each output KPI value:
+                High Confidence (CMCS ≥ 70% AND RLS ≥ 0.8 AND CVS ≥ 4),
+                Moderate Confidence (CMCS 50–70% OR RLS 0.6–0.8 OR CVS 3),
+                Directional (CMCS < 50% OR RLS < 0.6 OR CVS ≤ 2).
+              how_to_read: >
+                "Decision Driver: Claims Simplicity — ranked #1 [High Confidence]" means
+                this finding is robust across models, stable across runs, and in a
+                high-validity category. Act on it.
+                "Attribute: Sustainability — ranked #4 [Directional]" means this
+                finding should be validated before acting on it.
+              unit: "label: High Confidence / Moderate Confidence / Directional"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "CMCS + RLS + CVS scores (derived)"
+                transformations:
+                  - step: 1
+                    name: confidence_tier_assignment
+                    description: "Apply confidence tier rules to each output KPI."
+                    formula: >
+                      tier = 'High' if (CMCS >= 0.7 AND RLS >= 0.8 AND CVS >= 4)
+                             else 'Moderate' if (CMCS >= 0.5 AND RLS >= 0.6 AND CVS >= 3)
+                             else 'Directional'
+                output_value:
+                  type: label
+                  granularity: per_output_kpi
+                  comparable_across: [time_periods]
+
+            - id: instrument_bias_indicators
+              name: Instrument Bias Indicators
+              short_name: IBI
+              motivation: >
+                Different LLMs have known systematic tendencies — some overrepresent
+                US brands, some skew toward large incumbents, some have known political
+                or cultural biases in framing. IBI flags where model-specific biases
+                may be affecting findings.
+              definition: >
+                A set of per-model flags indicating known or detected systematic biases
+                relevant to the study's category and geography, derived from cross-model
+                comparison of findings and a reference bias registry.
+              how_to_read: >
+                "GPT-4: US brand overrepresentation flag active for EU insurance category.
+                Findings for EU-local brands may be understated on this model."
+                These flags are reported alongside findings so analysts can weight
+                multi-model averages appropriately.
+              unit: "structured flag list per model"
+              direction: neutral (informational output)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived + bias_probe_prompts
+                  model_scope: each_major_model_separately
+                  replications: 10
+                raw_output:
+                  format: "Per-model DDR and AOM vs. reference findings"
+                  fields_extracted:
+                    - model_id: str
+                    - geographic_skew_flag: bool
+                    - incumbent_bias_flag: bool
+                    - known_bias_registry_flags: list
+                transformations:
+                  - step: 1
+                    name: geographic_skew_detection
+                    description: "Compare per-model DDR against cross-model average; flag if a model's rankings deviate significantly toward a specific geography."
+                    formula: "geo_skew_m = (JSD(DDR_m, DDR_average) > threshold) AND (dominant_brands_m are geographically concentrated)"
+                  - step: 2
+                    name: known_bias_lookup
+                    description: "Look up model in bias registry for known category-specific biases."
+                    formula: "known_flags_m = bias_registry.lookup(model_id=m, category=category)"
+                output_value:
+                  type: flag_list_per_model
+                  granularity: per_model
+                  comparable_across: [categories]
+
+        # ───────────────────────────────────────────────────────────
+        - id: amr_ch5
+          number: 5
+          name: Strategic Implications
+          client_question: "What would you act on — and why does the data justify it?"
+          illuminates: >
+            The strategic choices the data points toward — stated as decisions, not
+            observations. The interpretive layer that turns market research into
+            strategy.
+          unique_insight: >
+            Research that stops at findings leaves clients to make the strategic leap
+            themselves. This chapter makes the leap explicit and traces every
+            recommendation to its evidence chain — so clients can defend the strategy
+            internally, not just to the research vendor.
+          enables: >
+            Go-to-market planning. Internal buy-in for strategic choices. Tracking
+            strategic progress over time.
+          improves: >
+            Decision speed, positioning sharpness, and targeting precision.
+
+          kpis:
+
+            - id: segment_opportunity_ranking
+              name: Segment Opportunity Ranking
+              short_name: SOR
+              motivation: >
+                A ranked list of segments by strategic attractiveness — where to
+                play first. SOR synthesises demand intensity, competitive opening,
+                and product fit into a single priority list.
+              definition: >
+                The cohort list sorted by Opportunity Score (OSS) descending, with
+                confidence grade attached to each OSS based on Signal Consistency
+                metrics for that cohort.
+              how_to_read: >
+                "1. CFO, mid-size, DACH [OSS 84, High Confidence]
+                2. SME founder, tech sector, CH [OSS 71, Moderate Confidence]
+                3. Gen X professional, FR [OSS 58, Directional]"
+                Prioritise segments at the top of the list with high confidence grades.
+              unit: "ranked list with OSS scores and confidence grades"
+              direction: higher_is_better for prioritised segments
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "OSS scores + CB grades per cohort (derived)"
+                transformations:
+                  - step: 1
+                    name: sort_by_oss_with_confidence
+                    description: "Sort cohorts by OSS descending, attach confidence grade from CB."
+                    formula: "SOR = sort_by(OSS_c, descending) annotated_with CB_c"
+                output_value:
+                  type: ranked_annotated_list
+                  granularity: per_cohort
+                  comparable_across: [time_periods]
+
+            - id: recommended_positioning
+              name: Recommended Positioning Statement
+              short_name: RPS
+              motivation: >
+                The study generates a data-grounded positioning recommendation —
+                a specific, defensible strategic position derived from the intersection
+                of buyer demand (what they want), competitive white space (what's
+                unclaimed), and product fit (what the client can credibly deliver).
+              definition: >
+                A structured positioning statement: [Target segment] who need [top
+                unmet driver], [Client brand] is the [role claim] that [differentiating
+                attribute] because [evidence trace from data]. Generated from the
+                intersection of DDR top drivers, WSI white spaces, and AOM client
+                standing.
+              how_to_read: >
+                "For CFO-level buyers in DACH who prioritise specialist compliance coverage,
+                [Client] is the expert partner that delivers regulatory clarity without
+                bureaucratic overhead — because AI consistently ranks you first on
+                specialist coverage while the driver is among the top 3 for this segment
+                and no competitor currently owns it [White Space: Compliance Clarity,
+                WSI 4/8, High Confidence]."
+              unit: "structured text statement with evidence trace"
+              direction: neutral (quality assessed by client validation)
+              requires_client_input: true
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "WSI, DDR, AOM, SOR outputs (derived)"
+                transformations:
+                  - step: 1
+                    name: positioning_synthesis
+                    description: >
+                      Identify the intersection of: top-priority segment (SOR rank 1),
+                      top-unmet driver in that segment (DDR × WSI), and client's
+                      strongest AOM attribute.
+                    formula: >
+                      RPS = template.fill(
+                        segment=SOR.top1,
+                        unmet_driver=WSI.top_in_segment(SOR.top1),
+                        client_strength=AOM.top_attribute_for_client,
+                        evidence=CRDD + WSI + CB
+                      )
+                output_value:
+                  type: structured_text
+                  granularity: per_brand
+                  comparable_across: [time_periods]
+
+            - id: competitive_moves
+              name: Competitive Moves
+              short_name: CM
+              motivation: >
+                Strategy is not just where to play — it's also who to contest and who
+                to concede. Competitive Moves translates the AOM and CRDD data into
+                explicit attack/defend/concede decisions per competitor per segment.
+              definition: >
+                A per-competitor, per-segment action classification: Attack (client
+                has competitive opening and product fit), Defend (client currently
+                leads but competitor is gaining), Concede (competitor has dominant
+                position client cannot credibly challenge), Monitor (neutral, watch).
+              how_to_read: >
+                "Brand A, CFO segment: Defend (your SCS dropped 8pp last period,
+                Brand A gaining). Brand B, Gen Z segment: Concede (Brand B dominates
+                all top drivers for this segment with high confidence). Brand C,
+                tech sector: Attack (Brand C has low PS score and you have WSI
+                opportunity in their core territory)."
+              unit: "action label per competitor per segment"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "SCS, CRDD, PS, WSI, TSS per competitor per segment (derived)"
+                transformations:
+                  - step: 1
+                    name: competitive_classification
+                    description: >
+                      For each competitor × segment combination, classify action
+                      using rule-based decision tree on competitive metrics.
+                    formula: >
+                      action = 'Defend' if (client_SCS_delta < -0.05)
+                               else 'Attack' if (WSI_in_competitor_territory AND client_PS_improving)
+                               else 'Concede' if (competitor_SCS > 0.6 AND competitor_PS > 0.5)
+                               else 'Monitor'
+                output_value:
+                  type: action_label_matrix
+                  granularity: per_competitor_per_segment
+                  comparable_across: [time_periods]
+
+            - id: traceability_map
+              name: Research-to-Action Traceability Map
+              short_name: RTM
+              motivation: >
+                Every recommendation needs to survive internal scrutiny. The
+                Traceability Map links every strategic recommendation back to the
+                specific KPI finding and confidence grade that supports it — so the
+                client can show their leadership team not just a strategy but its
+                evidence chain.
+              definition: >
+                A structured document listing each recommendation (from RPS, SOR, CM)
+                with its supporting evidence: the specific KPI name, its value,
+                the confidence grade, and the reasoning chain from finding to
+                recommendation.
+              how_to_read: >
+                "Recommendation: Invest in compliance content for CFO segment.
+                Evidence: DDR rank 1 for 'Compliance Coverage' in CFO segment [CMCS 88%,
+                High Confidence]. AOM: Client ranks 1st on compliance attribute
+                [AOM 61%, High Confidence]. WSI: Compliance Clarity is white space
+                [no competitor >50% AOM]. Conclusion: High demand, client-owned
+                attribute, unclaimed in competitive positioning."
+              unit: "structured document"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                transformations:
+                  - step: 1
+                    name: evidence_chain_assembly
+                    description: >
+                      For each recommendation generated, assemble the chain of KPI
+                      inputs, their values, and their confidence grades that logically
+                      support the recommendation.
+                    formula: >
+                      RTM_rec = {
+                        recommendation: rec,
+                        kpi_evidence: [kpi_id, value, CB_grade for kpi in supporting_kpis(rec)],
+                        reasoning: reasoning_template.fill(kpi_evidence)
+                      }
+                output_value:
+                  type: structured_document
+                  granularity: per_recommendation
+                  comparable_across: [time_periods]
+
+            - id: confidence_graded_summary
+              name: Confidence-Graded Recommendation Summary
+              short_name: CGS
+              motivation: >
+                A single-page summary that distinguishes hard findings from directional
+                signals — the executive-ready version of the full RTM. Designed for
+                presentation to leadership who need the bottom line, not the full
+                methodology.
+              definition: >
+                A ranked list of recommendations grouped by confidence tier (High /
+                Moderate / Directional), each with a one-line rationale. Intended as
+                the opening page of the research deliverable.
+              how_to_read: >
+                "High Confidence: Prioritise CFO segment in DACH for compliance
+                positioning. Act now.
+                Moderate Confidence: Gen Z digital-first messaging has potential —
+                validate with one additional study run.
+                Directional: Sustainability messaging opportunity exists — insufficient
+                data to commit budget. Monitor."
+              unit: "grouped recommendation list with confidence tiers"
+              direction: neutral (output type)
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                transformations:
+                  - step: 1
+                    name: group_by_confidence
+                    description: "Group all recommendations from RTM by their CB confidence grade."
+                    formula: "CGS = group_by(RTM.recommendations, key=CB_grade)"
+                  - step: 2
+                    name: summarise_each
+                    description: "Generate one-line rationale for each recommendation."
+                    formula: "summary_rec = summarise(RTM_rec.evidence_chain)"
+                output_value:
+                  type: structured_summary
+                  granularity: per_study
+                  comparable_across: [time_periods]
