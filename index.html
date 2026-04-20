@@ -138,29 +138,17 @@
     .flow-kpi { font-size: 0.72rem; color: var(--text2); background: var(--bg3); border-radius: 4px; padding: 0.28rem 0.5rem; cursor: pointer; position: relative; transition: background 0.15s, color 0.15s; }
     .flow-kpi:hover { background: rgba(99,102,241,0.15); color: var(--text); }
     .flow-kpi[data-color="cyan"]:hover { background: rgba(6,182,212,0.15); }
-    /* Tooltip */
-    .flow-kpi .kpi-tip {
-      display: none; position: absolute; z-index: 200;
-      bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-      width: 240px; background: var(--bg3); border: 1px solid var(--border);
-      border-radius: 10px; padding: 0.9rem 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    /* KPI Tooltip — position:fixed via JS, never clipped by container */
+    #kpiTooltip {
+      display: none; position: fixed; z-index: 9999;
+      width: 260px; background: #1a1a26; border: 1px solid #6366f1;
+      border-radius: 10px; padding: 0.9rem 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.6);
       pointer-events: none;
     }
-    .flow-kpi:hover .kpi-tip,
-    .flow-kpi:focus .kpi-tip { display: block; }
-    /* keep tooltip on screen at edges */
-    .flow-chapter:first-child .flow-kpi .kpi-tip { left: 0; transform: none; }
-    .flow-chapter:last-child .flow-kpi .kpi-tip { left: auto; right: 0; transform: none; }
-    .kpi-tip-name { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-    .kpi-tip-abbr { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
-    .kpi-tip-abbr.cyan { color: var(--accent3); }
-    .kpi-tip-why { font-size: 0.75rem; color: var(--text2); line-height: 1.55; margin-bottom: 0.5rem; }
-    .kpi-tip-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem; }
-    .kpi-tip-badge { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.15rem 0.45rem; border-radius: 20px; }
-    .dir-up { background: rgba(34,197,94,0.12); color: var(--green); }
-    .dir-down { background: rgba(239,68,68,0.12); color: var(--red); }
-    .dir-neutral { background: rgba(153,153,184,0.1); color: var(--text2); }
-    .kpi-tip-bench { font-size: 0.68rem; color: var(--text2); margin-top: 0.4rem; font-style: italic; }
+    #kpiTooltip .tt-name { font-size: 0.8rem; font-weight: 700; color: #e8e8f0; margin-bottom: 0.4rem; }
+    #kpiTooltip .tt-body { font-size: 0.75rem; color: #9999b8; line-height: 1.6; }
+    /* Hide inline kpi-tip spans — content moved to data attrs */
+    .kpi-tip { display: none !important; }
     .flow-arrow { display: flex; align-items: center; padding: 0 0.4rem; color: var(--border); font-size: 1.1rem; margin-top: 2rem; }
 
     /* EVIDENCE SECTION */
@@ -453,7 +441,7 @@
 <section id="kpis">
   <div class="section-tag">KPI Framework</div>
   <h2>A complete story, not a dashboard inventory</h2>
-  <p class="section-sub">26 KPIs across 5 chapters for AI Brand Monitor. 22 KPIs across 5 chapters for AI Market Research. Hover any KPI for its Steckbrief. <a href="framework.html" style="color:var(--accent)">Full framework details →</a></p>
+  <p class="section-sub">26 KPIs across 5 chapters for AI Brand Monitor. 22 KPIs across 5 chapters for AI Market Research. Hover any KPI for its description. <a href="framework.html" style="color:var(--accent)">Full framework details →</a></p>
 
   <div class="kpi-product-tabs">
     <button class="kpi-tab active" onclick="switchKpiTab('A',this)">AI Brand Monitor</button>
@@ -726,13 +714,50 @@
   <p>AI Brand & Market Intelligence · <a href="methodology.html">Methodology</a> · <a href="contact.html">Contact</a></p>
 </footer>
 
+<div id="kpiTooltip"><div class="tt-name"></div><div class="tt-body"></div></div>
+
 <script>
+// Tab switcher
 function switchKpiTab(prod, btn) {
   document.querySelectorAll('.kpi-tab').forEach(function(t){ t.classList.remove('active'); });
   document.querySelectorAll('.kpi-product-panel').forEach(function(p){ p.classList.remove('visible'); });
   btn.classList.add('active');
   document.getElementById('kpi-panel-' + prod).classList.add('visible');
 }
+
+// KPI tooltip — position:fixed, never clipped
+var tip = document.getElementById('kpiTooltip');
+var tipName = tip.querySelector('.tt-name');
+var tipBody = tip.querySelector('.tt-body');
+
+document.addEventListener('mouseover', function(e) {
+  var el = e.target.closest('.flow-kpi');
+  if (!el) return;
+  var nameEl = el.querySelector('.kpi-tip-name');
+  var bodyEl = el.querySelector('.kpi-tip-why');
+  if (!nameEl && !bodyEl) return;
+  tipName.textContent = nameEl ? nameEl.textContent : '';
+  tipBody.textContent = bodyEl ? bodyEl.textContent : '';
+  tip.style.display = 'block';
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (tip.style.display !== 'block') return;
+  var x = e.clientX + 14;
+  var y = e.clientY - 10;
+  var tw = 270;
+  var th = tip.offsetHeight || 100;
+  if (x + tw > window.innerWidth) x = e.clientX - tw - 10;
+  if (y + th > window.innerHeight) y = e.clientY - th - 6;
+  tip.style.left = x + 'px';
+  tip.style.top = Math.max(8, y) + 'px';
+});
+
+document.addEventListener('mouseout', function(e) {
+  var from = e.target.closest('.flow-kpi');
+  var to = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.flow-kpi');
+  if (from && !to) tip.style.display = 'none';
+});
 </script>
 </body>
 </html>
