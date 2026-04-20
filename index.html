@@ -125,33 +125,24 @@
     .kpi-product-badge.b { background: rgba(6,182,212,0.15); color: var(--accent3); }
     .kpi-product-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
 
-    /* CHAPTER INFO POPOVER */
-    .flow-chapter { position: relative; }
-    .flow-header { cursor: default; }
-    .flow-header-text { display: block; }
-    .ch-popover {
+    /* CHAPTER INFO POPOVER — position:fixed via JS, never shifts layout */
+    .ch-popover { display: none; } /* hidden in DOM, content read by JS */
+    #chPopover {
       display: none;
-      position: absolute;
-      top: 100%; left: 0;
+      position: fixed;
       z-index: 9998;
-      width: 300px;
+      width: 310px;
       background: #1a1a26;
       border: 1px solid rgba(99,102,241,0.45);
       border-radius: 12px;
       padding: 1.1rem 1.3rem;
       box-shadow: 0 12px 40px rgba(0,0,0,0.7);
       pointer-events: none;
-      margin-top: 4px;
-      max-height: 360px;
-      overflow-y: auto;
     }
-    .flow-chapter:hover .ch-popover { display: block; }
-    /* flip right-edge chapters to the left */
-    .flow-chapter:last-child .ch-popover { left: auto; right: 0; }
-    .ch-popover-title { font-size: 0.82rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
-    .ch-popover-arc { font-size: 0.76rem; font-style: italic; color: var(--accent); margin-bottom: 0.85rem; }
-    .ch-popover-q { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent2); margin-bottom: 0.2rem; margin-top: 0.6rem; }
-    .ch-popover-body { font-size: 0.76rem; color: var(--text2); line-height: 1.6; }
+    #chPopover .ch-popover-title { font-size: 0.82rem; font-weight: 800; color: var(--text); margin-bottom: 0.2rem; }
+    #chPopover .ch-popover-arc { font-size: 0.76rem; font-style: italic; color: var(--accent); margin-bottom: 0.85rem; }
+    #chPopover .ch-popover-q { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent2); margin-bottom: 0.2rem; margin-top: 0.6rem; }
+    #chPopover .ch-popover-body { font-size: 0.76rem; color: var(--text2); line-height: 1.6; }
     .kpi-flow { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; }
     .flow-row-wrap { overflow-x: auto; }
     .flow-row { display: flex; gap: 0; align-items: stretch; flex-wrap: nowrap; }
@@ -757,8 +748,61 @@
 
 <div id="kpiTooltip"><div class="tt-name"></div><div class="tt-body"></div></div>
 
+<!-- Chapter popover: single fixed element, positioned by JS -->
+<div id="chPopover">
+  <div class="ch-popover-title" id="cp-title"></div>
+  <div class="ch-popover-arc" id="cp-arc"></div>
+  <div class="ch-popover-q">What it illuminates</div>
+  <div class="ch-popover-body" id="cp-illum"></div>
+  <div class="ch-popover-q">What it enables</div>
+  <div class="ch-popover-body" id="cp-enables"></div>
+  <div class="ch-popover-q">What improves</div>
+  <div class="ch-popover-body" id="cp-improves"></div>
+</div>
+
 <script>
-// (CH_DATA removed — popovers are now pure CSS hover on .flow-chapter)
+// Chapter popover — position:fixed tracked by mousemove, never shifts layout
+var chPop = document.getElementById('chPopover');
+var cpTitle = document.getElementById('cp-title');
+var cpArc = document.getElementById('cp-arc');
+var cpIllum = document.getElementById('cp-illum');
+var cpEnables = document.getElementById('cp-enables');
+var cpImproves = document.getElementById('cp-improves');
+
+document.addEventListener('mouseover', function(e) {
+  var header = e.target.closest('.flow-header');
+  if (!header) return;
+  var chapter = header.closest('.flow-chapter');
+  if (!chapter) return;
+  var pop = chapter.querySelector('.ch-popover');
+  if (!pop) return;
+  cpTitle.textContent    = (pop.querySelector('.ch-popover-title')   || {}).textContent || '';
+  cpArc.textContent      = (pop.querySelector('.ch-popover-arc')     || {}).textContent || '';
+  cpIllum.textContent    = (pop.querySelector('.ch-popover-body:nth-of-type(1)') || pop.querySelectorAll('.ch-popover-body')[0] || {}).textContent || '';
+  cpEnables.textContent  = (pop.querySelectorAll('.ch-popover-body')[1] || {}).textContent || '';
+  cpImproves.textContent = (pop.querySelectorAll('.ch-popover-body')[2] || {}).textContent || '';
+  chPop.style.display = 'block';
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (chPop.style.display !== 'block') return;
+  if (!e.target.closest('.flow-header')) return;
+  var x = e.clientX + 14;
+  var y = e.clientY + 14;
+  var pw = 318, ph = chPop.offsetHeight || 260;
+  if (x + pw > window.innerWidth)  x = e.clientX - pw - 10;
+  if (y + ph > window.innerHeight) y = e.clientY - ph - 10;
+  chPop.style.left = Math.max(8, x) + 'px';
+  chPop.style.top  = Math.max(8, y) + 'px';
+});
+
+document.addEventListener('mouseout', function(e) {
+  var from = e.target.closest('.flow-header');
+  var to   = e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('.flow-header');
+  if (from && !to) chPop.style.display = 'none';
+});
+
+// (data object kept for reference only)
 var CH_DATA_UNUSED = {
   'a-vis': {
     title: 'Ch. 1 · Visibility',
