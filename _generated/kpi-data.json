@@ -1,0 +1,574 @@
+{
+  "products": [
+    {
+      "id": "ai_brand_monitor",
+      "name": "AI Brand Monitor",
+      "tagline": "The brand audit for the AI era.",
+      "role": "AI is the subject. You are auditing how the AI layer represents your brand and products — visibility, authority, narrative accuracy, and stability over time.",
+      "chapter_arc": "You appear (Ch. 1 Visibility) because authoritative sources vouch for you (Ch. 2 Authority), which shapes the narrative AI tells about you (Ch. 3 Narrative), and we can measure how stable that is (Ch. 4 Reliability), so you know exactly what to act on and in what order (Ch. 5 Action).",
+      "chapters": [
+        {
+          "id": "abm_ch1",
+          "number": 1,
+          "name": "Visibility",
+          "client_question": "Are you in the room when buyers ask?",
+          "illuminates": "Whether your brand exists in the AI layer at the moment a buyer asks a purchase-relevant question — before any human recommendation, search result, or sales call intervenes.",
+          "unique_insight": "A brand can have strong human awareness and near-zero AI presence. Traditional brand tracking cannot detect this gap. This chapter makes it visible, measurable, and comparable across competitors.",
+          "enables": "Segment-specific presence profiling. Competitive benchmarking of AI share. Intent-level gap identification (present for informational queries but absent for high-intent buy-decision queries).",
+          "improves": "Content strategy targeting training signals. Publisher relationships that increase citation frequency. Category definition work. Visibility scores should respond to a 6–12 month content and PR cycle.",
+          "kpis": [
+            {
+              "name": "Share of Answer",
+              "short_name": "SoA",
+              "motivation": "AI is increasingly the first touchpoint in a buyer's research journey. If your brand does not appear in AI responses to relevant category queries, you are invisible at the most consequential moment — before the buyer has formed a consideration set.",
+              "definition": "The proportion of relevant AI inference trials in which the brand is mentioned at least once, regardless of position, expressed as a percentage. Measured per cohort cell (persona × intent × model).",
+              "how_to_read": "SoA of 80% means your brand appeared in 80 out of 100 relevant queries for this cohort. SoA below 30% indicates marginal AI presence — the brand is not reliably part of the AI-generated consideration set for this segment. SoA above 70% indicates strong structural presence.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Shortlist Rate",
+              "short_name": "SR",
+              "motivation": "Being mentioned is not enough — appearing in the top 3 is what drives consideration. Shortlist Rate separates structural presence from peripheral mentions.",
+              "definition": "The proportion of relevant inference trials in which the brand appears in the top 3 positions of a ranked AI response. Only applicable to prompts that elicit a ranked list.",
+              "how_to_read": "SR of 60% means you were in the top 3 in 6 of 10 ranked responses. High SoA with low SR indicates the brand is mentioned but not prioritised — a narrative or authority problem, not a visibility problem.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Intent Visibility",
+              "short_name": "IV",
+              "motivation": "A brand may appear for informational queries but vanish for high-intent buy-decision queries — exactly where it matters most. Intent Visibility reveals whether presence is strategically aligned with the buyer journey.",
+              "definition": "SoA broken down by intent type (informational / comparative / buy-decision / navigational). Each intent type is scored separately; the composite is an intent-weighted average where buy-decision carries highest weight.",
+              "how_to_read": "High SoA for informational, low for buy-decision = awareness without conversion support. The intent weighting makes the composite sensitive to the stages that matter commercially.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Share of Voice",
+              "short_name": "SoV",
+              "motivation": "Absolute SoA does not tell you where you stand relative to competitors. Share of Voice normalises presence against the full competitive set mentioned by AI, giving a relative market position score.",
+              "definition": "The brand's mention count as a proportion of total brand mentions across all competitors in the defined competitive set, within the same inference batch.",
+              "how_to_read": "SoV of 35% means your brand accounts for 35% of all brand mentions across the competitive set. SoV gain over time indicates strengthening AI position relative to competitors, independent of absolute query volume.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Preference Rate",
+              "short_name": "PR",
+              "motivation": "When AI is asked to recommend one option, which brand does it choose? Preference Rate captures the AI's implicit ranking when forced to commit — the strongest signal of brand strength in the AI layer.",
+              "definition": "The proportion of inference trials using a forced-choice or top-recommendation prompt in which the brand is selected as the primary (first or only) recommendation.",
+              "how_to_read": "PR of 45% means your brand was the top recommendation in 45% of forced-choice trials. This is the most commercially meaningful presence metric — it simulates the AI's answer when a buyer asks \"just tell me which one to pick.\"",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Model Coverage",
+              "short_name": "MC",
+              "motivation": "AI presence on one model does not guarantee presence on others. A brand well-represented in GPT-4's training data may be nearly absent from Claude or Gemini. Model Coverage makes this cross-model distribution explicit — high variance across models indicates fragile, non-structural presence.",
+              "definition": "The number of major LLMs in which the brand achieves SoA above a defined threshold (default: 40%), expressed as a fraction of models tested.",
+              "how_to_read": "MC of 5/5 means you exceed the threshold on all five tested models — structural, model-independent presence. MC of 2/5 means you are present on two models only — presence is model-specific and fragile.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            }
+          ]
+        },
+        {
+          "id": "abm_ch2",
+          "number": 2,
+          "name": "Authority",
+          "client_question": "Why does AI trust you — and who vouches for you?",
+          "illuminates": "The citation and trust architecture behind your AI presence. LLMs don't recommend from thin air — their outputs reflect what authoritative sources have written about you. This chapter maps which publishers vouch for you, how consistently, and how that compares to competitors.",
+          "unique_insight": "High visibility with weak authority signals means your presence is fragile. A model update or editorial shift at a key publisher can erase it. This chapter tells you whether your AI presence has structural foundations.",
+          "enables": "Precision PR and content placement decisions. Publisher gap analysis. Source concentration risk assessment.",
+          "improves": "Publisher diversity and quality of citation. Source Citation Rate and Cross-Source Reinforcement should respond to earned media investment within 2–3 quarters.",
+          "kpis": [
+            {
+              "name": "Source Citation Rate",
+              "short_name": "SCR",
+              "motivation": "AI models that cite sources are showing their work — and those citations reveal which publishers are trusted enough to influence model outputs. Measuring how often sources are cited alongside your brand reveals the infrastructure of your AI credibility.",
+              "definition": "The proportion of inference trials in which the model cites at least one identifiable external source (URL, publication name, or domain) in the same response that mentions the brand.",
+              "how_to_read": "SCR of 70% means 7 in 10 brand mentions come with a source citation. Low SCR indicates the model is asserting your brand without citing supporting sources — presence without traceable authority.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Publisher Citation Share",
+              "short_name": "PCS",
+              "motivation": "Not all citations are equal. Being cited by NZZ carries more authority signal than being cited by an unknown blog. This KPI maps which publications are vouching for you in AI responses and in what proportion.",
+              "definition": "For all citation URLs extracted in trials where the brand is mentioned, the distribution of citations across identified publishers, expressed as a percentage share per outlet.",
+              "how_to_read": "PCS showing Handelszeitung 45%, NZZ 20%, Bilanz 15%, other 20% means nearly half your AI authority comes from one publisher — concentration risk. If NZZ has a higher authority tier score than Handelszeitung for your category, you know where to invest PR effort.",
+              "prompt_type": "",
+              "direction": "neutral (diversity is good; concentration is risk)"
+            },
+            {
+              "name": "Publisher Authority Score",
+              "short_name": "PAS",
+              "motivation": "Citation share tells you who cites you. Authority Score tells you how much those citations are worth — weighted by the tier of the publisher doing the citing.",
+              "definition": "A weighted average of citations received, where each citation is weighted by the authority tier of the citing publisher (Tier 1 = 1.0, Tier 2 = 0.6, Tier 3 = 0.3). Normalised to 0–100.",
+              "how_to_read": "PAS of 72 means your citation profile is dominated by high-tier sources. PAS of 28 with high SCR means you have many citations but mostly from low-authority outlets — quantity without quality.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Cross-Source Reinforcement Index",
+              "short_name": "CSRI",
+              "motivation": "A single publisher vouching for you is fragile. When multiple independent, high-tier publishers consistently cite your brand in the same context, that reinforcement creates a structural authority signal that is resistant to single-publisher changes.",
+              "definition": "The proportion of brand citation clusters (per query) in which at least 2 distinct Tier 1 or Tier 2 publishers are cited together. Measures co-citation diversity, not just volume.",
+              "how_to_read": "CSRI of 65% means 65% of your citation clusters include two or more high-tier independent sources. CSRI below 30% indicates your authority rests on a single-source dependency.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Trust Framing Index",
+              "short_name": "TFI",
+              "motivation": "A brand can be mentioned and cited but framed with qualifying or dismissive language (\"some consider\", \"reportedly\", \"despite controversy\"). Trust Framing Index measures whether AI's language around your brand is confident and positive or hedged and cautious.",
+              "definition": "A scored classification of the framing language surrounding brand mentions, on a four-point scale: Positive (1.0), Neutral (0.5), Qualified (0.25), Dismissive (0.0). Aggregated as a weighted mean.",
+              "how_to_read": "TFI of 0.8 indicates the brand is predominantly framed in positive, confident language. TFI of 0.3 indicates hedged or cautious framing — AI trusts the brand less than competitors. Compare TFI against competitors to identify framing disadvantages.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            }
+          ]
+        },
+        {
+          "id": "abm_ch3",
+          "number": 3,
+          "name": "Narrative",
+          "client_question": "What story does AI actually tell about you?",
+          "illuminates": "The content of AI's representation of your brand — not just whether you appear, but what is said, how you are framed, what attributes are assigned, and how that compares to your intended positioning.",
+          "unique_insight": "A brand can have high visibility and strong authority signals and still be described in ways that work against its strategy. This chapter systematically audits the narrative AI tells about your brand at scale.",
+          "enables": "Positioning gap identification. Messaging strategy grounded in how AI currently frames you vs. how you want to be framed. Attribute-level competitive comparison.",
+          "improves": "Content and messaging that closes the narrative gap. The Narrative Gap Index provides a direct feedback loop between brand strategy and AI output.",
+          "kpis": [
+            {
+              "name": "Role Attribution",
+              "short_name": "RA",
+              "motivation": "AI classifies brands into implicit roles — market leader, challenger, niche specialist, legacy player, value option. These role assignments shape how buyers perceive and shortlist brands. Knowing your assigned role reveals whether AI is reinforcing or undermining your positioning.",
+              "definition": "The dominant role category assigned to the brand across inference trials, derived from keyword and framing classification of brand mention contexts. Reported as a distribution across role categories.",
+              "how_to_read": "A distribution heavily weighted toward \"market leader\" (70%) is ideal for an established brand. \"Niche specialist\" (60%) may be appropriate for a focused player. \"Value option\" for a premium brand is a positioning mismatch that requires content correction.",
+              "prompt_type": "",
+              "direction": "neutral (target role is client-defined)"
+            },
+            {
+              "name": "Topic Alignment Score",
+              "short_name": "TAS",
+              "motivation": "A brand that appears in AI responses but only for topics outside its strategic intent has a misalignment problem. Topic Alignment measures whether AI associates your brand with the right intent contexts.",
+              "definition": "The proportion of brand mentions that occur within the client-defined set of target topics and intent types, versus off-target topics.",
+              "how_to_read": "TAS of 85% means 85% of your brand appearances are in the right topic context. TAS of 40% means the majority of your AI presence is in contexts irrelevant to your strategy — noise, not signal.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Reason-for-Recommendation",
+              "short_name": "RFR",
+              "motivation": "When AI recommends your brand, it typically gives a reason. Those reasons reveal which attributes AI associates with you — price, reputation, specialisation, innovation, trust. Knowing which attributes drive your AI recommendations lets you audit whether they match your strategy.",
+              "definition": "A ranked distribution of the attributes cited as reasons for recommending the brand, extracted and clustered from recommendation-context text.",
+              "how_to_read": "RFR showing price (45%), reliability (30%), brand recognition (15%) means AI recommends you primarily as a cost option. If your strategy is premium positioning, this is a content signal — the attributes AI learned from your ecosystem don't match your intent.",
+              "prompt_type": "",
+              "direction": "neutral (target distribution is client-defined)"
+            },
+            {
+              "name": "Narrative Gap Index",
+              "short_name": "NGI",
+              "motivation": "The most actionable output in the platform. Compares AI's actual narrative about your brand against your declared strategic positioning. The delta between desired and actual is the gap you need to close.",
+              "definition": "A composite distance score between the client-declared desired positioning (attributes, role, topics) and the measured AI narrative (from Role Attribution, Topic Alignment, Reason-for-Recommendation). Normalised to 0–100 where 0 = perfect alignment, 100 = maximum divergence.",
+              "how_to_read": "NGI of 12 = AI's narrative is closely aligned with your positioning. NGI of 67 = significant misalignment — AI is telling a story about you that conflicts with your strategy. NGI is the primary metric for tracking the impact of content and PR interventions over time.",
+              "prompt_type": "",
+              "direction": "lower_is_better"
+            },
+            {
+              "name": "Framing Quality",
+              "short_name": "FQ",
+              "motivation": "Beyond sentiment, framing quality captures whether AI language about your brand is confident and direct vs. hedged, qualified, or dismissive. A brand can have neutral sentiment but poor framing quality — mentioned but never as a clear recommendation.",
+              "definition": "A four-category classification of the predominant language framing surrounding brand mentions: Positive / Neutral / Qualified / Dismissive. Reported as a distribution; summary score is proportion of Positive + Neutral frames.",
+              "how_to_read": "A distribution of Positive 60%, Neutral 30%, Qualified 8%, Dismissive 2% indicates a healthy framing profile. Qualified framing above 20% is a warning signal — AI is hedging when it mentions you.",
+              "prompt_type": "",
+              "direction": "more Positive is better; less Qualified/Dismissive is better"
+            },
+            {
+              "name": "Comparative Narrative Role",
+              "short_name": "CNR",
+              "motivation": "When AI describes your brand relative to competitors, it assigns an implicit competitive role. Understanding whether AI frames you as market leader, challenger, or alternative to something else tells you how it positions you in the buyer's competitive landscape.",
+              "definition": "The dominant competitive framing of the brand in responses that mention both the brand and at least one competitor. Categories: Leader / Challenger / Alternative / Complementary / Unclassified.",
+              "how_to_read": "CNR of Leader 55% means in most comparative contexts AI frames your brand as the reference point. CNR of Alternative 60% means AI typically frames you as a secondary option to a competitor — a positioning problem if you're trying to lead the category.",
+              "prompt_type": "",
+              "direction": "neutral (target depends on brand strategy)"
+            }
+          ]
+        },
+        {
+          "id": "abm_ch4",
+          "number": 4,
+          "name": "Reliability",
+          "client_question": "Can you trust these numbers — and will they hold tomorrow?",
+          "illuminates": "The variance, sensitivity, and temporal stability of your AI presence. The quality gate that separates findings worth acting on from noise.",
+          "unique_insight": "A single measurement without error bars is an anecdote. This chapter gives every finding from Chapters 1–3 a confidence band. It also reveals whether your presence is maturing (becoming more stable) or remains fragile.",
+          "enables": "Confidence-graded reporting. Priority weighting of findings by stability. Early detection of model updates that affect brand representation.",
+          "improves": "Measurement discipline. A reliability profile that improves over time is itself a strategic signal — fragile presence becoming structural.",
+          "kpis": [
+            {
+              "name": "Response Variance",
+              "short_name": "RV",
+              "motivation": "AI outputs are non-deterministic. The same prompt can produce different results on repeated runs. Without measuring variance, you cannot know whether a reported SoA of 72% is a stable signal or could swing to 41% on the next run.",
+              "definition": "The standard deviation of SoA scores across all replications of the same prompt × cohort cell. Reported per KPI to provide a confidence band around each chapter's outputs.",
+              "how_to_read": "RV (σ) of 3% around an SoA of 72% means the true score is reliably in the 69–75% range — act on it. RV of 22% means the score is highly unstable — treat as directional, not as a hard finding.",
+              "prompt_type": "",
+              "direction": "lower_is_better"
+            },
+            {
+              "name": "Model Divergence Index",
+              "short_name": "MDI",
+              "motivation": "Different LLMs have different training data, weighting, and update cycles. A brand well-represented on GPT-4 may score very differently on Claude or Gemini. High model divergence means your presence is model-specific — fragile and dependent on one provider's editorial choices.",
+              "definition": "A measure of how much SoA scores vary across major models for the same prompt and cohort. Computed as the range (max − min) of per-model SoA scores, normalised to 0–100.",
+              "how_to_read": "MDI of 10 = scores are closely aligned across models — structural presence. MDI of 55 = large cross-model spread — presence is model-dependent and will behave unpredictably as models update.",
+              "prompt_type": "",
+              "direction": "lower_is_better"
+            },
+            {
+              "name": "Persona Sensitivity Index",
+              "short_name": "PSI",
+              "motivation": "Adding a persona primer to a prompt changes AI outputs — sometimes dramatically. PSI measures how much your brand presence scores shift when persona priming is applied. High sensitivity means your AI presence is context-dependent; low sensitivity means it is robust.",
+              "definition": "The average absolute difference in SoA between primed (persona-active) and unprimed (baseline) inference trials, across all persona variants tested, normalised to 0–100.",
+              "how_to_read": "PSI of 8 = presence is robust across persona contexts. PSI of 42 = your SoA score shifts significantly depending on the persona in the prompt — you may be strong for one segment but weak for others.",
+              "prompt_type": "",
+              "direction": "lower_is_better (high PSI = unstable; but high PSI can also reveal useful segment variation)"
+            },
+            {
+              "name": "Temporal Stability Score",
+              "short_name": "TSS",
+              "motivation": "AI models are updated silently. A score that was 70% last quarter may be 45% this quarter with no action on your part. Temporal Stability measures how much your key scores drift between measurement periods, enabling you to distinguish intentional change from model-induced drift.",
+              "definition": "The average absolute change in core KPI scores (SoA, SR, NGI) between consecutive measurement periods. Lower = more stable. Reported as a normalised index.",
+              "how_to_read": "TSS of 5 = scores are highly stable between periods. TSS of 35 = significant period-to-period drift — investigate whether a model update or content change is the cause.",
+              "prompt_type": "",
+              "direction": "lower_is_better"
+            },
+            {
+              "name": "Narrative Drift",
+              "short_name": "ND",
+              "motivation": "The story AI tells about your brand can shift over time as models are updated and the information landscape changes. Narrative Drift detects whether the content of AI's brand narrative is changing — even when presence scores remain stable.",
+              "definition": "Jensen-Shannon Divergence (JSD) between the role/attribute distributions measured in the current period and the prior period. JSD of 0 = identical narrative; JSD of 1 = completely different narrative.",
+              "how_to_read": "ND of 0.03 = narrative is stable between periods. ND of 0.28 = significant narrative shift — something in the AI's learned representation of your brand has changed. Investigate content sources and model updates.",
+              "prompt_type": "",
+              "direction": "lower_is_better (unless change was intentional)"
+            }
+          ]
+        },
+        {
+          "id": "abm_ch5",
+          "number": 5,
+          "name": "Action",
+          "client_question": "What do you actually do with all of this?",
+          "illuminates": "The priority order of strategic interventions — what to fix first, why, and how to measure success. Converts four chapters of measurement into a working action plan.",
+          "unique_insight": "Most intelligence platforms stop at dashboards. This chapter makes the translation from score to decision explicit and grounded in the specific KPI evidence from Chapters 1–4.",
+          "enables": "Quarterly planning integration. PR and content briefs grounded in KPI gaps. ROI tracking through baseline-vs-target measurement cycles.",
+          "improves": "Client retention and platform stickiness. The action layer is the product's core value delivery mechanism — it turns measurement into mandate.",
+          "kpis": [
+            {
+              "name": "Priority Gap Matrix",
+              "short_name": "PGM",
+              "motivation": "Without prioritisation, a client faces 20+ KPI gaps of varying importance and effort. The Priority Gap Matrix collapses this into a ranked action list: high-impact gaps that are achievable vs. gaps that require more investment.",
+              "definition": "A ranked list of identified KPI gaps, scored on two axes: Strategic Impact (how much closing this gap improves brand position) and Effort to Close (estimated investment in content, PR, or partnerships). Gaps are plotted in four quadrants: Quick Wins / Strategic Priorities / Long-term / Deprioritise.",
+              "how_to_read": "Top-right quadrant (high impact, low effort) = Quick Wins to action immediately. Top-left (high impact, high effort) = Strategic Priorities for roadmap. Bottom-right (low impact, low effort) = nice-to-have. Bottom-left = deprioritise.",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Lever Map",
+              "short_name": "LM",
+              "motivation": "Knowing you have a gap is not enough. The Lever Map translates each high-priority gap into specific, concrete recommended actions — not vague advice but targeted interventions with named channels.",
+              "definition": "For each gap in the top quadrants of the Priority Gap Matrix, a set of recommended actions specifying: the target channel (PR, owned content, publisher partnership, technical SEO), the specific action, and the KPI it addresses.",
+              "how_to_read": "\"Publisher Citation Share gap → Action: commission Bilanz profile piece (PR), pitch NZZ data story (PR), create authoritative white paper for industry citation (Owned Content). Addresses: SCR, PCS, PAS.\"",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Baseline + Target KPIs",
+              "short_name": "BT",
+              "motivation": "A plan without measurable targets is not a plan. Baseline + Targets gives clients a concrete mandate: specific KPI scores to reach by specific dates, derived from current scores and realistic improvement trajectories.",
+              "definition": "For each KPI addressed in the Lever Map, a current baseline score and a target score at 6 months and 12 months, with the expected improvement trajectory stated explicitly.",
+              "how_to_read": "\"SoA (CFO segment, DACH): Baseline 34% → 6m target 52% → 12m target 68%. SCR: Baseline 28% → 6m target 45% → 12m target 60%.\" If scores are not moving toward targets by the 6-month check, the lever strategy needs revision.",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Quick Win Index",
+              "short_name": "QWI",
+              "motivation": "Early wins matter for client retention. The Quick Win Index filters the full gap list for improvements that are high-impact relative to effort and achievable within 90 days — ensuring every client sees measurable progress in the first quarter.",
+              "definition": "A filtered and ranked subset of the Priority Gap Matrix: gaps in the Quick Win quadrant (high impact, low effort) with an estimated close time of ≤ 90 days. Ranked by impact score descending.",
+              "how_to_read": "Top 3 Quick Wins = the three things to do this quarter that will move the needle the most for the least investment. Each has a specific action, a responsible channel, and the KPI it improves.",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ai_market_research",
+      "name": "AI Market Research",
+      "tagline": "Market research at AI speed.",
+      "role": "AI is the instrument. You are using it to understand your market — what buyers want, how competitors are perceived, how thinking varies by segment, and what to do with those findings.",
+      "chapter_arc": "Buyers want these things (Ch. 1 Demand Landscape), competitors own these positions (Ch. 2 Competitive Perception), but differently depending on who the buyer is (Ch. 3 Segment Intelligence), and here is how confident we are in these findings (Ch. 4 Signal Consistency), so here is what to do and in what order (Ch. 5 Strategic Implications).",
+      "chapters": [
+        {
+          "id": "amr_ch1",
+          "number": 1,
+          "name": "Demand Landscape",
+          "client_question": "What does AI believe buyers in this category actually want?",
+          "illuminates": "How AI frames the problem your brand is solving — the needs, decision criteria, and trade-offs AI associates with buyer decisions in your category. This is the market context layer before any brand-specific measurement.",
+          "unique_insight": "Survey panels tell you what respondents say today. AI tells you what the aggregated weight of training data — reviews, articles, forums, research — has converged on as the dominant market narrative. Highly stable for mature categories; a leading indicator for fast-moving ones.",
+          "enables": "Messaging alignment. Gap identification between what buyers want (per AI) and what your product actually delivers. Contextualises all Brand Monitor findings.",
+          "improves": "Content strategy, value proposition clarity, and product-market fit communication.",
+          "kpis": [
+            {
+              "name": "Decision Driver Ranking",
+              "short_name": "DDR",
+              "motivation": "Before measuring competitive position, you need to know what the competition is on. DDR reveals which buyer priorities AI believes drive decisions in your category — the criteria against which all brands are evaluated.",
+              "definition": "A ranked list of purchase decision criteria extracted from AI responses to open-ended buyer intent prompts, clustered into canonical drivers and ranked by mention frequency across the inference batch.",
+              "how_to_read": "DDR showing \"1. Claims simplicity (89%), 2. Digital interface (67%), 3. Price (45%), 4. Brand reputation (31%)\" means AI believes the primary purchase driver in your category is claims simplicity, not price. Compare against your product's actual strengths to identify alignment or gaps.",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Category Frame",
+              "short_name": "CF",
+              "motivation": "How AI defines the boundaries of a category shapes everything — which brands belong, which need types are relevant, which use cases count. If AI frames the category more narrowly or broadly than your product addresses, your positioning will be misaligned with the AI layer.",
+              "definition": "A structured description of how AI defines the boundaries of the client's product category: included/excluded use cases, included/excluded competitor types, primary framing axis (e.g. price vs. service vs. risk). Extracted from category-definition prompts.",
+              "how_to_read": "If AI consistently frames \"business banking\" as primarily about digital tools and SME lending (and not wealth management), a bank whose strength is private wealth will find itself outside the AI-defined category frame — invisible by definition, not by reputation.",
+              "prompt_type": "",
+              "direction": "neutral (output type — category fit is evaluated by client)"
+            },
+            {
+              "name": "Segment Need Profile",
+              "short_name": "SNP",
+              "motivation": "Different buyer segments have fundamentally different need structures. A 28-year-old renter and a 55-year-old CFO are in different markets even when shopping in the same category. SNP makes these differences explicit at the granularity of each defined cohort.",
+              "definition": "A per-cohort ranking of the top decision drivers, derived by running DDR measurement separately for each cohort definition. Each cohort gets its own ordered need priority list.",
+              "how_to_read": "SNP for Gen Z (18–26): \"1. Price (92%), 2. Digital-first UX (78%), 3. No lock-in (55%).\" SNP for CFO (45–60): \"1. Compliance coverage (87%), 2. Service SLA (71%), 3. Reporting quality (60%).\" These are different markets. Different messaging is required.",
+              "prompt_type": "",
+              "direction": "neutral"
+            },
+            {
+              "name": "Market Narrative Consistency",
+              "short_name": "MNC",
+              "motivation": "If different models give radically different answers about what buyers want in a category, the \"AI view of the market\" is not stable enough to be a reliable research instrument. MNC measures how much models agree on the demand landscape — the prerequisite for treating results as findings rather than model artefacts.",
+              "definition": "The degree of agreement across major LLMs on the top-3 decision drivers for a given category and segment, measured as the proportion of driver rankings that are consistent (same top-3, same order) across models.",
+              "how_to_read": "MNC of 85% means 85% of the top-3 driver rankings are identical across models — the demand landscape finding is robust. MNC of 35% means the models disagree substantially — findings should be treated as directional only and investigated for model-specific biases.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            }
+          ]
+        },
+        {
+          "id": "amr_ch2",
+          "number": 2,
+          "name": "Competitive Perception",
+          "client_question": "How does AI rank and frame competitors in buyers' eyes?",
+          "illuminates": "The competitive distribution of buyer demand — who AI positions as the answer to each decision driver, how sharply each competitor is differentiated, and where white space exists.",
+          "unique_insight": "AI has processed years of comparative reviews, analyst reports, and user feedback. Its competitive framing is a compressed consensus of all of that. You get the competitive map as the AI layer has distilled it — and where no one owns a position yet.",
+          "enables": "Positioning strategy grounded in competitive reality. White space identification. Targeting and messaging differentiation.",
+          "improves": "Go-to-market sharpness. Competitive positioning. Clients can track whether positioning investments shift how AI distributes competitive rankings.",
+          "kpis": [
+            {
+              "name": "Competitive Ranking by Decision Driver",
+              "short_name": "CRDD",
+              "motivation": "The decision drivers from Ch. 1 are the competitive battleground. CRDD maps which brands AI believes best address each driver — giving a driver-level competitive landscape rather than a single overall ranking.",
+              "definition": "For each top decision driver identified in DDR, a ranked list of brands most associated with delivering that driver, derived from competitive association prompts. Each driver gets its own ranking.",
+              "how_to_read": "CRDD for \"Claims simplicity\": Brand A (78%), Brand B (45%), Client (22%). Client is ranked 3rd on the most important driver — a critical positioning gap. CRDD for \"Specialist coverage\": Client (71%), Brand A (18%), Brand B (12%) — a white space the client already owns.",
+              "prompt_type": "",
+              "direction": "higher_is_better per target driver"
+            },
+            {
+              "name": "Attribute Ownership Map",
+              "short_name": "AOM",
+              "motivation": "Strategic positioning is about owning an attribute in the buyer's mind. AOM maps which brand owns which attribute in AI's view of your competitive set — and which attributes are genuinely contested or unclaimed.",
+              "definition": "A matrix of brands × attributes where each cell contains the association strength between brand and attribute, derived from attribute-specific competitive prompts. Normalised so each attribute sums to 100% across brands.",
+              "how_to_read": "Attribute \"innovation\": Brand A 65%, Brand B 20%, Client 10%, Other 5%. Brand A owns innovation. Attribute \"local expertise\": Client 55%, Brand B 30%, Brand A 8%. Client owns local expertise. The map tells you what you own, what you don't, and what's contested.",
+              "prompt_type": "",
+              "direction": "neutral (client evaluates own position per target attribute)"
+            },
+            {
+              "name": "White Space Index",
+              "short_name": "WSI",
+              "motivation": "The most strategically valuable finding in competitive analysis is not what competitors own but what nobody owns. WSI identifies the decision drivers that buyers care about (from DDR) but that no competitor is clearly associated with in AI's view.",
+              "definition": "The set of top-N decision drivers (from DDR) where no brand in the competitive set achieves an AOM association score above the dominance threshold (default: 50%). Each qualifying driver is a white space. WSI score = proportion of top-N drivers that are white spaces.",
+              "how_to_read": "WSI of 3/8 means 3 of the top 8 buyer decision criteria have no clear AI-defined owner. Those 3 drivers are the primary positioning opportunities — high buyer relevance, no incumbent. A brand that moves first to own one of these through content and positioning will be the first to be associated with it in AI outputs.",
+              "prompt_type": "",
+              "direction": "higher_is_better (more white space = more opportunity)"
+            },
+            {
+              "name": "Positioning Sharpness",
+              "short_name": "PS",
+              "motivation": "A competitor that is clearly associated with specific attributes is harder to displace than one that is blurry or generic. Positioning Sharpness measures how distinctly each competitor is differentiated in AI's view — high sharpness = owned position; low sharpness = generic, vulnerable.",
+              "definition": "For each brand, the concentration (Herfindahl-style index) of its AOM attribute ownership — how much its associations are concentrated on a few specific attributes vs. spread evenly across many. Score 0 = perfectly generic; score 1 = fully concentrated on one attribute.",
+              "how_to_read": "PS of 0.7 for Brand A = highly concentrated on 2–3 attributes — a sharply positioned brand that owns clear territory. PS of 0.2 for Brand B = spread evenly across 10 attributes — generic, not owning anything in particular. Low PS + high AOM overall = known but undifferentiated — the most common positioning failure.",
+              "prompt_type": "",
+              "direction": "higher_is_better (for the competitor being assessed)"
+            },
+            {
+              "name": "Segment-level Competitive Share",
+              "short_name": "SCS",
+              "motivation": "Overall competitive rankings obscure important segment variation. A brand may dominate overall but underperform in the fastest-growing segment. SCS breaks competitive standing down by cohort to reveal where each competitor is strongest and weakest.",
+              "definition": "SoA-equivalent presence score computed separately for each brand within each cohort definition, normalised to competitive share within that cohort. Shows how the competitive distribution of AI's responses shifts across segments.",
+              "how_to_read": "Brand A: SCS Gen Z 62%, SCS CFO 18%. Client: SCS Gen Z 12%, SCS CFO 71%. The competitive landscape is completely different by segment. Strategy needs to reflect this: different channels, different content, different publishers to influence.",
+              "prompt_type": "",
+              "direction": "higher_is_better for client brand in target segments"
+            }
+          ]
+        },
+        {
+          "id": "amr_ch3",
+          "number": 3,
+          "name": "Segment Intelligence",
+          "client_question": "How does buyer thinking differ across personas and cohorts?",
+          "illuminates": "The full segment-level breakdown of buyer needs, competitive perceptions, and decision drivers — the granular view that justifies differentiated strategy across cohorts.",
+          "unique_insight": "Traditional segmentation research is slow and expensive. AI synthetic research runs the full Cartesian product of persona dimensions in hours — giving segment resolution that no human panel study can match at this cost.",
+          "enables": "Media targeting precision. Product-market fit validation by segment. Evidence base for differentiated messaging by segment.",
+          "improves": "Targeting precision. Messaging differentiation. ROI on media spend.",
+          "kpis": [
+            {
+              "name": "Segment Competitive Ranking",
+              "short_name": "SCR_seg",
+              "motivation": "The overall competitive ranking from Ch. 2 may hide dramatic segment-level reversals. A brand that is second overall may be first in the highest-value segment. SCR_seg makes the full segment-competitive matrix visible.",
+              "definition": "A competitive ranking table broken down by cohort: for each cohort, brands ranked by their SCS score. The full cohort × brand matrix of competitive standing.",
+              "how_to_read": "The matrix reveals which cohorts each competitor dominates and which are contested or open. Prioritise segments where your competitive standing is strong (or where standing can be improved with targeted action) against segments with high strategic value.",
+              "prompt_type": "",
+              "direction": "neutral (client evaluates own rank per target cohort)"
+            },
+            {
+              "name": "Cross-Segment Variance",
+              "short_name": "CSV",
+              "motivation": "If all segments think the same thing, a single strategy serves everyone. If segments diverge substantially, differentiated strategy is mandatory. CSV quantifies how much segment findings differ — the business case for or against segmented messaging.",
+              "definition": "The average pairwise divergence (Jensen-Shannon Distance) between Segment Need Profiles across all cohort pairs. High CSV = segments are substantially different; low CSV = market is relatively homogeneous.",
+              "how_to_read": "CSV of 0.08 = segments are very similar — a single value proposition can address them all. CSV of 0.45 = high segment divergence — a unified strategy will underserve most segments. The threshold for \"differentiation required\" is context-dependent but 0.20+ typically warrants distinct messaging.",
+              "prompt_type": "",
+              "direction": "neutral (high CSV = differentiation opportunity or necessity)"
+            },
+            {
+              "name": "Opportunity Score per Segment",
+              "short_name": "OSS",
+              "motivation": "Not all segments are equally worth targeting. OSS synthesises three inputs — buyer demand intensity, competitive white space, and product fit — into a single prioritisation score per segment.",
+              "definition": "A composite score per cohort combining: (1) Demand Intensity — how strongly expressed are buyer needs in this segment (from SNP frequency scores); (2) Competitive Opening — average white space available to the client in this segment's top drivers; (3) Product Fit — client-declared alignment between their product's strengths and the segment's top drivers. Normalised to 0–100.",
+              "how_to_read": "OSS of 82 for the \"CFO, mid-size firm, DACH\" segment means high demand, open competitive field, and strong product fit — the segment to prioritise. OSS of 23 for \"Gen Z consumer\" means low fit or high competition — not where to invest resources now.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            }
+          ]
+        },
+        {
+          "id": "amr_ch4",
+          "number": 4,
+          "name": "Signal Consistency",
+          "client_question": "When can you trust AI as a research instrument — and when should you be careful?",
+          "illuminates": "Where AI produces reliable, cross-model-consistent findings and where it produces noisy, model-specific outputs. The quality gate that separates hard findings from directional signals.",
+          "unique_insight": "Any tool produces outputs. What distinguishes a rigorous research platform is the ability to grade its own findings. Signal Consistency is that grade — every finding gets a confidence rating, and clients know exactly what they can act on vs. what they should validate further.",
+          "enables": "Confidence-graded reporting. Transparent research platform positioning. Risk management: avoids acting on unstable model artefacts.",
+          "improves": "Client trust, platform credibility, and reputational integrity.",
+          "kpis": [
+            {
+              "name": "Cross-Model Consensus Score",
+              "short_name": "CMCS",
+              "motivation": "If GPT-4, Claude, and Gemini give the same answer about what buyers want, that's a finding. If they give completely different answers, that's a model artefact, not market intelligence. CMCS is the gate between the two.",
+              "definition": "The proportion of top-3 decision driver rankings that are consistent across all major models tested, for a given segment and category.",
+              "how_to_read": "CMCS of 85% = robust finding. CMCS of 35% = model-specific — investigate which models are outliers and why. Findings with CMCS below 50% should be reported as directional only, not as hard findings.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Run-Level Stability",
+              "short_name": "RLS",
+              "motivation": "A finding that changes between the morning run and the afternoon run of the same study is not a finding — it's noise. RLS measures whether the study produces consistent outputs across repeated executions, which is the minimum bar for treating results as research data.",
+              "definition": "The average overlap (Jaccard similarity) of top-3 decision driver rankings between repeated runs of the same study configuration, across all segments.",
+              "how_to_read": "RLS of 0.9 = very stable — same top drivers appear across all runs. RLS of 0.4 = unstable — findings change between runs without any real-world change having occurred. Investigate prompt sensitivity and reduce temperature settings.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Category Validity Score",
+              "short_name": "CVS",
+              "motivation": "AI is a more reliable research instrument for high-consideration categories (insurance, banking, B2B software) than for impulse or commodity categories (snacks, fast fashion). CVS rates how well-suited AI is as a research instrument for the specific category being studied.",
+              "definition": "A composite rating of AI suitability for the category, based on: (1) training data richness signals (CMCS as proxy), (2) response completeness (does AI produce substantive answers or deflect?), (3) category type classification (high-consideration vs. impulse). Rated on a 5-point scale with an associated confidence tier.",
+              "how_to_read": "CVS 5 (Very High) = AI is an excellent research instrument for this category — findings can be treated as primary research. CVS 2 (Low) = AI has thin training data or high deflection rate for this category — findings are supplementary only. Always report CVS alongside findings for transparency.",
+              "prompt_type": "",
+              "direction": "higher_is_better"
+            },
+            {
+              "name": "Confidence Band per Output KPI",
+              "short_name": "CB",
+              "motivation": "Every research finding should carry its own confidence grade. The Confidence Band system converts the underlying quality metrics (CMCS, RLS, CVS) into a per-KPI confidence label that is readable by non-technical stakeholders.",
+              "definition": "A three-tier confidence label assigned to each output KPI value: High Confidence (CMCS ≥ 70% AND RLS ≥ 0.8 AND CVS ≥ 4), Moderate Confidence (CMCS 50–70% OR RLS 0.6–0.8 OR CVS 3), Directional (CMCS < 50% OR RLS < 0.6 OR CVS ≤ 2).",
+              "how_to_read": "\"Decision Driver: Claims Simplicity — ranked #1 [High Confidence]\" means this finding is robust across models, stable across runs, and in a high-validity category. Act on it. \"Attribute: Sustainability — ranked #4 [Directional]\" means this finding should be validated before acting on it.",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Instrument Bias Indicators",
+              "short_name": "IBI",
+              "motivation": "Different LLMs have known systematic tendencies — some overrepresent US brands, some skew toward large incumbents, some have known political or cultural biases in framing. IBI flags where model-specific biases may be affecting findings.",
+              "definition": "A set of per-model flags indicating known or detected systematic biases relevant to the study's category and geography, derived from cross-model comparison of findings and a reference bias registry.",
+              "how_to_read": "\"GPT-4: US brand overrepresentation flag active for EU insurance category. Findings for EU-local brands may be understated on this model.\" These flags are reported alongside findings so analysts can weight multi-model averages appropriately.",
+              "prompt_type": "",
+              "direction": "neutral (informational output)"
+            }
+          ]
+        },
+        {
+          "id": "amr_ch5",
+          "number": 5,
+          "name": "Strategic Implications",
+          "client_question": "What would you act on — and why does the data justify it?",
+          "illuminates": "The strategic choices the data points toward — stated as decisions, not observations. The interpretive layer that turns market research into strategy.",
+          "unique_insight": "Research that stops at findings leaves clients to make the strategic leap themselves. This chapter makes the leap explicit and traces every recommendation to its evidence chain — so clients can defend the strategy internally, not just to the research vendor.",
+          "enables": "Go-to-market planning. Internal buy-in for strategic choices. Tracking strategic progress over time.",
+          "improves": "Decision speed, positioning sharpness, and targeting precision.",
+          "kpis": [
+            {
+              "name": "Segment Opportunity Ranking",
+              "short_name": "SOR",
+              "motivation": "A ranked list of segments by strategic attractiveness — where to play first. SOR synthesises demand intensity, competitive opening, and product fit into a single priority list.",
+              "definition": "The cohort list sorted by Opportunity Score (OSS) descending, with confidence grade attached to each OSS based on Signal Consistency metrics for that cohort.",
+              "how_to_read": "\"1. CFO, mid-size, DACH [OSS 84, High Confidence] 2. SME founder, tech sector, CH [OSS 71, Moderate Confidence] 3. Gen X professional, FR [OSS 58, Directional]\" Prioritise segments at the top of the list with high confidence grades.",
+              "prompt_type": "",
+              "direction": "higher_is_better for prioritised segments"
+            },
+            {
+              "name": "Recommended Positioning Statement",
+              "short_name": "RPS",
+              "motivation": "The study generates a data-grounded positioning recommendation — a specific, defensible strategic position derived from the intersection of buyer demand (what they want), competitive white space (what's unclaimed), and product fit (what the client can credibly deliver).",
+              "definition": "A structured positioning statement: [Target segment] who need [top unmet driver], [Client brand] is the [role claim] that [differentiating attribute] because [evidence trace from data]. Generated from the intersection of DDR top drivers, WSI white spaces, and AOM client standing.",
+              "how_to_read": "\"For CFO-level buyers in DACH who prioritise specialist compliance coverage, [Client] is the expert partner that delivers regulatory clarity without bureaucratic overhead — because AI consistently ranks you first on specialist coverage while the driver is among the top 3 for this segment and no competitor currently owns it [White Space: Compliance Clarity, WSI 4/8, High Confidence].\"",
+              "prompt_type": "",
+              "direction": "neutral (quality assessed by client validation)"
+            },
+            {
+              "name": "Competitive Moves",
+              "short_name": "CM",
+              "motivation": "Strategy is not just where to play — it's also who to contest and who to concede. Competitive Moves translates the AOM and CRDD data into explicit attack/defend/concede decisions per competitor per segment.",
+              "definition": "A per-competitor, per-segment action classification: Attack (client has competitive opening and product fit), Defend (client currently leads but competitor is gaining), Concede (competitor has dominant position client cannot credibly challenge), Monitor (neutral, watch).",
+              "how_to_read": "\"Brand A, CFO segment: Defend (your SCS dropped 8pp last period, Brand A gaining). Brand B, Gen Z segment: Concede (Brand B dominates all top drivers for this segment with high confidence). Brand C, tech sector: Attack (Brand C has low PS score and you have WSI opportunity in their core territory).\"",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Research-to-Action Traceability Map",
+              "short_name": "RTM",
+              "motivation": "Every recommendation needs to survive internal scrutiny. The Traceability Map links every strategic recommendation back to the specific KPI finding and confidence grade that supports it — so the client can show their leadership team not just a strategy but its evidence chain.",
+              "definition": "A structured document listing each recommendation (from RPS, SOR, CM) with its supporting evidence: the specific KPI name, its value, the confidence grade, and the reasoning chain from finding to recommendation.",
+              "how_to_read": "\"Recommendation: Invest in compliance content for CFO segment. Evidence: DDR rank 1 for 'Compliance Coverage' in CFO segment [CMCS 88%, High Confidence]. AOM: Client ranks 1st on compliance attribute [AOM 61%, High Confidence]. WSI: Compliance Clarity is white space [no competitor >50% AOM]. Conclusion: High demand, client-owned attribute, unclaimed in competitive positioning.\"",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            },
+            {
+              "name": "Confidence-Graded Recommendation Summary",
+              "short_name": "CGS",
+              "motivation": "A single-page summary that distinguishes hard findings from directional signals — the executive-ready version of the full RTM. Designed for presentation to leadership who need the bottom line, not the full methodology.",
+              "definition": "A ranked list of recommendations grouped by confidence tier (High / Moderate / Directional), each with a one-line rationale. Intended as the opening page of the research deliverable.",
+              "how_to_read": "\"High Confidence: Prioritise CFO segment in DACH for compliance positioning. Act now. Moderate Confidence: Gen Z digital-first messaging has potential — validate with one additional study run. Directional: Sustainability messaging opportunity exists — insufficient data to commit budget. Monitor.\"",
+              "prompt_type": "",
+              "direction": "neutral (output type)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

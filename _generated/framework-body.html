@@ -1,0 +1,307 @@
+  <div id="ppanel-A" class="ppanel active">
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch1">Ch. 1</span>
+        <div>
+          <div class="chapter-title">Visibility</div>
+          <div class="chapter-desc">&#8220;Are you in the room when buyers ask?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Share of Answer</div>
+          <div class="kpi-item-body">The proportion of relevant AI inference trials in which the brand is mentioned at least once, regardless of position, expressed as a percentage. Measured per cohort cell (persona × intent × model).</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Shortlist Rate</div>
+          <div class="kpi-item-body">The proportion of relevant inference trials in which the brand appears in the top 3 positions of a ranked AI response. Only applicable to prompts that elicit a ranked list.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Intent Visibility</div>
+          <div class="kpi-item-body">SoA broken down by intent type (informational / comparative / buy-decision / navigational). Each intent type is scored separately; the composite is an intent-weighted average where buy-decision carries highest weight.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Share of Voice</div>
+          <div class="kpi-item-body">The brand&#39;s mention count as a proportion of total brand mentions across all competitors in the defined competitive set, within the same inference batch.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Preference Rate</div>
+          <div class="kpi-item-body">The proportion of inference trials using a forced-choice or top-recommendation prompt in which the brand is selected as the primary (first or only) recommendation.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Model Coverage</div>
+          <div class="kpi-item-body">The number of major LLMs in which the brand achieves SoA above a defined threshold (default: 40%), expressed as a fraction of models tested.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch2">Ch. 2</span>
+        <div>
+          <div class="chapter-title">Authority</div>
+          <div class="chapter-desc">&#8220;Why does AI trust you — and who vouches for you?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Source Citation Rate</div>
+          <div class="kpi-item-body">The proportion of inference trials in which the model cites at least one identifiable external source (URL, publication name, or domain) in the same response that mentions the brand.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Publisher Citation Share</div>
+          <div class="kpi-item-body">For all citation URLs extracted in trials where the brand is mentioned, the distribution of citations across identified publishers, expressed as a percentage share per outlet.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Publisher Authority Score</div>
+          <div class="kpi-item-body">A weighted average of citations received, where each citation is weighted by the authority tier of the citing publisher (Tier 1 = 1.0, Tier 2 = 0.6, Tier 3 = 0.3). Normalised to 0–100.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Cross-Source Reinforcement Index</div>
+          <div class="kpi-item-body">The proportion of brand citation clusters (per query) in which at least 2 distinct Tier 1 or Tier 2 publishers are cited together. Measures co-citation diversity, not just volume.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Trust Framing Index</div>
+          <div class="kpi-item-body">A scored classification of the framing language surrounding brand mentions, on a four-point scale: Positive (1.0), Neutral (0.5), Qualified (0.25), Dismissive (0.0). Aggregated as a weighted mean.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch3">Ch. 3</span>
+        <div>
+          <div class="chapter-title">Narrative</div>
+          <div class="chapter-desc">&#8220;What story does AI actually tell about you?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Role Attribution</div>
+          <div class="kpi-item-body">The dominant role category assigned to the brand across inference trials, derived from keyword and framing classification of brand mention contexts. Reported as a distribution across role categories.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Topic Alignment Score</div>
+          <div class="kpi-item-body">The proportion of brand mentions that occur within the client-defined set of target topics and intent types, versus off-target topics.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Reason-for-Recommendation</div>
+          <div class="kpi-item-body">A ranked distribution of the attributes cited as reasons for recommending the brand, extracted and clustered from recommendation-context text.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Narrative Gap Index</div>
+          <div class="kpi-item-body">A composite distance score between the client-declared desired positioning (attributes, role, topics) and the measured AI narrative (from Role Attribution, Topic Alignment, Reason-for-Recommendation). Normalised to 0–100 where 0 = perfect alignment, 100 = maximum divergence.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Framing Quality</div>
+          <div class="kpi-item-body">A four-category classification of the predominant language framing surrounding brand mentions: Positive / Neutral / Qualified / Dismissive. Reported as a distribution; summary score is proportion of Positive + Neutral frames.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Comparative Narrative Role</div>
+          <div class="kpi-item-body">The dominant competitive framing of the brand in responses that mention both the brand and at least one competitor. Categories: Leader / Challenger / Alternative / Complementary / Unclassified.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch4">Ch. 4</span>
+        <div>
+          <div class="chapter-title">Reliability</div>
+          <div class="chapter-desc">&#8220;Can you trust these numbers — and will they hold tomorrow?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Response Variance</div>
+          <div class="kpi-item-body">The standard deviation of SoA scores across all replications of the same prompt × cohort cell. Reported per KPI to provide a confidence band around each chapter&#39;s outputs.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Model Divergence Index</div>
+          <div class="kpi-item-body">A measure of how much SoA scores vary across major models for the same prompt and cohort. Computed as the range (max − min) of per-model SoA scores, normalised to 0–100.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Persona Sensitivity Index</div>
+          <div class="kpi-item-body">The average absolute difference in SoA between primed (persona-active) and unprimed (baseline) inference trials, across all persona variants tested, normalised to 0–100.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Temporal Stability Score</div>
+          <div class="kpi-item-body">The average absolute change in core KPI scores (SoA, SR, NGI) between consecutive measurement periods. Lower = more stable. Reported as a normalised index.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Narrative Drift</div>
+          <div class="kpi-item-body">Jensen-Shannon Divergence (JSD) between the role/attribute distributions measured in the current period and the prior period. JSD of 0 = identical narrative; JSD of 1 = completely different narrative.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch5">Ch. 5</span>
+        <div>
+          <div class="chapter-title">Action</div>
+          <div class="chapter-desc">&#8220;What do you actually do with all of this?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Priority Gap Matrix</div>
+          <div class="kpi-item-body">A ranked list of identified KPI gaps, scored on two axes: Strategic Impact (how much closing this gap improves brand position) and Effort to Close (estimated investment in content, PR, or partnerships). Gaps are plotted in four quadrants: Quick Wins / Strategic Priorities / Long-term / Deprioritise.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Lever Map</div>
+          <div class="kpi-item-body">For each gap in the top quadrants of the Priority Gap Matrix, a set of recommended actions specifying: the target channel (PR, owned content, publisher partnership, technical SEO), the specific action, and the KPI it addresses.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Baseline + Target KPIs</div>
+          <div class="kpi-item-body">For each KPI addressed in the Lever Map, a current baseline score and a target score at 6 months and 12 months, with the expected improvement trajectory stated explicitly.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Quick Win Index</div>
+          <div class="kpi-item-body">A filtered and ranked subset of the Priority Gap Matrix: gaps in the Quick Win quadrant (high impact, low effort) with an estimated close time of ≤ 90 days. Ranked by impact score descending.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ppanel-A -->
+
+  <div id="ppanel-B" class="ppanel">
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch1">Ch. 1</span>
+        <div>
+          <div class="chapter-title">Demand Landscape</div>
+          <div class="chapter-desc">&#8220;What does AI believe buyers in this category actually want?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Decision Driver Ranking</div>
+          <div class="kpi-item-body">A ranked list of purchase decision criteria extracted from AI responses to open-ended buyer intent prompts, clustered into canonical drivers and ranked by mention frequency across the inference batch.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Category Frame</div>
+          <div class="kpi-item-body">A structured description of how AI defines the boundaries of the client&#39;s product category: included/excluded use cases, included/excluded competitor types, primary framing axis (e.g. price vs. service vs. risk). Extracted from category-definition prompts.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Segment Need Profile</div>
+          <div class="kpi-item-body">A per-cohort ranking of the top decision drivers, derived by running DDR measurement separately for each cohort definition. Each cohort gets its own ordered need priority list.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Market Narrative Consistency</div>
+          <div class="kpi-item-body">The degree of agreement across major LLMs on the top-3 decision drivers for a given category and segment, measured as the proportion of driver rankings that are consistent (same top-3, same order) across models.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch2">Ch. 2</span>
+        <div>
+          <div class="chapter-title">Competitive Perception</div>
+          <div class="chapter-desc">&#8220;How does AI rank and frame competitors in buyers&#39; eyes?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Competitive Ranking by Decision Driver</div>
+          <div class="kpi-item-body">For each top decision driver identified in DDR, a ranked list of brands most associated with delivering that driver, derived from competitive association prompts. Each driver gets its own ranking.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Attribute Ownership Map</div>
+          <div class="kpi-item-body">A matrix of brands × attributes where each cell contains the association strength between brand and attribute, derived from attribute-specific competitive prompts. Normalised so each attribute sums to 100% across brands.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">White Space Index</div>
+          <div class="kpi-item-body">The set of top-N decision drivers (from DDR) where no brand in the competitive set achieves an AOM association score above the dominance threshold (default: 50%). Each qualifying driver is a white space. WSI score = proportion of top-N drivers that are white spaces.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Positioning Sharpness</div>
+          <div class="kpi-item-body">For each brand, the concentration (Herfindahl-style index) of its AOM attribute ownership — how much its associations are concentrated on a few specific attributes vs. spread evenly across many. Score 0 = perfectly generic; score 1 = fully concentrated on one attribute.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Segment-level Competitive Share</div>
+          <div class="kpi-item-body">SoA-equivalent presence score computed separately for each brand within each cohort definition, normalised to competitive share within that cohort. Shows how the competitive distribution of AI&#39;s responses shifts across segments.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch3">Ch. 3</span>
+        <div>
+          <div class="chapter-title">Segment Intelligence</div>
+          <div class="chapter-desc">&#8220;How does buyer thinking differ across personas and cohorts?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Segment Competitive Ranking</div>
+          <div class="kpi-item-body">A competitive ranking table broken down by cohort: for each cohort, brands ranked by their SCS score. The full cohort × brand matrix of competitive standing.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Cross-Segment Variance</div>
+          <div class="kpi-item-body">The average pairwise divergence (Jensen-Shannon Distance) between Segment Need Profiles across all cohort pairs. High CSV = segments are substantially different; low CSV = market is relatively homogeneous.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Opportunity Score per Segment</div>
+          <div class="kpi-item-body">A composite score per cohort combining: (1) Demand Intensity — how strongly expressed are buyer needs in this segment (from SNP frequency scores); (2) Competitive Opening — average white space available to the client in this segment&#39;s top drivers; (3) Product Fit — client-declared alignment between their product&#39;s strengths and the segment&#39;s top drivers. Normalised to 0–100.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch4">Ch. 4</span>
+        <div>
+          <div class="chapter-title">Signal Consistency</div>
+          <div class="chapter-desc">&#8220;When to trust AI as a research instrument — and when to be careful?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Cross-Model Consensus Score</div>
+          <div class="kpi-item-body">The proportion of top-3 decision driver rankings that are consistent across all major models tested, for a given segment and category.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Run-Level Stability</div>
+          <div class="kpi-item-body">The average overlap (Jaccard similarity) of top-3 decision driver rankings between repeated runs of the same study configuration, across all segments.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Category Validity Score</div>
+          <div class="kpi-item-body">A composite rating of AI suitability for the category, based on: (1) training data richness signals (CMCS as proxy), (2) response completeness (does AI produce substantive answers or deflect?), (3) category type classification (high-consideration vs. impulse). Rated on a 5-point scale with an associated confidence tier.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Confidence Band per Output KPI</div>
+          <div class="kpi-item-body">A three-tier confidence label assigned to each output KPI value: High Confidence (CMCS ≥ 70% AND RLS ≥ 0.8 AND CVS ≥ 4), Moderate Confidence (CMCS 50–70% OR RLS 0.6–0.8 OR CVS 3), Directional (CMCS &lt; 50% OR RLS &lt; 0.6 OR CVS ≤ 2).</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Instrument Bias Indicators</div>
+          <div class="kpi-item-body">A set of per-model flags indicating known or detected systematic biases relevant to the study&#39;s category and geography, derived from cross-model comparison of findings and a reference bias registry.</div>
+        </div>
+      </div>
+    </div>
+    <div class="chapter">
+      <div class="chapter-header">
+        <span class="chapter-num ch5">Ch. 5</span>
+        <div>
+          <div class="chapter-title">Strategic Implications</div>
+          <div class="chapter-desc">&#8220;What would you act on — and why does the data justify it?&#8221;</div>
+        </div>
+      </div>
+      <div class="kpi-list">
+        <div class="kpi-item">
+          <div class="kpi-item-name">Segment Opportunity Ranking</div>
+          <div class="kpi-item-body">The cohort list sorted by Opportunity Score (OSS) descending, with confidence grade attached to each OSS based on Signal Consistency metrics for that cohort.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Recommended Positioning Statement</div>
+          <div class="kpi-item-body">A structured positioning statement: [Target segment] who need [top unmet driver], [Client brand] is the [role claim] that [differentiating attribute] because [evidence trace from data]. Generated from the intersection of DDR top drivers, WSI white spaces, and AOM client standing.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Competitive Moves</div>
+          <div class="kpi-item-body">A per-competitor, per-segment action classification: Attack (client has competitive opening and product fit), Defend (client currently leads but competitor is gaining), Concede (competitor has dominant position client cannot credibly challenge), Monitor (neutral, watch).</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Research-to-Action Traceability Map</div>
+          <div class="kpi-item-body">A structured document listing each recommendation (from RPS, SOR, CM) with its supporting evidence: the specific KPI name, its value, the confidence grade, and the reasoning chain from finding to recommendation.</div>
+        </div>
+        <div class="kpi-item">
+          <div class="kpi-item-name">Confidence-Graded Recommendation Summary</div>
+          <div class="kpi-item-body">A ranked list of recommendations grouped by confidence tier (High / Moderate / Directional), each with a one-line rationale. Intended as the opening page of the research deliverable.</div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /ppanel-B -->
