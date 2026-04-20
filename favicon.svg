@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="13" fill="#0a0a0f"/>
+  <!-- Wave 1: indigo, dominant foreground wave -->
+  <path d="M5 44 C13 44, 17 20, 25 20 C33 20, 37 44, 45 44 C53 44, 57 20, 59 20"
+        stroke="#6366f1" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+  <!-- Wave 2: cyan, phase-shifted, gives depth -->
+  <path d="M5 32 C13 32, 17 10, 25 10 C33 10, 37 54, 45 54 C53 54, 57 10, 59 10"
+        stroke="#06b6d4" stroke-width="3.5" stroke-linecap="round" fill="none" opacity="0.65"/>
+  <!-- Wave 3: purple, subtle mid layer -->
+  <path d="M5 38 C14 38, 18 26, 26 26 C34 26, 38 42, 46 42 C54 42, 58 26, 59 26"
+        stroke="#8b5cf6" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+</svg>
