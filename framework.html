@@ -31,7 +31,7 @@
 
     /* NAV */
     nav { position: sticky; top: 0; z-index: 100; background: rgba(10,10,15,0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 60px; }
-    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.75rem; }
+    .nav-brand { font-size: 1rem; font-weight: 700; letter-spacing: -0.02em; display: flex; align-items: center; gap: 0.75rem; color: var(--text); }
     .nav-brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); display: inline-block; }
     .nav-links { display: flex; gap: 2rem; font-size: 0.875rem; color: var(--text2); }
     .nav-links a { color: var(--text2); transition: color 0.2s; }
@@ -176,26 +176,31 @@
 
 <!-- NAV -->
 <nav>
-  <a href="index.html" class="nav-brand">
-    <span class="dot"></span>
-    UnderCurrent
+  <a href="index.html" class="nav-brand" style="text-decoration:none;">
+    <svg class="wave-svg" width="36" height="18" viewBox="0 0 36 18" fill="none">
+      <path d="M2 14 C6 14, 8 4, 12 4 C16 4, 18 14, 22 14 C26 14, 28 4, 32 4" stroke="#6366f1" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <path d="M2 9 C6 9, 8 2, 12 2 C16 2, 18 16, 22 16 C26 16, 28 2, 32 2" stroke="#06b6d4" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M2 12 C7 12, 9 7, 13 7 C17 7, 19 13, 23 13 C27 13, 29 7, 34 7" stroke="#8b5cf6" stroke-width="1" stroke-linecap="round" fill="none" opacity="0.4"/>
+    </svg>
+    <span>UnderCurrent</span>
   </a>
   <div class="nav-links">
     <a href="index.html">Platform</a>
-    <a href="index.html#methodology">Methodology</a>
+    <a href="methodology.html">Methodology</a>
     <a href="framework.html" class="active">KPI Framework</a>
-    <a href="contact.html" class="nav-cta">Request Briefing</a>
+    <a href="contact.html">Contact</a>
   </div>
-  <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>
+  <a href="contact.html" class="nav-cta">Request Briefing</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" onclick="toggleNav()">
+    <svg id="iconMenu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <svg id="iconClose" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
   </button>
 </nav>
 <div class="nav-dropdown" id="navDropdown">
-  <a href="index.html">Platform</a>
-  <a href="index.html#methodology">Methodology</a>
-  <a href="framework.html">KPI Framework</a>
+  <a href="index.html" onclick="closeNav()">Platform</a>
+  <a href="methodology.html" onclick="closeNav()">Methodology</a>
+  <a href="framework.html" onclick="closeNav()">KPI Framework</a>
+  <a href="contact.html" onclick="closeNav()">Contact</a>
   <a href="contact.html" class="nav-cta-mobile">Request Briefing</a>
 </div>
 
@@ -230,13 +235,27 @@ const CH_COLORS = ['#6366f1','#06b6d4','#8b5cf6','#22c55e','#f59e0b'];
 
 // ─── nav toggle ──────────────────────────────────────────────────────────────
 function toggleNav() {
-  const dd = document.getElementById('navDropdown');
-  dd.classList.toggle('open');
+  var dd = document.getElementById('navDropdown');
+  var menu = document.getElementById('iconMenu');
+  var close = document.getElementById('iconClose');
+  var open = dd.classList.toggle('open');
+  menu.style.display = open ? 'none' : 'block';
+  close.style.display = open ? 'block' : 'none';
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeNav() {
+  var dd = document.getElementById('navDropdown');
+  var menu = document.getElementById('iconMenu');
+  var close = document.getElementById('iconClose');
+  dd.classList.remove('open');
+  menu.style.display = 'block';
+  close.style.display = 'none';
+  document.body.style.overflow = '';
 }
 document.addEventListener('click', e => {
   const dd = document.getElementById('navDropdown');
   if (dd.classList.contains('open') && !e.target.closest('nav') && !e.target.closest('.nav-dropdown')) {
-    dd.classList.remove('open');
+    closeNav();
   }
 });
 
