@@ -118,18 +118,50 @@
     .product-card.b ul li::before { color: var(--accent3); }
 
     /* KPI FLOW DIAGRAM */
-    .kpi-flow { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem; margin-top: 2rem; overflow-x: auto; }
+    .kpi-product-tabs { display: flex; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .kpi-tab { background: var(--bg2); border: 1px solid var(--border); color: var(--text2); padding: 0.5rem 1.1rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .kpi-tab:hover { border-color: var(--accent); color: var(--text); }
+    .kpi-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .kpi-tab.active.b { background: var(--accent3); border-color: var(--accent3); }
+    .kpi-product-panel { display: none; }
+    .kpi-product-panel.visible { display: block; }
+    .kpi-flow { background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; overflow-x: auto; }
     .flow-row { display: flex; gap: 0; align-items: stretch; flex-wrap: nowrap; }
-    .flow-chapter { flex: 1; min-width: 160px; }
-    .flow-header { padding: 0.75rem 1rem; border-radius: 8px 8px 0 0; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
+    .flow-chapter { flex: 1; min-width: 155px; }
+    .flow-header { padding: 0.65rem 0.9rem; border-radius: 8px 8px 0 0; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; text-align: center; }
     .flow-header.ch1 { background: rgba(99,102,241,0.2); color: var(--accent); }
     .flow-header.ch2 { background: rgba(6,182,212,0.2); color: var(--accent3); }
     .flow-header.ch3 { background: rgba(139,92,246,0.2); color: var(--accent2); }
     .flow-header.ch4 { background: rgba(34,197,94,0.2); color: var(--green); }
     .flow-header.ch5 { background: rgba(245,158,11,0.2); color: var(--amber); }
-    .flow-body { padding: 1rem; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 0.4rem; }
-    .flow-kpi { font-size: 0.75rem; color: var(--text2); background: var(--bg3); border-radius: 4px; padding: 0.3rem 0.5rem; }
-    .flow-arrow { display: flex; align-items: center; padding: 0 0.5rem; color: var(--border); font-size: 1.25rem; margin-top: 2.2rem; }
+    .flow-body { padding: 0.75rem; border: 1px solid var(--border); border-top: none; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 0.35rem; }
+    .flow-kpi { font-size: 0.72rem; color: var(--text2); background: var(--bg3); border-radius: 4px; padding: 0.28rem 0.5rem; cursor: pointer; position: relative; transition: background 0.15s, color 0.15s; }
+    .flow-kpi:hover { background: rgba(99,102,241,0.15); color: var(--text); }
+    .flow-kpi[data-color="cyan"]:hover { background: rgba(6,182,212,0.15); }
+    /* Tooltip */
+    .flow-kpi .kpi-tip {
+      display: none; position: absolute; z-index: 200;
+      bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      width: 240px; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 10px; padding: 0.9rem 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      pointer-events: none;
+    }
+    .flow-kpi:hover .kpi-tip,
+    .flow-kpi:focus .kpi-tip { display: block; }
+    /* keep tooltip on screen at edges */
+    .flow-chapter:first-child .flow-kpi .kpi-tip { left: 0; transform: none; }
+    .flow-chapter:last-child .flow-kpi .kpi-tip { left: auto; right: 0; transform: none; }
+    .kpi-tip-name { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .kpi-tip-abbr { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 0.5rem; }
+    .kpi-tip-abbr.cyan { color: var(--accent3); }
+    .kpi-tip-why { font-size: 0.75rem; color: var(--text2); line-height: 1.55; margin-bottom: 0.5rem; }
+    .kpi-tip-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.35rem; }
+    .kpi-tip-badge { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 0.15rem 0.45rem; border-radius: 20px; }
+    .dir-up { background: rgba(34,197,94,0.12); color: var(--green); }
+    .dir-down { background: rgba(239,68,68,0.12); color: var(--red); }
+    .dir-neutral { background: rgba(153,153,184,0.1); color: var(--text2); }
+    .kpi-tip-bench { font-size: 0.68rem; color: var(--text2); margin-top: 0.4rem; font-style: italic; }
+    .flow-arrow { display: flex; align-items: center; padding: 0 0.4rem; color: var(--border); font-size: 1.1rem; margin-top: 2rem; }
 
     /* EVIDENCE SECTION */
     .evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
@@ -421,71 +453,135 @@
 <section id="kpis">
   <div class="section-tag">KPI Framework</div>
   <h2>A complete story, not a dashboard inventory</h2>
-  <p class="section-sub">26 KPIs across five chapters for AI Brand Monitor. Each chapter answers a distinct client question. Together they trace the full arc from visibility to action. <a href="framework.html" style="color:var(--accent)">Browse the full framework →</a></p>
+  <p class="section-sub">26 KPIs across 5 chapters for AI Brand Monitor. 22 KPIs across 5 chapters for AI Market Research. Hover any KPI for its Steckbrief. <a href="framework.html" style="color:var(--accent)">Full framework details →</a></p>
 
-  <div class="kpi-flow">
-    <div class="flow-row">
-      <div class="flow-chapter">
-        <div class="flow-header ch1">Ch. 1 · Visibility</div>
-        <div class="flow-body">
-          <div class="flow-kpi">Share of Answer</div>
-          <div class="flow-kpi">Shortlist Rate</div>
-          <div class="flow-kpi">Intent Visibility</div>
-          <div class="flow-kpi">Share of Voice</div>
-          <div class="flow-kpi">Preference Rate</div>
-          <div class="flow-kpi">Model Coverage</div>
+  <div class="kpi-product-tabs">
+    <button class="kpi-tab active" onclick="switchKpiTab('A',this)">AI Brand Monitor</button>
+    <button class="kpi-tab" onclick="switchKpiTab('B',this)">AI Market Research</button>
+  </div>
+
+  <div id="kpi-panel-A" class="kpi-product-panel visible">
+    <div class="kpi-flow">
+      <div class="flow-row">
+        <div class="flow-chapter">
+          <div class="flow-header ch1">Ch. 1 · Visibility</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Share of Answer<span class="kpi-tip"><span class="kpi-tip-name">Share of Answer</span><span class="kpi-tip-why">AI is increasingly the first touchpoint in a buyer&#39;s research journey. SoA measures the % of relevant AI responses in which your brand appears.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Shortlist Rate<span class="kpi-tip"><span class="kpi-tip-name">Shortlist Rate</span><span class="kpi-tip-why">Being mentioned is not enough — appearing in the top 3 is what drives consideration. Shortlist Rate measures how often your brand is listed among the first three options.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Intent Visibility<span class="kpi-tip"><span class="kpi-tip-name">Intent Visibility</span><span class="kpi-tip-why">A brand may appear for informational queries but vanish for high-intent buying signals. Intent Visibility breaks down your SoA by query intent type.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Share of Voice<span class="kpi-tip"><span class="kpi-tip-name">Share of Voice</span><span class="kpi-tip-why">Absolute SoA doesn&#39;t tell you where you stand relative to competitors. SoV normalises your presence against the full competitive set.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Preference Rate<span class="kpi-tip"><span class="kpi-tip-name">Preference Rate</span><span class="kpi-tip-why">When AI is asked to recommend one option, which brand does it choose? Preference Rate measures your win rate on single-recommendation prompts.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Model Coverage<span class="kpi-tip"><span class="kpi-tip-name">Model Coverage</span><span class="kpi-tip-why">AI presence on one model does not guarantee presence on others. Model Coverage tracks your SoA across ChatGPT, Perplexity, Claude, Gemini separately.</span></span></div>
+          </div>
         </div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-chapter">
-        <div class="flow-header ch2">Ch. 2 · Authority</div>
-        <div class="flow-body">
-          <div class="flow-kpi">Source Citation Rate</div>
-          <div class="flow-kpi">Publisher Citation Share</div>
-          <div class="flow-kpi">Publisher Authority Score</div>
-          <div class="flow-kpi">Cross-Source Reinforcement</div>
-          <div class="flow-kpi">Trust Framing Index</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch2">Ch. 2 · Authority</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Source Citation Rate<span class="kpi-tip"><span class="kpi-tip-name">Source Citation Rate</span><span class="kpi-tip-why">AI models that cite sources are showing their work — and those citations reveal the evidence base for your AI representation.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Publisher Citation Share<span class="kpi-tip"><span class="kpi-tip-name">Publisher Citation Share</span><span class="kpi-tip-why">Not all citations are equal. Being cited by NZZ or FT carries more authority than a private blog. This maps which publications drive your AI presence.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Publisher Authority Score<span class="kpi-tip"><span class="kpi-tip-name">Publisher Authority Score</span><span class="kpi-tip-why">Citation share tells you who cites you. Authority Score tells you how much that citation is worth — weighted by publisher tier and domain authority.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Cross-Source Reinforcement<span class="kpi-tip"><span class="kpi-tip-name">Cross-Source Reinforcement Index</span><span class="kpi-tip-why">A single publisher vouching for you is fragile. When multiple independent sources converge, AI treats it as established fact. CSRI measures that corroboration.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Trust Framing Index<span class="kpi-tip"><span class="kpi-tip-name">Trust Framing Index</span><span class="kpi-tip-why">A brand can be mentioned and cited but framed with qualifying language that undermines trust. TFI classifies the linguistic register of AI language about your brand.</span></span></div>
+          </div>
         </div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-chapter">
-        <div class="flow-header ch3">Ch. 3 · Narrative</div>
-        <div class="flow-body">
-          <div class="flow-kpi">Role Attribution</div>
-          <div class="flow-kpi">Topic Alignment Score</div>
-          <div class="flow-kpi">Reason-for-Recommendation</div>
-          <div class="flow-kpi">Narrative Gap Index</div>
-          <div class="flow-kpi">Framing Quality</div>
-          <div class="flow-kpi">Comparative Narrative Role</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch3">Ch. 3 · Narrative</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Role Attribution<span class="kpi-tip"><span class="kpi-tip-name">Role Attribution</span><span class="kpi-tip-why">AI classifies brands into implicit roles — market leader, challenger, niche player. Your role shapes every recommendation downstream.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Topic Alignment Score<span class="kpi-tip"><span class="kpi-tip-name">Topic Alignment Score</span><span class="kpi-tip-why">A brand that appears in AI responses but only for topics outside its strategic positioning is wasting its presence. This measures how well AI topics match your strategy.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Reason-for-Recommendation<span class="kpi-tip"><span class="kpi-tip-name">Reason-for-Recommendation</span><span class="kpi-tip-why">When AI recommends your brand, it gives a reason. Those reasons are your actual positioning in the AI layer — whether or not they match your messaging.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Narrative Gap Index<span class="kpi-tip"><span class="kpi-tip-name">Narrative Gap Index</span><span class="kpi-tip-why">The most actionable output in the platform. Compares AI&#39;s actual narrative about you to your intended positioning. The gap is your actionable brief.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Framing Quality<span class="kpi-tip"><span class="kpi-tip-name">Framing Quality</span><span class="kpi-tip-why">Beyond sentiment, framing quality captures whether AI language about you signals confidence and authority — or introduces doubt through hedges and qualifications.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Comparative Narrative Role<span class="kpi-tip"><span class="kpi-tip-name">Comparative Narrative Role</span><span class="kpi-tip-why">When AI describes your brand relative to competitors, it assigns an implicit comparative rank. This makes that rank visible and trackable.</span></span></div>
+          </div>
         </div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-chapter">
-        <div class="flow-header ch4">Ch. 4 · Reliability</div>
-        <div class="flow-body">
-          <div class="flow-kpi">Response Variance</div>
-          <div class="flow-kpi">Model Divergence Index</div>
-          <div class="flow-kpi">Persona Sensitivity Index</div>
-          <div class="flow-kpi">Temporal Stability Score</div>
-          <div class="flow-kpi">Narrative Drift</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch4">Ch. 4 · Reliability</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Response Variance<span class="kpi-tip"><span class="kpi-tip-name">Response Variance</span><span class="kpi-tip-why">AI outputs are non-deterministic. The same prompt can produce different answers. Response Variance measures how much your SoA and narrative fluctuate.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Model Divergence Index<span class="kpi-tip"><span class="kpi-tip-name">Model Divergence Index</span><span class="kpi-tip-why">Different LLMs have different training and update schedules. MDI measures the cross-model spread of your scores — high MDI means model-dependent rather than structural presence.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Persona Sensitivity Index<span class="kpi-tip"><span class="kpi-tip-name">Persona Sensitivity Index</span><span class="kpi-tip-why">Adding a persona primer changes AI outputs — sometimes dramatically. PSI measures how much your scores shift across demographic and professional personas.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Temporal Stability Score<span class="kpi-tip"><span class="kpi-tip-name">Temporal Stability Score</span><span class="kpi-tip-why">AI models are updated silently. TSS tracks your scores across quarterly windows, distinguishing your own interventions from background model drift.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Narrative Drift<span class="kpi-tip"><span class="kpi-tip-name">Narrative Drift</span><span class="kpi-tip-why">The story AI tells about your brand can shift over time as models are retrained. Narrative Drift measures semantic delta in AI descriptions across time periods.</span></span></div>
+          </div>
         </div>
-      </div>
-      <div class="flow-arrow">→</div>
-      <div class="flow-chapter">
-        <div class="flow-header ch5">Ch. 5 · Action</div>
-        <div class="flow-body">
-          <div class="flow-kpi">Priority Gap Matrix</div>
-          <div class="flow-kpi">Lever Map</div>
-          <div class="flow-kpi">Baseline + Target KPIs</div>
-          <div class="flow-kpi">Quick Win Index</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch5">Ch. 5 · Action</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Priority Gap Matrix<span class="kpi-tip"><span class="kpi-tip-name">Priority Gap Matrix</span><span class="kpi-tip-why">Without prioritisation, a client faces 20+ KPI gaps of varying urgency. PGM scores each gap on impact × effort and produces a ranked action list.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Lever Map<span class="kpi-tip"><span class="kpi-tip-name">Lever Map</span><span class="kpi-tip-why">Knowing you have a gap is not enough. The Lever Map translates each KPI gap into the specific intervention type most likely to address it.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Baseline + Target KPIs<span class="kpi-tip"><span class="kpi-tip-name">Baseline + Target KPIs</span><span class="kpi-tip-why">A plan without measurable targets is not a plan. B+T sets starting points and achievable targets at 90-day and 180-day horizons.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Quick Win Index<span class="kpi-tip"><span class="kpi-tip-name">Quick Win Index</span><span class="kpi-tip-why">Early wins matter for stakeholder buy-in. The QWI filters for high-impact, fast-to-implement interventions — typically 2–4 actions showing movement within 30 days.</span></span></div>
+          </div>
         </div>
       </div>
     </div>
+    <div style="margin-top: 1.1rem; font-size: 0.83rem; color: var(--text2); text-align: center;">Visibility without Authority is noise. Authority without Narrative is wasted credibility. Narrative that&#39;s unstable can&#39;t be managed.</div>
   </div>
 
-  <div style="margin-top: 1.25rem; font-size: 0.85rem; color: var(--text2); text-align: center;">
-    Each chapter is complete on its own. Each feeds the next. Visibility without Authority is noise. Authority without Narrative is wasted credibility. Narrative that's unstable can't be managed. <a href="framework.html" style="color:var(--accent)">Full framework details →</a>
+  <div id="kpi-panel-B" class="kpi-product-panel">
+    <div class="kpi-flow">
+      <div class="flow-row">
+        <div class="flow-chapter">
+          <div class="flow-header ch1">Ch. 1 · Demand Landscape</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Decision Driver Ranking<span class="kpi-tip"><span class="kpi-tip-name">Decision Driver Ranking</span><span class="kpi-tip-why">Before measuring competitive position, you need to know what the market actually uses to make decisions. DDR extracts and ranks those criteria.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Category Frame<span class="kpi-tip"><span class="kpi-tip-name">Category Frame</span><span class="kpi-tip-why">How AI defines the category boundaries shapes everything — which competitors are in scope, which attributes matter. Category Frame maps those implicit definitions.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Segment Need Profile<span class="kpi-tip"><span class="kpi-tip-name">Segment Need Profile</span><span class="kpi-tip-why">Different buyer segments have fundamentally different need structures. SNP profiles the distinct decision driver set for each persona or segment.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Market Narrative Consistency<span class="kpi-tip"><span class="kpi-tip-name">Market Narrative Consistency</span><span class="kpi-tip-why">If models give radically different answers about what buyers want, the signal is unstable. MNC measures cross-model agreement on the demand picture.</span></span></div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch2">Ch. 2 · Competitive Perception</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Competitive Ranking<span class="kpi-tip"><span class="kpi-tip-name">Competitive Ranking by Decision Driver</span><span class="kpi-tip-why">The decision drivers from Ch. 1 are the competitive battleground. This KPI ranks all measured brands on each driver.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Attribute Ownership Map<span class="kpi-tip"><span class="kpi-tip-name">Attribute Ownership Map</span><span class="kpi-tip-why">Strategic positioning is about owning an attribute in the buyer&#39;s mind. The AOM shows which brand &quot;owns&quot; each decision driver in AI&#39;s representation.</span></span></div>
+            <div class="flow-kpi" tabindex="0">White Space Index<span class="kpi-tip"><span class="kpi-tip-name">White Space Index</span><span class="kpi-tip-why">The most strategically valuable finding: decision drivers that buyers value highly but no competitor currently owns convincingly.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Positioning Sharpness<span class="kpi-tip"><span class="kpi-tip-name">Positioning Sharpness</span><span class="kpi-tip-why">A competitor clearly associated with specific attributes is harder to displace. Positioning Sharpness measures the definition and concentration of attribute associations.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Segment Competitive Share<span class="kpi-tip"><span class="kpi-tip-name">Segment-level Competitive Share</span><span class="kpi-tip-why">Overall rankings obscure segment variation. You may lead overall but trail badly in your highest-value segment. This surfaces those splits.</span></span></div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch3">Ch. 3 · Segment Intelligence</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Segment Competitive Ranking<span class="kpi-tip"><span class="kpi-tip-name">Segment Competitive Ranking</span><span class="kpi-tip-why">The overall competitive ranking may hide dramatic segment-level variation. SCR produces a separate ranking for each defined persona or demographic segment.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Cross-Segment Variance<span class="kpi-tip"><span class="kpi-tip-name">Cross-Segment Variance</span><span class="kpi-tip-why">High CSV means you need to segment your approach. This quantifies the degree of need and perception divergence across your defined audience segments.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Opportunity Score / Segment<span class="kpi-tip"><span class="kpi-tip-name">Opportunity Score per Segment</span><span class="kpi-tip-why">Not all segments are equally worth targeting. OSS synthesises competitive position, need intensity, and strategic attractiveness into a single prioritisation score.</span></span></div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch4">Ch. 4 · Signal Consistency</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Cross-Model Consensus<span class="kpi-tip"><span class="kpi-tip-name">Cross-Model Consensus Score</span><span class="kpi-tip-why">If GPT-4, Claude, and Gemini give the same answer about what buyers want, that&#39;s a robust signal. CMCS measures agreement level across models.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Run-Level Stability<span class="kpi-tip"><span class="kpi-tip-name">Run-Level Stability</span><span class="kpi-tip-why">A finding that changes between morning and afternoon runs is not a finding — it&#39;s noise. RLS measures within-session variance.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Category Validity Score<span class="kpi-tip"><span class="kpi-tip-name">Category Validity Score</span><span class="kpi-tip-why">AI is a more reliable research instrument for high-consideration categories. CVS assesses whether the category matches the instrument&#39;s known strengths.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Confidence Band / KPI<span class="kpi-tip"><span class="kpi-tip-name">Confidence Band per Output KPI</span><span class="kpi-tip-why">Every research finding should carry its own confidence grade. Not all KPIs are equally stable — this makes that variation visible.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Instrument Bias Indicators<span class="kpi-tip"><span class="kpi-tip-name">Instrument Bias Indicators</span><span class="kpi-tip-why">Different LLMs have known systematic tendencies. IBI flags where model-specific bias may be distorting the findings.</span></span></div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-chapter">
+          <div class="flow-header ch5">Ch. 5 · Strategic Implications</div>
+          <div class="flow-body">
+            <div class="flow-kpi" tabindex="0">Segment Opportunity Ranking<span class="kpi-tip"><span class="kpi-tip-name">Segment Opportunity Ranking</span><span class="kpi-tip-why">A ranked list of segments by strategic attractiveness — where to play, in priority order, with the evidence trail that justifies the ranking.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Recommended Positioning<span class="kpi-tip"><span class="kpi-tip-name">Recommended Positioning Statement</span><span class="kpi-tip-why">A data-grounded positioning recommendation derived directly from white space analysis, segment need profiles, and competitive ranking.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Competitive Moves<span class="kpi-tip"><span class="kpi-tip-name">Competitive Moves</span><span class="kpi-tip-why">Strategy is not just where to play — it&#39;s also who to contest and who to cede. This maps the competitive response implications.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Research-to-Action Traceability<span class="kpi-tip"><span class="kpi-tip-name">Research-to-Action Traceability Map</span><span class="kpi-tip-why">Every recommendation links back through the KPI chain to the underlying prompt data — so &quot;why do you say that?&quot; always has a full answer.</span></span></div>
+            <div class="flow-kpi" tabindex="0">Confidence-Graded Summary<span class="kpi-tip"><span class="kpi-tip-name">Confidence-Graded Recommendation Summary</span><span class="kpi-tip-why">Distinguishes hard findings from directional signals from speculative hypotheses — so decisions get made at the right confidence level.</span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 1.1rem; font-size: 0.83rem; color: var(--text2); text-align: center;">Demand Landscape first — you can&#39;t position competitively until you know how the market actually makes decisions.</div>
   </div>
+
 </section>
 
 <hr class="sep">
@@ -630,5 +726,13 @@
   <p>AI Brand & Market Intelligence · <a href="methodology.html">Methodology</a> · <a href="contact.html">Contact</a></p>
 </footer>
 
+<script>
+function switchKpiTab(prod, btn) {
+  document.querySelectorAll('.kpi-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.kpi-product-panel').forEach(function(p){ p.classList.remove('visible'); });
+  btn.classList.add('active');
+  document.getElementById('kpi-panel-' + prod).classList.add('visible');
+}
+</script>
 </body>
 </html>
