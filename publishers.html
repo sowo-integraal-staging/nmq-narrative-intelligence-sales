@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KPI Framework — UnderCurrent</title>
+  <title>Publisher Intelligence — UnderCurrent</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" href="icon.png" sizes="512x512">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -190,7 +190,8 @@
   <div class="nav-links">
     <a href="index.html">Platform</a>
     <a href="methodology.html">Methodology</a>
-    <a href="framework.html" class="active">KPI Framework</a>
+    <a href="framework.html">KPI Framework</a>
+    <a href="publishers.html" class="active">Publishers</a>
     <a href="contact.html">Contact</a>
   </div>
   <a href="contact.html" class="nav-cta">Request Briefing</a>
@@ -210,9 +211,30 @@
 
 <!-- HERO -->
 <div class="page-hero">
-  <div class="page-tag">KPI Framework</div>
-  <h1>The full measurement<br><span>framework, documented.</span></h1>
-  <p class="page-hero-sub">Every KPI defined, measured, and explained — from what it captures to how it's computed. Browse by chapter, expand any KPI for the full specification.</p>
+  <div class="page-tag">Publisher Intelligence</div>
+  <h1>AI authority for<br><span>publishers, documented.</span></h1>
+  <p class="page-hero-sub">UnderCurrent Publisher Intelligence measures whether your editorial content is absorbed, cited, and trusted by AI systems — and what editorial investment moves the needle. Five chapters, 12 KPIs, fully documented.</p>
+</div>
+
+
+<!-- Publisher Context -->
+<div style="max-width:1100px; margin: 0 auto 2rem; padding: 0 2rem;">
+  <div style="background: rgba(99,102,241,0.07); border: 1px solid rgba(99,102,241,0.25); border-radius: 10px; padding: 1.25rem 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;">
+    <div style="flex: 1; min-width: 260px;">
+      <div style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem;">Complementary to the NMQ Publisher Brand Audit</div>
+      <p style="font-size: 0.9rem; color: var(--text2); line-height: 1.6; margin: 0;">The <strong style="color:var(--text)">NMQ PAFI scoring system</strong> measures structural authority signals — editorial consistency, semantic depth, EEAT, backlink authority, traffic relevance, and AI citations — computed from web analytics and content analysis. UnderCurrent Publisher Intelligence complements this with <strong style="color:var(--text)">live AI behavior measurement</strong>: what AI models actually do when asked questions in your topic domains.</p>
+    </div>
+    <div style="flex: 1; min-width: 260px;">
+      <div style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent2); margin-bottom: 0.4rem;">What UnderCurrent adds</div>
+      <ul style="font-size: 0.9rem; color: var(--text2); line-height: 1.8; margin: 0; padding-left: 1.2rem;">
+        <li>Live cross-model citation measurement (not just one AI score)</li>
+        <li>Domain-level competitive citation share</li>
+        <li>Attribution accuracy — does AI represent your journalism correctly?</li>
+        <li>Temporal drift detection — are you gaining or losing AI authority?</li>
+        <li>Editorial format effectiveness signal</li>
+      </ul>
+    </div>
+  </div>
 </div>
 
 <!-- PRODUCT TABS -->
@@ -492,7 +514,9 @@ function scrollToKPI(id) {
 
 // ─── main render ─────────────────────────────────────────────────────────────
 function render(data) {
-  const products = data.platform?.products || [];
+  const allProducts = data.platform?.products || [];
+  // Publishers page: show only the publisher intelligence product
+  const products = allProducts.filter(p => p.id && p.id.includes('publisher'));
   if (!products.length) {
     document.getElementById('mainContent').innerHTML = '<div class="state-msg"><p>No products found in YAML.</p></div>';
     return;

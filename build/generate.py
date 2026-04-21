@@ -250,12 +250,18 @@ def build_framework_body(products, arch):
 def build_methodology_products(products, arch):
     lines = []
     for prod in products:
-        is_a  = 'brand' in prod['id']
-        cls   = 'a' if is_a else 'b'
+        is_a  = 'brand'     in prod['id']
+        is_c  = 'publisher' in prod['id']
+        cls   = 'a' if is_a else ('c' if is_c else 'b')
         role  = esc(prod['role'])
         name  = esc(prod['name'])
         kpi_n = sum(len(ch['kpis']) for ch in prod['chapters'])
-        subj  = 'The AI system is the subject.' if is_a else 'The AI system is the instrument.'
+        if is_a:
+            subj = 'The AI system is the subject.'
+        elif is_c:
+            subj = 'The AI system is the reader.'
+        else:
+            subj = 'The AI system is the instrument.'
 
         lines.append(f'  <div class="product-block">')
         lines.append(f'    <span class="product-block-label {cls}">{name}</span>')
@@ -307,20 +313,24 @@ def main():
     for k, v in arch.items():
         print(f'  {k}: {len(v)} chapters')
 
-    prod_a = next((p for p in products if 'brand'    in p['id']), None)
-    prod_b = next((p for p in products if 'market'   in p['id'] or 'research' in p['id']), None)
+    prod_a = next((p for p in products if 'brand'     in p['id']), None)
+    prod_b = next((p for p in products if 'market'    in p['id'] or 'research' in p['id']), None)
+    prod_c = next((p for p in products if 'publisher' in p['id']), None)
     arch_a = arch.get('ai_brand_monitor', {})
     arch_b = arch.get('ai_market_research', {})
+    arch_c = {}  # no CHAPTER-ARCHITECTURE.md entry for C yet; uses YAML fields directly
 
     print('\nBuilding fragments...')
     flow_a     = build_kpi_flow(prod_a, arch_a) if prod_a else ''
     flow_b     = build_kpi_flow(prod_b, arch_b) if prod_b else ''
+    flow_c     = build_kpi_flow(prod_c, arch_c) if prod_c else ''
     fw_body    = build_framework_body(products, arch)
     meth_prods = build_methodology_products(products, arch)
 
     fragments = {
         'kpi-flow-a.html':            flow_a,
         'kpi-flow-b.html':            flow_b,
+        'kpi-flow-c.html':            flow_c,
         'framework-body.html':        fw_body,
         'methodology-products.html':  meth_prods,
     }
@@ -338,6 +348,7 @@ def main():
         print('\nInjecting into HTML...')
         inject(os.path.join(SITE_DIR, 'index.html'),       'kpi-flow-a',           flow_a)
         inject(os.path.join(SITE_DIR, 'index.html'),       'kpi-flow-b',           flow_b)
+        inject(os.path.join(SITE_DIR, 'publishers.html'),  'kpi-flow-c',           flow_c)
         inject(os.path.join(SITE_DIR, 'framework.html'),   'framework-body',       fw_body)
         inject(os.path.join(SITE_DIR, 'methodology.html'), 'methodology-products', meth_prods)
 

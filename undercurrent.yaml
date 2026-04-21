@@ -2598,6 +2598,716 @@ platform:
                   granularity: per_study
                   comparable_across: [time_periods]
 
+    # ═══════════════════════════════════════════════════════════════
+    # PRODUCT C — AI PUBLISHER INTELLIGENCE
+    # ═══════════════════════════════════════════════════════════════
+
+    - id: ai_publisher_intelligence
+      name: AI Publisher Intelligence
+      tagline: "Does AI treat your journalism as a source of truth?"
+      role: >
+        AI is the reader. You are measuring whether your editorial content is absorbed,
+        cited, and trusted by AI systems — and whether that authority holds across
+        topic domains, AI models, and time.
+      client_persona: Editorial directors, heads of digital, chief content officers, publisher CEOs
+      cadence: Quarterly baseline with monthly citation monitoring
+      origin_story: >
+        Publishers have always cared about reach and authority. In the AI era, there is
+        a new layer: AI systems are trained on web content and increasingly act as
+        research intermediaries. When someone asks an AI about finance, healthcare, or
+        automotive — which publications does it draw from? Which does it cite? Which
+        does it trust? Publishers who are invisible in the AI layer are losing authority
+        at the source, before the reader even forms a search query.
+      relationship_to_brand_audit: >
+        The NMQ Publisher Brand Audit (PAFI scoring system) measures structural authority
+        signals — editorial consistency, semantic depth, EEAT score, backlink authority,
+        traffic relevance, intent coverage, and AI citations — computed from web analytics
+        and content analysis data. AI Publisher Intelligence complements this by measuring
+        live AI behavior: what AI models actually do when asked about your topic domains.
+        The Brand Audit tells you your structural position. AI Publisher Intelligence tells
+        you whether that position translates into actual AI behavior.
+      chapter_arc: >
+        Your content exists in the AI layer (Ch. 1 Coverage) because it is recognised as
+        authoritative (Ch. 2 Authority), but AI may represent your positions accurately or
+        not (Ch. 3 Accuracy), and that presence may be stable or drifting (Ch. 4 Stability),
+        so you know exactly what editorial investment to make (Ch. 5 Content Strategy).
+
+      chapters:
+
+        - id: api_ch1
+          number: 1
+          name: Coverage
+          client_question: "Does AI draw on your content when answering questions in your topic domains?"
+          illuminates: >
+            When someone asks an AI assistant about a topic your publication covers —
+            finance, automotive, healthcare, politics — does the AI draw on your content?
+            Coverage measures whether your editorial presence has penetrated the AI layer
+            at all. Not citations specifically, but whether your topic domains are ones
+            where AI considers your publication relevant.
+          unique_insight: >
+            A publication can have strong human readership in a segment and zero AI
+            coverage. The AI layer has absorbed different sources than Google has indexed
+            as authoritative. This gap is invisible without direct measurement — and it
+            is growing as AI becomes the first stop for research.
+          enables: >
+            Segment-level coverage map: which of your 25+ topic domains have strong AI
+            coverage vs. which are blind spots. Competitive comparison: where does AI
+            draw on NZZ vs. Tages-Anzeiger vs. your titles for the same topics?
+          improves: >
+            Content investment decisions. If AI coverage is weak in a segment your
+            publication wants to own, the gap points to content depth, format, or
+            authority signal deficits that content strategy can address.
+
+          kpis:
+
+            - id: topic_coverage_rate
+              name: Topic Coverage Rate
+              short_name: TCR
+              motivation: >
+                If AI does not draw on your content when answering questions in your
+                core topic domains, your editorial investment is invisible at the moment
+                of highest buyer/reader intent. TCR is the baseline presence metric for
+                publishers.
+              definition: >
+                The proportion of topic-domain probes in which the publication's content
+                or perspective is reflected in the AI response, measured across the
+                publication's declared topic portfolio.
+              how_to_read: >
+                TCR of 78% means AI draws on your publication's perspective in 78% of
+                relevant topic probes. TCR below 40% in a core domain indicates your
+                content is not in AI's effective training signal for that domain.
+              unit: "%"
+              direction: higher_is_better
+              typical_range: "20–90% depending on domain and publication authority"
+
+              measurement:
+                inference_required:
+                  prompt_type: topic_authority_probe
+                  prompt_example: >
+                    "What are the most authoritative Swiss sources on [topic]?"
+                    "Which publications cover [topic] most reliably in [geo]?"
+                  persona_priming: optional
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - publication_mentioned: bool
+                    - publication_position: "int|null"
+                    - topic_domain: str
+                transformations:
+                  - step: 1
+                    name: mention_flag
+                    description: "Flag each trial as covered if the publication is mentioned in the response."
+                    formula: "covered_i = (publication_name ∈ response_text_i)"
+                  - step: 2
+                    name: tcr_per_domain
+                    description: "Coverage rate per topic domain."
+                    formula: "TCR_domain = Σ(covered_i | domain) / N_trials_domain"
+                  - step: 3
+                    name: aggregate
+                    description: "Weighted average across domains by strategic importance."
+                    formula: "TCR = Σ(TCR_domain × weight_domain)"
+                output_value:
+                  type: percentage
+                  granularity: per_topic_domain
+                  comparable_across: [competitors, models, time_periods]
+
+            - id: domain_reach
+              name: Domain Reach
+              short_name: DR
+              motivation: >
+                Coverage in one domain is not coverage. Publishers need to know across
+                how many of their strategic topic domains they have meaningful AI presence.
+                Domain Reach quantifies breadth of AI coverage.
+              definition: >
+                The number of topic domains (out of the publication's declared domain
+                portfolio) in which TCR exceeds the coverage threshold (default 50%).
+                Expressed as N/total.
+              how_to_read: >
+                DR of 14/25 means you have meaningful AI coverage in 14 of your 25 topic
+                domains. The 11 gaps are your coverage blind spots in the AI layer.
+              unit: "N/total domains"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: topic_authority_probe
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "TCR per domain (derived from TCR computation)"
+                transformations:
+                  - step: 1
+                    name: threshold_flag
+                    description: "Flag domain as covered if TCR >= threshold."
+                    formula: "domain_covered_d = (TCR_d >= threshold)"
+                  - step: 2
+                    name: domain_reach
+                    description: "Count covered domains."
+                    formula: "DR = Σ(domain_covered_d) / N_domains"
+                output_value:
+                  type: fraction
+                  granularity: per_publication
+                  comparable_across: [competitors, time_periods]
+
+            - id: competitive_coverage_share
+              name: Competitive Coverage Share
+              short_name: CCS
+              motivation: >
+                When AI answers a question in your topic domain, does it draw on you or
+                your competitor? Coverage Share normalises your presence against the
+                full competitive set of publications, domain by domain.
+              definition: >
+                For each topic domain, the publication's mention count as a proportion
+                of all publication mentions across the competitive set in that domain.
+              how_to_read: >
+                CCS of 34% in Financial Services means your publication accounts for
+                34% of all publication mentions when AI answers financial questions.
+                A drop in CCS over time — even if your absolute TCR is stable — means
+                competitors are gaining AI coverage faster than you.
+              unit: "% per topic domain"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: topic_authority_probe
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - publications_mentioned: "list[str]"
+                    - topic_domain: str
+                transformations:
+                  - step: 1
+                    name: count_per_publication
+                    description: "Count mentions per publication per domain."
+                    formula: "count_p_d = Σ_trials(p ∈ publications_mentioned_i | domain=d)"
+                  - step: 2
+                    name: normalise
+                    description: "Normalise by total mentions across competitive set per domain."
+                    formula: "CCS_p_d = count_p_d / Σ_p'(count_p'_d)"
+                output_value:
+                  type: percentage
+                  granularity: per_domain_per_publication
+                  comparable_across: [competitors, time_periods]
+
+        - id: api_ch2
+          number: 2
+          name: Authority
+          client_question: "When AI cites sources, how prominently and consistently are your titles cited?"
+          illuminates: >
+            Coverage tells you whether AI draws on your content. Authority tells you
+            how much weight AI gives you — whether you are cited explicitly as a source,
+            how prominently, and whether multiple independent AI systems agree on your
+            authority in each domain. This is the citation layer: not just presence but
+            credibility.
+          unique_insight: >
+            A publication can be in the AI's knowledge base without being cited as a
+            source. Authority measures the explicit trust signal — when AI cites, it is
+            showing its work, and your position in that work is measurable. This directly
+            complements the PAFI aiCitations score with live, granular, cross-model data.
+          enables: >
+            Publisher-specific citation intelligence: which domains generate the most
+            AI citations, which competitor titles are cited alongside yours, and whether
+            your citation authority is concentrated in a few domains (concentration risk)
+            or distributed across many (structural authority).
+          improves: >
+            Content investment directed at high-authority domains. PR and partnership
+            strategy targeting cross-publication citation reinforcement. Citation authority
+            should respond to sustained, expert-level coverage within 2–4 quarters.
+
+          kpis:
+
+            - id: editorial_citation_share
+              name: Editorial Citation Share
+              short_name: ECS
+              motivation: >
+                AI cites sources when it trusts them enough to show its work. ECS
+                measures what share of AI citations in each topic domain go to your
+                publication. Own the citation, own the authority signal that shapes
+                AI training data going forward.
+              definition: >
+                For each topic domain, the publication's citation count as a proportion
+                of all publication citations across the competitive set in citation-enabled
+                AI responses.
+              how_to_read: >
+                ECS of 28% in Financial Services means when AI cites sources on finance
+                topics, your titles account for 28% of those citations. ECS above 30% in
+                a domain indicates strong citation authority. Below 10% indicates the
+                domain is owned by competitors in the AI citation layer.
+              unit: "% per topic domain"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_elicitation
+                  prompt_example: >
+                    "Explain [topic] in [geo] and cite your sources."
+                    "What should I know about [topic]? Please cite the publications you draw from."
+                  persona_priming: optional
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: free_text_with_citations
+                  fields_extracted:
+                    - citation_urls: "list[str]"
+                    - topic_domain: str
+                transformations:
+                  - step: 1
+                    name: domain_resolution
+                    description: "Resolve citation URLs to publication names via publisher registry."
+                    formula: "publication_p = publisher_registry.lookup(domain(url))"
+                  - step: 2
+                    name: count_per_publication
+                    description: "Count citations per publication per domain."
+                    formula: "count_p_d = Σ_trials Σ_citations(publication_p | domain=d)"
+                  - step: 3
+                    name: normalise
+                    description: "Normalise by total citations in domain across competitive set."
+                    formula: "ECS_p_d = count_p_d / Σ_p'(count_p'_d)"
+                output_value:
+                  type: percentage
+                  granularity: per_domain
+                  comparable_across: [competitors, time_periods]
+
+            - id: topic_authority_score
+              name: Topic Authority Score
+              short_name: TAS
+              motivation: >
+                ECS tells you your share. Topic Authority Score tells you whether
+                that share reflects genuine multi-model consensus or a single-model
+                quirk. High TAS means AI consistently treats you as authoritative
+                across models — structural authority, not a model artefact.
+              definition: >
+                A weighted composite of ECS and cross-model citation consistency for
+                a given domain. ECS provides the share magnitude; consistency provides
+                the confidence weight. Normalised 0–100.
+              how_to_read: >
+                TAS of 82 in Automotive means you have both strong citation share and
+                high cross-model agreement on that share. TAS of 35 means either low
+                share or high model disagreement — fragile authority.
+              unit: "score 0–100"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_elicitation
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "ECS per model per domain (derived)"
+                transformations:
+                  - step: 1
+                    name: cross_model_consistency
+                    description: "Compute consistency of ECS rankings across models."
+                    formula: "consistency_d = 1 - (σ(ECS_model) / mean(ECS_model))"
+                  - step: 2
+                    name: tas_composite
+                    description: "Weight ECS by consistency."
+                    formula: "TAS_d = normalise(mean(ECS_d) × consistency_d) × 100"
+                output_value:
+                  type: score_0_100
+                  granularity: per_domain
+                  comparable_across: [competitors, time_periods]
+
+            - id: citation_depth_index
+              name: Citation Depth Index
+              short_name: CDI
+              motivation: >
+                Not all citations are equal. Being named as a brand ("according to Blick")
+                is weaker than being cited for a specific article. Being cited for a
+                specific data point or finding is strongest. CDI measures the depth of
+                AI's engagement with your content.
+              definition: >
+                A three-level classification of citation depth: Brand-level (publication
+                name only, score 0.3), Article-level (specific piece cited, score 0.7),
+                Content-level (specific claim, data, or finding attributed, score 1.0).
+                Aggregated as a weighted mean across all citations.
+              how_to_read: >
+                CDI of 0.8 means most citations are article-level or content-level —
+                AI is engaging deeply with your specific journalism. CDI of 0.3 means
+                AI knows your brand exists but is not drawing on your specific work.
+              unit: "index 0.0–1.0"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_elicitation
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: free_text_with_citations
+                  fields_extracted:
+                    - citation_context: "str (text surrounding the citation)"
+                    - citation_url: str
+                transformations:
+                  - step: 1
+                    name: depth_classification
+                    description: "Classify citation depth from surrounding context."
+                    formula: "depth_i = classify(citation_context_i, depth_dictionary)"
+                  - step: 2
+                    name: depth_score
+                    description: "Map depth classification to score."
+                    formula: "score_i = {brand: 0.3, article: 0.7, content: 1.0}[depth_i]"
+                  - step: 3
+                    name: cdi_aggregate
+                    description: "Mean depth score across all citations."
+                    formula: "CDI = Σ(score_i) / N_citations"
+                output_value:
+                  type: index_0_1
+                  granularity: per_publication
+                  comparable_across: [competitors, time_periods]
+
+        - id: api_ch3
+          number: 3
+          name: Accuracy
+          client_question: "Does AI represent your editorial positions and findings correctly?"
+          illuminates: >
+            Being cited is not enough if you are misrepresented. This chapter measures
+            whether AI accurately attributes positions and findings to your publication —
+            and whether the framing AI uses when referencing your content is consistent
+            with your editorial identity and standards.
+          unique_insight: >
+            AI can cite a publication while misattributing its position, conflating it
+            with a competitor's coverage, or framing it with the wrong editorial tone.
+            This is a reputational risk that no traditional media monitoring tool
+            measures. Only live AI probing reveals it.
+          enables: >
+            Editorial integrity monitoring. Detecting systematic misrepresentation
+            before it compounds in AI training cycles. Flagging where AI conflates
+            your coverage with competitors.
+          improves: >
+            Where misrepresentation is detected, content corrections, clearer editorial
+            attribution, and structured data markup (schema.org) can improve accuracy
+            over subsequent model update cycles.
+
+          kpis:
+
+            - id: attribution_accuracy
+              name: Attribution Accuracy
+              short_name: AA
+              motivation: >
+                If AI attributes a finding or position to your publication that you did
+                not report — or attributes your reporting to a competitor — that is a
+                direct editorial integrity problem. Attribution Accuracy measures how
+                correctly AI assigns your content to you.
+              definition: >
+                The proportion of AI citations of the publication where the attributed
+                content (claim, finding, or position) can be verified as actually
+                published by the publication vs. misattributed, paraphrased beyond
+                recognition, or assigned to the wrong outlet.
+              how_to_read: >
+                AA of 91% means AI correctly attributes your content in 91% of cases.
+                AA below 70% indicates systematic misattribution — a reputational risk
+                that needs editorial and technical response.
+              unit: "%"
+              direction: higher_is_better
+              requires_client_input: true
+              client_input_description: >
+                Requires a sample of the publication's key findings and positions from
+                recent coverage for verification testing.
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_verification
+                  prompt_example: >
+                    "What has [Publication] reported about [topic] recently?"
+                    "What is [Publication]'s position on [issue]?"
+                  model_scope: all_major
+                  replications: 15
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - attributed_claim: str
+                    - publication_named: str
+                transformations:
+                  - step: 1
+                    name: claim_verification
+                    description: >
+                      Compare attributed claims against publication's verified content set.
+                      Flag as accurate, misattributed, or fabricated.
+                    formula: "accuracy_i = verify(attributed_claim_i, publication_content_set)"
+                  - step: 2
+                    name: aa_aggregate
+                    description: "Proportion of accurately attributed citations."
+                    formula: "AA = Σ(accuracy_i == accurate) / N_citations"
+                output_value:
+                  type: percentage
+                  granularity: per_publication
+                  comparable_across: [time_periods]
+
+            - id: editorial_framing_alignment
+              name: Editorial Framing Alignment
+              short_name: EFA
+              motivation: >
+                Beyond accuracy, framing matters. AI may correctly attribute a finding
+                but frame it in a way inconsistent with the publication's editorial
+                identity — calling a quality outlet "tabloid" or a specialist publication
+                "general interest." EFA measures whether AI's description of your
+                publication aligns with your editorial positioning.
+              definition: >
+                A scored match between AI's description of the publication's editorial
+                identity and the publication's declared editorial positioning.
+                Measured across multiple prompt contexts.
+              how_to_read: >
+                EFA of 0.85 means AI describes your publication in terms closely aligned
+                with how you position yourselves. EFA of 0.4 means AI has a systematically
+                different picture of your editorial identity than you intend to project.
+              unit: "alignment score 0.0–1.0"
+              direction: higher_is_better
+              requires_client_input: true
+              client_input_description: >
+                Client declares their editorial positioning: tone (quality/popular/specialist),
+                primary domains, audience descriptor, key differentiators.
+
+              measurement:
+                inference_required:
+                  prompt_type: publication_description
+                  prompt_example: >
+                    "How would you describe [Publication] as a news source?"
+                    "What kind of journalism does [Publication] do?"
+                  model_scope: all_major
+                  replications: 15
+                raw_output:
+                  format: free_text
+                  fields_extracted:
+                    - editorial_description: str
+                transformations:
+                  - step: 1
+                    name: framing_extraction
+                    description: "Extract editorial framing attributes from description."
+                    formula: "framing_i = extract_attributes(editorial_description_i, framing_taxonomy)"
+                  - step: 2
+                    name: alignment_score
+                    description: "Compare extracted framing against declared positioning."
+                    formula: "EFA_i = cosine_similarity(framing_i, declared_positioning)"
+                  - step: 3
+                    name: efa_aggregate
+                    description: "Mean alignment score across all trials."
+                    formula: "EFA = mean(EFA_i)"
+                output_value:
+                  type: alignment_score_0_1
+                  granularity: per_publication
+                  comparable_across: [time_periods]
+
+        - id: api_ch4
+          number: 4
+          name: Stability
+          client_question: "Is your AI authority stable — and are you gaining or losing ground over time?"
+          illuminates: >
+            AI models are updated silently. A publication's citation authority in one
+            model version may erode in the next. Stability measures whether your AI
+            presence is structural — holding across models, across time, and across
+            the full range of topic probes — or fragile and model-dependent.
+          unique_insight: >
+            A publisher can run the Brand Audit once and see their PAFI score. Stability
+            requires repeated measurement over time. Only temporal monitoring reveals
+            whether authority is growing, stable, or eroding — and which model updates
+            caused shifts.
+          enables: >
+            Early warning of authority erosion before it compounds. Model-specific
+            authority profiling (strong on Perplexity, weak on Gemini). Trend
+            tracking to demonstrate ROI of editorial investments over time.
+          improves: >
+            A stability profile that improves over time — citation rates becoming more
+            consistent across models — is itself a signal that editorial authority is
+            maturing from fragile to structural.
+
+          kpis:
+
+            - id: cross_model_authority_consistency
+              name: Cross-Model Authority Consistency
+              short_name: CMAC
+              motivation: >
+                If Claude treats you as authoritative but GPT-4 does not, your authority
+                is model-dependent. As different AI models are used by different platforms
+                and users, model-dependent authority is a structural vulnerability.
+              definition: >
+                The degree of agreement across major LLMs on the publication's Topic
+                Authority Score rankings per domain. Measured as the proportion of
+                domain rankings that are consistent (same top-3 position) across models.
+              how_to_read: >
+                CMAC of 82% means AI models broadly agree on your domain authority profile.
+                CMAC of 35% means models disagree significantly — authority is model-specific
+                and may disappear as model usage patterns shift.
+              unit: "%"
+              direction: higher_is_better
+
+              measurement:
+                inference_required:
+                  prompt_type: topic_authority_probe + citation_elicitation
+                  model_scope: each_major_model_separately
+                  replications: 20
+                raw_output:
+                  format: "TAS per model per domain (derived)"
+                transformations:
+                  - step: 1
+                    name: ranking_per_model
+                    description: "Rank publications by TAS per domain per model."
+                    formula: "rank_m_d = rank(TAS_d for all publications | model=m)"
+                  - step: 2
+                    name: consistency
+                    description: "Proportion of consistent domain rankings across models."
+                    formula: "CMAC = |intersection(top3_rank_m_d for all m)| / 3"
+                output_value:
+                  type: percentage
+                  granularity: per_domain
+                  comparable_across: [time_periods]
+
+            - id: authority_drift
+              name: Authority Drift
+              short_name: AD
+              motivation: >
+                AI models update. Without temporal tracking, a publisher cannot know
+                whether their citation authority is stable or silently eroding. Authority
+                Drift detects period-over-period changes in the citation profile.
+              definition: >
+                Jensen-Shannon Divergence between the ECS distribution across domains
+                measured in the current period vs. the prior period. JSD of 0 = identical
+                authority profile; JSD of 1 = completely different.
+              how_to_read: >
+                AD of 0.04 = authority profile is stable between periods.
+                AD of 0.31 = significant shift in which domains AI cites you for —
+                investigate what model updates or content changes drove the shift.
+              unit: "JSD 0.0–1.0"
+              direction: lower_is_better
+              requires_multi_period: true
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_elicitation
+                  model_scope: all_major
+                  replications: 20
+                raw_output:
+                  format: "ECS distribution per period (derived)"
+                transformations:
+                  - step: 1
+                    name: ecs_distribution_per_period
+                    description: "Compute ECS across all domains for current and prior period."
+                    formula: "ecs_dist_t = {domain: ECS_d for all domains}"
+                  - step: 2
+                    name: jsd
+                    description: "Jensen-Shannon Divergence between periods."
+                    formula: "AD = JSD(ecs_dist_t, ecs_dist_(t-1))"
+                output_value:
+                  type: divergence_score_0_1
+                  granularity: per_publication
+                  comparable_across: [time_periods]
+
+        - id: api_ch5
+          number: 5
+          name: Content Strategy
+          client_question: "What editorial investment moves the needle on AI authority?"
+          illuminates: >
+            AI authority is not just measured — it can be grown. This chapter translates
+            the full measurement picture (coverage gaps, authority deficits, accuracy
+            issues, stability risks) into specific, prioritised editorial and technical
+            recommendations. It is the bridge from intelligence to action.
+          unique_insight: >
+            Most editorial strategy advice is based on audience data and SEO. This
+            chapter adds a new input: what the AI layer rewards. The answer is often
+            different — depth over volume, expert sourcing over breadth, structured
+            data over raw text. Without AI authority measurement, these investments
+            are invisible to editorial planning.
+          enables: >
+            Quarter-over-quarter editorial investment decisions grounded in AI authority
+            data. Domain prioritisation for coverage expansion. Format and structure
+            recommendations (schema markup, data journalism, expert sourcing) that AI
+            models reward with citations.
+          improves: >
+            AI citation rates in targeted domains within 2–4 editorial quarters.
+            Topic Authority Scores across the publication's strategic domain portfolio.
+
+          kpis:
+
+            - id: coverage_gap_priority
+              name: Coverage Gap Priority Map
+              short_name: CGPM
+              motivation: >
+                Not all coverage gaps are equal. Some domains have high reader demand
+                and low AI coverage — these are priority investments. Others have high
+                AI coverage but low citation depth — these need quality improvement
+                rather than volume increase.
+              definition: >
+                A ranked list of topic domains where the publication has low AI coverage
+                or citation authority, weighted by strategic domain importance and
+                competitive opportunity (low competitor authority = open territory).
+              how_to_read: >
+                Top-3 entries = domains to invest in this quarter. Each entry shows:
+                current TCR, competitive CCS, recommended investment type (volume,
+                depth, structure, sourcing).
+              unit: "ranked list"
+              direction: neutral
+
+              measurement:
+                inference_required:
+                  prompt_type: derived
+                  model_scope: n/a
+                  replications: n/a
+                raw_output:
+                  format: "TCR + ECS + TAS per domain (derived from Chapters 1–2)"
+                transformations:
+                  - step: 1
+                    name: gap_identification
+                    description: "Identify domains where TCR < threshold or TAS < threshold."
+                    formula: "gap_d = (TCR_d < 0.5 OR TAS_d < 40)"
+                  - step: 2
+                    name: opportunity_score
+                    description: "Score each gap by strategic importance × competitive openness."
+                    formula: "opp_d = strategic_weight_d × (1 - max_competitor_TAS_d)"
+                  - step: 3
+                    name: priority_ranking
+                    description: "Rank domains by opportunity score."
+                    formula: "CGPM = sort_by(opp_d, descending)"
+                output_value:
+                  type: ranked_list
+                  granularity: per_domain
+                  comparable_across: [time_periods]
+
+            - id: format_effectiveness_signal
+              name: Format Effectiveness Signal
+              short_name: FES
+              motivation: >
+                Different content formats generate different AI citation rates. Data
+                journalism, expert interviews, long-form analysis, and structured
+                explainers tend to outperform news briefs for AI citations. FES
+                measures which formats in your existing coverage generate the most AI
+                citations, giving editorial guidance on where to invest.
+              definition: >
+                Citation Depth Index broken down by content format type (news brief,
+                analysis, data piece, expert interview, explainer). Reveals which
+                formats the AI layer rewards most in your domain portfolio.
+              how_to_read: >
+                FES showing analysis (CDI 0.82) > data journalism (CDI 0.76) > news
+                brief (CDI 0.31) means investing in analysis and data journalism
+                generates the deepest AI citations. News briefs generate brand-level
+                mentions only.
+              unit: "CDI per content format"
+              direction: higher_is_better per format
+
+              measurement:
+                inference_required:
+                  prompt_type: citation_elicitation
+                  model_scope: citation_capable_models
+                  replications: 20
+                raw_output:
+                  format: "CDI per citation with format classification (derived)"
+                transformations:
+                  - step: 1
+                    name: format_classification
+                    description: "Classify cited content by format from URL and context signals."
+                    formula: "format_i = classify_format(citation_url_i, citation_context_i)"
+                  - step: 2
+                    name: cdi_per_format
+                    description: "Mean CDI per content format."
+                    formula: "FES_format = mean(CDI_i | format == format)"
+                output_value:
+                  type: score_per_format
+                  granularity: per_format_type
+                  comparable_across: [time_periods]
+
   # ═══════════════════════════════════════════════════════════════
   # PUBLISHER MODE — Planned Extension
   # ═══════════════════════════════════════════════════════════════
