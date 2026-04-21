@@ -2597,3 +2597,94 @@ platform:
                   type: structured_summary
                   granularity: per_study
                   comparable_across: [time_periods]
+
+  # ═══════════════════════════════════════════════════════════════
+  # PUBLISHER MODE — Planned Extension
+  # ═══════════════════════════════════════════════════════════════
+  # Publishers (Ringier, NZZ, Axel Springer, etc.) have an inverted
+  # relationship to the platform. They are not brands seeking citation
+  # — they ARE the citation sources. Publisher Mode measures whether
+  # a publisher's titles are treated as authoritative sources by AI
+  # across topic domains.
+  #
+  # This is NOT a separate product — it is a configuration mode that
+  # inverts the measurement frame. The chapter architecture is the
+  # same; the entity set, prompt category, and KPI interpretation change.
+  #
+  # Status: Planned extension. Not yet implemented.
+
+  publisher_mode:
+    status: planned
+    tagline: "Does AI treat your journalism as a source of truth?"
+    positioning: >
+      For publishers, AI is not a recommendation engine for their brand —
+      it is a potential amplifier or suppressor of their editorial authority.
+      When someone asks an AI about finance, politics, or cars, does it cite
+      your titles? Is your journalism treated as a trusted source, or is it
+      invisible in the AI layer?
+    inverted_frame: >
+      Standard mode: "Does AI recommend Brand X?" → entities are brands.
+      Publisher mode: "Does AI cite Publisher X?" → entities are publication titles.
+    entity_examples:
+      - Blick, Cash, Handelszeitung (Ringier)
+      - NZZ, NZZ am Sonntag (NZZ Mediengruppe)
+      - Tages-Anzeiger, Sonntagszeitung (TX Group)
+    competitive_set_examples:
+      - Cross-publisher: NZZ vs Tages-Anzeiger vs Blick for financial topic authority
+      - Cross-format: print title vs digital outlet vs wire service citation rates
+    publisher_specific_kpis:
+      - name: Editorial Citation Share by Topic
+        description: >
+          For each topic domain (finance, politics, automotive, lifestyle, etc.),
+          what share of AI citations in that domain go to this publisher's titles?
+          Answers: "In Swiss financial journalism, does Cash own the AI citation space?"
+      - name: Topic Authority Score
+        description: >
+          Across which topic domains does AI consistently treat this publisher as
+          an authoritative source? Scored 0–100 per domain. Reveals where editorial
+          authority is strongest and weakest in AI's trained view.
+      - name: Citation Depth Index
+        description: >
+          When AI cites this publisher, how deep is the citation? Headline-level
+          (brand name only), article-level (specific piece cited), or content-level
+          (specific claims attributed)? Deeper citation = stronger authority signal.
+      - name: Content-to-Citation Lag
+        description: >
+          How quickly does new content from this publisher appear in AI citation
+          patterns? Fast lag = AI training data refreshes include this publisher's
+          content promptly. Slow lag = content is present but not yet absorbed.
+          (Requires multi-period measurement.)
+    chapter_adaptations:
+      ch1_visibility: >
+        Measures whether publisher titles appear when AI answers questions in their
+        editorial topic domains. Prompt: "What are authoritative Swiss sources on
+        [topic]?" — publisher titles are the entities being detected.
+      ch2_authority: >
+        Measures cross-publisher citation reinforcement. When AI cites one Ringier
+        title, does it also cite others? High cross-source reinforcement within a
+        publisher group indicates platform authority, not just individual title authority.
+      ch3_narrative: >
+        Measures how AI describes the publisher's editorial positioning.
+        "Ringier is described as populist/quality/digital-first" — does that match
+        the publisher's desired positioning for their titles?
+      ch4_reliability: >
+        Same as standard mode — measures variance across models and time.
+        Critical for publishers: does Claude treat NZZ as authoritative but GPT-4 not?
+      ch5_action: >
+        Publisher-specific: Content Strategy Recommendations. Which topic domains
+        need more authoritative coverage? Which article formats (analysis, data,
+        exclusive) generate more AI citations? What editorial investment moves
+        the needle on AI citation rates?
+    prompt_category: publisher_authority
+    required_new_prompts:
+      - id: source_authority_probe
+        pattern: >
+          "What are the most authoritative sources on [topic] in [geo]?
+          Which publications would you recommend for reliable coverage of [topic]?"
+      - id: citation_elicitation
+        pattern: >
+          "Explain [topic] and cite your sources."
+          (Used with citation-capable models to directly observe what gets cited)
+      - id: publisher_comparison
+        pattern: >
+          "How would you compare [Publisher A] and [Publisher B] for coverage of [topic]?"
